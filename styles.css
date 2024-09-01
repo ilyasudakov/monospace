@@ -1,7 +1,7 @@
 /* DEFAULTS */
 
 :root {
-  --main: #000;
+  --main-color: #000;
   --link-color: #000;
 
   --line-size: 3px;
@@ -14,19 +14,28 @@
 }
 
 a {
-  display: flex;
-  align-items: center;
+  position: relative;
+
+  display: inline-block;
+  /* display: flex;
+  align-items: center; */
 
   width: fit-content;
 
-  border-bottom: 1px solid var(--main);
+  border-bottom: 1px solid var(--main-color);
   color: var(--link-color);
   text-decoration: none;
 }
 
+a span {
+  width: fit-content;
+  padding-right: 1rem;
+}
+
 a svg {
-  margin-bottom: 1px;
-  margin-left: 4px;
+  position: absolute;
+  right: -4px;
+  top: 2px;
   /* width: 0.75rem;
   height: 0.75rem; */
 }
@@ -35,10 +44,12 @@ hr {
   position: relative;
   overflow: visible;
 
-  width: 100%;
-  height: calc(var(--line-size) - 1px);
+  margin: 40px 0;
 
-  background-color: var(--main);
+  width: 100%;
+  height: 1px;
+
+  background-color: var(--main-color);
 }
 
 hr::before {
@@ -49,9 +60,9 @@ hr::before {
   left: 0;
 
   width: 100%;
-  height: var(--line-size);
+  height: 2px;
 
-  background-color: var(--main);
+  background-color: var(--main-color);
 }
 
 body {
@@ -62,6 +73,32 @@ body {
   justify-content: center;
 }
 
+h2 {
+  margin-top: 0;
+  margin-bottom: 1.25rem;
+
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+p {
+  margin: 0;
+}
+
+footer {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+details {
+  border: var(--line-size) solid var(--main-color);
+
+  padding: 0.75rem 1rem;
+}
+
+/* CONTAINER */
+
 .container {
   width: 100%;
   max-width: 900px;
@@ -69,7 +106,6 @@ body {
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  gap: 40px;
 }
 
 /* TABLE */
@@ -77,11 +113,11 @@ body {
 .table {
   width: 100%;
   border-spacing: 0;
-  border: var(--line-size) solid var(--main);
+  border: var(--line-size) solid var(--main-color);
 }
 
 .table tr:not(:last-child) td {
-  border-bottom: var(--line-size) solid var(--main);
+  border-bottom: var(--line-size) solid var(--main-color);
 }
 
 .table td {
@@ -99,7 +135,7 @@ body {
 }
 
 .table td:not(:last-child) {
-  border-right: var(--line-size) solid var(--main);
+  border-right: var(--line-size) solid var(--main-color);
 }
 
 .table .table__title {
