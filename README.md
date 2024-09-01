@@ -9,7 +9,7 @@ winget install --source winget --exact --id JohnMacFarlane.Pandoc
 2. Generate html file using template & input markdown:
 
 ```bash
-pandoc -f markdown -t html5 -o index.html index.md -c styles.css --template=template.html
+pandoc -s -f markdown -t html5 -o index.html index.md -c styles.css --template=template.html
 ```
 
 ## TODO

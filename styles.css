@@ -12,6 +12,7 @@
 * {
   box-sizing: border-box;
   font-family: "JetBrains Mono";
+  text-align: justify;
 }
 
 a {
@@ -33,6 +34,25 @@ a span {
 
 a svg {
   position: absolute;
+  right: -1px;
+  top: 2px;
+}
+
+h1 a span,
+h2 a span,
+h3 a span,
+h4 a span,
+h5 a span,
+h6 a span {
+  padding-right: 1.25rem;
+}
+
+h1 a svg,
+h2 a svg,
+h3 a svg,
+h4 a svg,
+h5 a svg,
+h6 a svg {
   right: -1px;
   top: 2px;
 }
@@ -102,7 +122,7 @@ details summary {
 
 .container {
   width: 100%;
-  max-width: 900px;
+  max-width: 768px;
 
   display: flex;
   flex-direction: column;
@@ -144,12 +164,12 @@ ul {
 }
 
 .table .table__title {
-  font-size: 32px;
+  font-size: 2rem;
   font-weight: 900;
 }
 
 .table .table__sub-title {
-  font-size: 18px;
+  font-size: 1rem;
 }
 
 .table .table__column-name {
@@ -164,7 +184,7 @@ ul {
 /* LIST */
 
 .experience-list ul {
-  list-style-type: circle;
+  list-style-type: disc;
 }
 
 .experience-list > ul {
@@ -175,6 +195,9 @@ ul {
 
 .experience-list > ul > li > ul {
   list-style-type: none;
+}
+.experience-list > ul > li > ul > li {
+  margin-bottom: 1rem;
 }
 
 .experience-list h3,
