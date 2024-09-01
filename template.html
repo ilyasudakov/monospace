@@ -1,48 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="description" content="Portfolio blog">
-        <title>Portfolio</title>
-        <link rel="stylesheet" href="styles.css">
-    </head>
-    <body>
-        <main class="container">
-            <table class="table">
-                <tbody>
-                    <tr>
-                        <td rowspan="2" colspan="2">
-                            <div class="table__title">$title$</div>
-                            <div class="table__sub-title">$subtitle$</div>
-                        </td>
-                        <td class="table__column-name full-width">Город</td>
-                        <td style="white-space: pre;">Санкт-Петербург</td>
-                    </tr>
-                    <tr>
-                        <td class="table__column-name">Обновлено</td>
-                        <td style="white-space: pre;">$last_updated_date$</td>
-                    </tr>
-                    <tr>
-                        <td class="table__column-name fit-content">Контакты</td>
-                        <td class="full-width">
-                            <div class="table__list">
-                                <a href="https://github.com/ilyasudakov">GitHub</a>
-                                <a href="https://t.me/ilyasudakov">Telegram</a>
-                            </div>
-                        </td>
-                        <td class="table__column-name">Язык</td>
-                        <td>
-                            <div class="table__list">
-                                RU
-                                <a href="/en">EN</a>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <hr />
-            $body$
-        </main>
-    </body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Portfolio blog" />
+    <title>Portfolio</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="container">
+      <table class="table">
+        <tbody>
+          <tr>
+            <td rowspan="2" colspan="2">
+              <div class="table__title">$title$</div>
+              <div class="table__sub-title">$subtitle$</div>
+            </td>
+            <td class="table__column-name full-width">Город</td>
+            <td style="white-space: pre">Санкт-Петербург</td>
+          </tr>
+          <tr>
+            <td class="table__column-name">Обновлено</td>
+            <td style="white-space: pre">$last_updated_date$</td>
+          </tr>
+          <tr>
+            <td class="table__column-name fit-content">Ссылки</td>
+            <td class="full-width">
+              <div class="table__list">
+                <a href="https://github.com/ilyasudakov">GitHub</a>
+                <a href="https://t.me/ilyasudakov">Telegram</a>
+              </div>
+            </td>
+            <td class="table__column-name">Лицензия</td>
+            <td>MIT</td>
+          </tr>
+        </tbody>
+      </table>
+      <hr />
+      $body$
+    </main>
+    <script src="./postprocess_document.js"></script>
+  </body>
 </html>

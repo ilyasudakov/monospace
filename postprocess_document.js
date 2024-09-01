@@ -2,7 +2,8 @@ function replaceLinks() {
   const all_links = document.querySelectorAll("a");
 
   for (const link of all_links) {
-    const text = link.innerText;
+    const text = link.innerHTML;
+    link.setAttribute("target", "_blank");
     link.innerHTML = `
       <span>${text}</span>
       <svg xmlns="http://www.w3.org/2000/svg"

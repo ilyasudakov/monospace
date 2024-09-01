@@ -3,7 +3,6 @@ title: Илья Судаков
 subtitle: Технический писатель / Фронтенд разработчик
 last_updated_date: 2024-09-01
 created_date: 2024-09-01
-header-includes: <script src="./postprocess_document.js"></script>
 ---
 
 ## Обо мне
@@ -53,7 +52,7 @@ React-разработчик из Санкт-Петербурга, 26 лет.
 <details>
     <summary>Про этот сайт</summary>
     <ul>
-        <li>Код: [https://github.com/ilyasudakov/portfolio/](https://github.com/ilyasudakov/portfolio/)</li>
+        <li>Код: [GitHub](https://github.com/ilyasudakov/monospace)</li>
         <li>[Pandoc CLI](https://github.com/jgm/pandoc) для конвертации markdown -> html</li>
         <li>0 фреймворков для рендеринга страницы, только HTML и CSS</li>
     </ul>
