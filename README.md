@@ -14,6 +14,6 @@ pandoc -s -f markdown -t html5 -o index.html index.md -c styles.css --template=t
 
 ## TODO
 
-- [ ] Add script to replace all default links with custom ones with icons
-- [ ] Automatically create index.html via GitHub Actions
+- [x] Add script to replace all default links with custom ones with icons
 - [ ] Add JetBrains Mono font CDN as a source
+      ~~- [ ] Automatically create index.html via GitHub Actions~~
