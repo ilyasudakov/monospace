@@ -143,6 +143,10 @@ ul {
   border: var(--line-size) solid var(--main-color);
 }
 
+.table--mobile-only {
+  display: none;
+}
+
 .table tr:not(:last-child) td {
   border-bottom: var(--line-size) solid var(--main-color);
 }
@@ -230,6 +234,13 @@ h4 {
 @media (max-width: 768px) {
   .container {
     overflow: hidden;
+  }
+
+  .table {
+    display: table;
+  }
+  .table:not(.table.table--mobile-only) {
+    display: none;
   }
 
   .experience-list h4 {
