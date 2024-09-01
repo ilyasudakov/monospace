@@ -1,6 +1,8 @@
 /* DEFAULTS */
 
 :root {
+  font-size: 16px;
+
   --main-color: #000;
   --link-color: #000;
 
@@ -10,7 +12,6 @@
 * {
   box-sizing: border-box;
   font-family: "JetBrains Mono";
-  font-size: 16px;
 }
 
 a {
@@ -108,6 +109,10 @@ details summary {
   align-items: stretch;
 }
 
+ul {
+  margin: 0;
+}
+
 /* TABLE */
 
 .table {
@@ -154,4 +159,44 @@ details summary {
 .table .table__list {
   display: flex;
   gap: 1rem;
+}
+
+/* LIST */
+
+.experience-list ul {
+  list-style-type: circle;
+}
+
+.experience-list > ul {
+  padding: 0;
+  margin-bottom: 1rem;
+  list-style-type: none;
+}
+
+.experience-list > ul > li > ul {
+  list-style-type: none;
+}
+
+.experience-list h3,
+h4 {
+  margin: 0;
+  margin-bottom: 0.5rem;
+  list-style-type: none;
+}
+
+.experience-list h4 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  border-bottom: 1px solid var(--main-color);
+}
+
+.experience-list h4 span:first-child {
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.experience-list h4 span:not(:first-child) {
+  font-weight: 400;
 }
