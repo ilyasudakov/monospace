@@ -17,8 +17,6 @@ a {
   position: relative;
 
   display: inline-block;
-  /* display: flex;
-  align-items: center; */
 
   width: fit-content;
 
@@ -34,10 +32,8 @@ a span {
 
 a svg {
   position: absolute;
-  right: -4px;
+  right: -1px;
   top: 2px;
-  /* width: 0.75rem;
-  height: 0.75rem; */
 }
 
 hr {
@@ -95,6 +91,10 @@ details {
   border: var(--line-size) solid var(--main-color);
 
   padding: 0.75rem 1rem;
+}
+
+details summary {
+  cursor: pointer;
 }
 
 /* CONTAINER */
