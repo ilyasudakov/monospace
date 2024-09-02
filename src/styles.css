@@ -4,9 +4,9 @@
   font-size: 16px;
 
   --main-color: #000;
-  --link-color: #000;
+  --link-color: #00449e;
 
-  --line-size: 3px;
+  --line-size: 2px;
 }
 
 * {
@@ -22,9 +22,8 @@ a {
 
   width: fit-content;
 
-  border-bottom: 1px solid var(--main-color);
+  text-decoration: underline;
   color: var(--link-color);
-  text-decoration: none;
 }
 
 a span {
@@ -241,11 +240,12 @@ h4 {
 
 /* INFORMERS */
 .informer {
-  border: var(--line-size) solid var(--main-color);
-  border-radius: 6px;
+  border: 1px solid var(--main-color);
 
   margin-bottom: 1rem;
   padding: 0.75rem 1rem;
+
+  box-shadow: 2px 2px #ddd;
 }
 
 .informer .informer__title {
