@@ -118,6 +118,10 @@ details summary {
   cursor: pointer;
 }
 
+details[open] summary {
+  margin-bottom: 0.5rem;
+}
+
 /* CONTAINER */
 
 .container {

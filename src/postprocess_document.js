@@ -1,4 +1,4 @@
-function replaceLinks() {
+function replace_links() {
   const all_links = document.querySelectorAll("a");
 
   for (const link of all_links) {
@@ -17,5 +17,5 @@ function replaceLinks() {
 }
 
 (() => {
-  replaceLinks();
+  replace_links();
 })();
