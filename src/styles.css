@@ -229,12 +229,12 @@ h4 {
 
 /* INFORMERS */
 .informer {
-  border: 1px solid var(--main-color);
-
   margin-bottom: 1rem;
-  padding: 0.75rem 1rem;
 
-  box-shadow: 2px 2px #ddd;
+  box-shadow: 2px 2px var(--secondary-color);
+  border: 3px double var(--main-color);
+
+  padding: 0.75rem 1rem;
 }
 
 .informer .informer__title {
