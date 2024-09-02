@@ -13,7 +13,7 @@ language_column_title: Language
 
 ## About me
 
-Frontend developer from Saint-Petersburg, 26 yo.
+Web developer from Saint-Petersburg, 26 yo.
 
 Currently working on pet projects - design + web.
 
@@ -25,15 +25,16 @@ Currently working on pet projects - design + web.
 
 - ### [Improvado](https://improvado.io)
   - #### <span>Technical writer/Business Analyst</span> <span>_Saint-Petersburg_, Nov 2023 - now</span>
-    - Analysis and compilation of requirements for product features
-    - Work with a team of designers, developers and product managers
+    - Analysed and created requirements for product features
+    - Worked with a team of designers, developers and product managers
     - Created an AI Agent using crewAI to write product documentation (user stories, competitor research, etc.)
-    - Actively helped organize company knowledge base in Notion
+    - Actively helped organizing company knowledge base in Notion
   - #### <span>Jr Technical writer</span> <span>_Almaty_, Oct 2022 - Nov 2023</span>
-    - Writing and maintaining documentation for the entire product
-    - Creating videos, instructions and articles in English for clients
-    - Systematization and organization of processes within the team
-    - Worked with Jira. Created custom JS scripts for the documentation site
+    - Written and maintained documentation for the entire product
+    - Created videos, instructions and articles in English for clients
+    - Organized team processes
+    - Worked with Jira, Notion
+    - Created custom JS scripts for the documentation site
 - ### [Osfix](https://osfix.ru)
   - #### <span>Frontend developer</span> <span>_Saint-Petersburg_, Jan 2020 - Mar 2021</span>
     - Developed & designed frontend for the CRM/ERP system used in a small industrial business
@@ -69,5 +70,5 @@ Made with Pandoc + HTML + CSS ♥. [GitHub Repo](https://github.com/ilyasudakov/
 ::::::::::::::::::
 
 <footer>
-Huge thanks to [THE MONOSPACE WEB](https://owickstrom.github.io/the-monospace-web/), [U.S. Graphics Company](https://x.com/usgraphics) for the inspiration.
+Huge thanks to [Oskar Wickström](https://x.com/owickstrom), [U.S. Graphics Company](https://x.com/usgraphics) for the inspiration.
 </footer>

@@ -15,7 +15,7 @@ language_column_title: Язык
 
 Веб-разработчик из Санкт-Петербурга, 26 лет.
 
-Сейчас занимаюсь собственными pet-проектами - дизайн + веб.
+Сейчас занимаюсь pet-проектами - дизайн + веб.
 
 ---
 
@@ -63,5 +63,5 @@ language_column_title: Язык
 ::::::::::::::::::
 
 <footer>
-Спасибо [THE MONOSPACE WEB](https://owickstrom.github.io/the-monospace-web/), [U.S. Graphics Company](https://x.com/usgraphics) за вдохновение.
+Спасибо [Oskar Wickström](https://x.com/owickstrom), [U.S. Graphics Company](https://x.com/usgraphics) за вдохновение.
 </footer>
