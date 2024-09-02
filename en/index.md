@@ -28,6 +28,7 @@ Currently working on pet projects - design + web.
     - Analysis and compilation of requirements for product features
     - Work with a team of designers, developers and product managers
     - Created an AI Agent using crewAI to write product documentation (user stories, competitor research, etc.)
+    - Actively helped organize company knowledge base in Notion
   - #### <span>Jr Technical writer</span> <span>_Almaty_, Oct 2022 - Nov 2023</span>
     - Writing and maintaining documentation for the entire product
     - Creating videos, instructions and articles in English for clients
