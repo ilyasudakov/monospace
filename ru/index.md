@@ -58,7 +58,7 @@ language_column_title: Язык
 
 <!-- prettier-ignore -->
 ::: informer__content
-Сделано с Pandoc + HTML + CSS ♥
+Сделано с Pandoc + HTML + CSS ♥. [GitHub репозиторий](https://github.com/ilyasudakov/monospace/)
 :::
 ::::::::::::::::::
 

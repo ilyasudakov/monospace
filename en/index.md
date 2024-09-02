@@ -63,7 +63,7 @@ About this site
 
 <!-- prettier-ignore -->
 ::: informer__content
-Made with Pandoc + HTML + CSS ♥
+Made with Pandoc + HTML + CSS ♥. [GitHub Repo](https://github.com/ilyasudakov/monospace/)
 :::
 
 ::::::::::::::::::
