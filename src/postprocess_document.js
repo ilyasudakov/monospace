@@ -2,8 +2,12 @@ function replace_links() {
   const all_links = document.querySelectorAll("a");
 
   for (const link of all_links) {
+    const href = new URL(link.href);
     const text = link.innerHTML;
-    link.setAttribute("target", "_blank");
+    if (href.hostname != window.location.hostname) {
+      link.setAttribute("target", "_blank");
+    }
+
     link.innerHTML = `
       <span>${text}</span>
       <svg xmlns="http://www.w3.org/2000/svg"
