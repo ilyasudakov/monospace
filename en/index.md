@@ -15,7 +15,7 @@ language_column_title: Language
 
 Frontend developer from Saint-Petersburg, 26 yo.
 
-Currently working on pet projects to improve my hard skills.
+Currently working on pet projects - design + web.
 
 ---
 
