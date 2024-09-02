@@ -1,7 +1,7 @@
 ---
 title: Ilya Sudakov
 subtitle: Technical writer / Frontend developer
-last_updated_date: 2024-09-01
+last_updated_date: 2024-09-02
 created_date: 2024-09-01
 lang: en
 city_column_title: City
