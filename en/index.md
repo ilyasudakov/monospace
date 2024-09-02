@@ -53,14 +53,19 @@ Currently working on pet projects - design + web.
 
 ---
 
-<details>
-    <summary>About this site</summary>
-    <ul>
-        <li>Code: [GitHub](https://github.com/ilyasudakov/monospace)</li>
-        <li>[Pandoc CLI](https://github.com/jgm/pandoc) for converting Markdown -> HTML</li>
-        <li>0 frameworks for page rendering, only HTML and CSS</li>
-    </ul>
-</details>
+::: informer ::::::
+
+<!-- prettier-ignore -->
+::: informer__title
+About this site
+:::
+
+<!-- prettier-ignore -->
+::: informer__content
+Made with Pandoc + HTML + CSS ♥
+:::
+
+::::::::::::::::::
 
 <footer>
 Huge thanks to [THE MONOSPACE WEB](https://owickstrom.github.io/the-monospace-web/), [U.S. Graphics Company](https://x.com/usgraphics) for the inspiration.

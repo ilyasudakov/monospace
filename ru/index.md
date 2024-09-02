@@ -25,8 +25,8 @@ language_column_title: Язык
 
 - ### [Improvado](https://improvado.io)
   - #### <span>Бизнес-аналитик/Технический писатель</span> <span>_Санкт-Петербург_, Ноя 2023 - сейчас</span>
-    - Анализ и составление требований для продуктовых фичей
-    - Работа с командой дизайнеров, разработчиков и менеджеров по продукту
+    - Анализ и описание требований для продуктовых фичей
+    - Работа с командой дизайнеров, разработчиков и менеджером по продукту
     - Создал AI Агента с crewAI для написания продуктовой документации (юзер стори, исследование конкурентов и т.д.)
   - #### <span>Младший Технический писатель</span> <span>_Алматы_, Окт 2022 - Ноя 2023</span>
     - Написание и поддержание документации для всего продукта
@@ -53,14 +53,13 @@ language_column_title: Язык
 
 ---
 
-<details>
-    <summary>Про этот сайт</summary>
-    <ul>
-        <li>Код: [GitHub](https://github.com/ilyasudakov/monospace)</li>
-        <li>[Pandoc CLI](https://github.com/jgm/pandoc) для конвертации Markdown -> HTML</li>
-        <li>0 фреймворков для рендеринга страницы, только HTML и CSS</li>
-    </ul>
-</details>
+::: informer ::::::
+
+<!-- prettier-ignore -->
+::: informer__content
+Сделано с Pandoc + HTML + CSS ♥
+:::
+::::::::::::::::::
 
 <footer>
 Спасибо [THE MONOSPACE WEB](https://owickstrom.github.io/the-monospace-web/), [U.S. Graphics Company](https://x.com/usgraphics) за вдохновение.
