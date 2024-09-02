@@ -1,7 +1,7 @@
 ## Usage
 
 1. Install Pandoc
-2. Generate html file using template & input markdown:
+2. Generate HTML file using template & markdown as an input:
 
 ```bash
 pandoc -s -f markdown -t html5 -o index.html index.md -c styles.css --template=../src/template.html
