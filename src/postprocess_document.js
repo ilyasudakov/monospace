@@ -38,15 +38,16 @@ function fix_relative_path(href) {
   return new_url;
 }
 
-function fix_image_paths() {
+function fix_images() {
   const all_images = document.querySelectorAll("img");
 
   for (const image of all_images) {
     image.src = fix_relative_path(image.src, "img");
+    image.setAttribute("loading", "lazy");
   }
 }
 
 (() => {
   replace_links();
-  fix_image_paths();
+  fix_images();
 })();
