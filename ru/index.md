@@ -6,7 +6,7 @@ lang: ru-RU
 city_column_title: Город
 city_name: Санкт-Петербург
 last_updated_column_title: Обновлено
-last_updated_date: 2024-09-02
+last_updated_date: 2024-09-07
 links_column_title: Ссылки
 language_column_title: Язык
 ---
@@ -51,6 +51,23 @@ language_column_title: Язык
     - Закончил бакалавриат в СПБГУТ. Разработка программного обеспечения, управление разработкой проектов, базы данных, алгоритмы.
 
 </section>
+
+---
+
+## Витрина проектов
+
+<section class="showcase-list">
+
+- #### Дизайн метро г. Санкт-Петербург, 2024 | Дизайн
+
+  [![Метро Санкт-Петербурга](/assets/metro_spb.png)](https://x.com/ilyasudakov_dev/status/1831182730467672080)
+
+  ::: links
+
+  - [Twitter thread](https://x.com/ilyasudakov_dev/status/1831182730467672080)
+
+  :::
+  </section>
 
 ---
 

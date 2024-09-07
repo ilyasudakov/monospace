@@ -4,6 +4,7 @@ function replace_links() {
   for (const link of all_links) {
     const href = new URL(link.href);
     const text = link.innerHTML;
+
     if (href.hostname != window.location.hostname) {
       link.setAttribute("target", "_blank");
     }
