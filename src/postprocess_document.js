@@ -21,6 +21,34 @@ function replace_links() {
   }
 }
 
+function fix_relative_path(href) {
+  let new_url = href;
+  let prod_hostname = "/monospace";
+
+  if (!window.location.hostname.includes("github")) {
+    prod_hostname = "";
+  }
+
+  const map_folders = {
+    "/assets/": `${prod_hostname}/assets/`,
+  };
+
+  for (const path of Object.keys(map_folders)) {
+    new_url = new_url.replaceAll(path, map_folders[path]);
+  }
+  console.log(`${href} -> ${new_url}`);
+  return new_url;
+}
+
+function fix_image_paths() {
+  const all_images = document.querySelectorAll("img");
+
+  for (const image of all_images) {
+    image.src = fix_relative_path(image.src, "img");
+  }
+}
+
 (() => {
   replace_links();
+  fix_image_paths();
 })();
