@@ -61,7 +61,7 @@ Currently working on pet projects - design + web.
 
 - #### St. Petersburg metro design, 2024 | Design
 
-  [![St. Petersburg metro](/assets/metro_spb.png)](https://x.com/ilyasudakov_dev/status/1831182730467672080)
+  [![St. Petersburg metro](../assets/metro_spb.png)](https://x.com/ilyasudakov_dev/status/1831182730467672080)
 
   ::: links
 
