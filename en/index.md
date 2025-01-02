@@ -24,7 +24,11 @@ Currently working on pet projects - design + web.
 <section class="experience-list">
 
 - ### [Improvado](https://improvado.io)
-  - #### <span>Technical writer/Business Analyst</span> <span>_Saint-Petersburg_, Nov 2023 - now</span>
+  - #### <span>Jr Product Manager</span> <span>_Saint-Petersburg_, Dec 2024 - сейчас</span>
+    - Analysis, preparation, and maintenance of product features
+    - Created a majority of prototypes myself in Figma, Bolt.new (Live prototypes in React+Ant Design)
+    - Worked with a team of designers, developers and product managers
+  - #### <span>Technical writer/Business Analyst</span> <span>_Saint-Petersburg_, Nov 2023 - Dec 2024</span>
     - Analysed and created requirements for product features
     - Worked with a team of designers, developers and product managers
     - Created an AI Agent using crewAI to write product documentation (user stories, competitor research, etc.)
