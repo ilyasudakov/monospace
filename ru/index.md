@@ -60,11 +60,11 @@ language_column_title: Язык
 
 - #### Дизайн метро г. Санкт-Петербург, 2024 | Дизайн
 
-  [![Метро Санкт-Петербурга](/assets/metro_spb.png)](https://x.com/ilyasudakov_dev/status/1831182730467672080)
+  [![Метро Санкт-Петербурга](/assets/metro_spb.png)](https://drive.google.com/file/d/1UUDPaj_qXAbU7dkX3M-AlAhBv5-bc7Fk/view?usp=sharing)
 
   ::: links
 
-  - [Twitter thread](https://x.com/ilyasudakov_dev/status/1831182730467672080)
+  - [Полный размер](https://drive.google.com/file/d/1UUDPaj_qXAbU7dkX3M-AlAhBv5-bc7Fk/view?usp=sharing)
 
   :::
   </section>
