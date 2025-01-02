@@ -24,7 +24,7 @@ Currently working on pet projects - design + web.
 <section class="experience-list">
 
 - ### [Improvado](https://improvado.io)
-  - #### <span>Jr Product Manager</span> <span>_Saint-Petersburg_, Dec 2024 - сейчас</span>
+  - #### <span>Jr Product Manager</span> <span>_Saint-Petersburg_, Dec 2024 - now</span>
     - Analysis, preparation, and maintenance of product features
     - Created a majority of prototypes myself in Figma, Bolt.new (Live prototypes in React+Ant Design)
     - Worked with a team of designers, developers and product managers
