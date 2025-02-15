@@ -72,10 +72,12 @@ hr {
 
 body {
   margin: 0;
-  padding: 60px 0;
+  padding: 20px 0;
 
   display: flex;
   justify-content: center;
+
+  background-color: #efefef;
 }
 
 h2 {
@@ -92,6 +94,10 @@ p {
 }
 
 footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
   margin-top: 1.5rem;
   text-align: center;
 }
@@ -117,11 +123,14 @@ details[open] summary {
   width: 100%;
   --container-padding: 1rem;
   max-width: calc(768px + var(--container-padding) * 2);
-  padding: 0 var(--container-padding);
+  padding: var(--container-padding);
 
   display: flex;
   flex-direction: column;
   align-items: stretch;
+
+  background-color: #fefefe;
+  border: 1px solid var(--main-color);
 }
 
 ul {
@@ -154,6 +163,7 @@ ul {
 .table td.fit-content {
   width: fit-content;
 }
+
 .table td.full-width {
   width: 100%;
 }
@@ -180,25 +190,33 @@ ul {
   gap: 1rem;
 }
 
+.tag {
+  display: inline-block;
+  border: 1px solid var(--main-color);
+  padding: 1px 12px;
+}
+
 /* LIST */
 
 .experience-list ul {
   list-style-type: disc;
 }
 
-.experience-list > ul {
+.experience-list>ul {
   padding: 0;
   margin-bottom: 1rem;
   list-style-type: none;
 }
 
-.experience-list > ul > li > ul {
+.experience-list>ul>li>ul {
   list-style-type: none;
 }
-.experience-list > ul > li > ul > li {
+
+.experience-list>ul>li>ul>li {
   margin-bottom: 1rem;
 }
-.experience-list > ul > li > ul > li > ul {
+
+.experience-list>ul>li>ul>li>ul {
   padding-left: 4rem;
 }
 
@@ -245,7 +263,7 @@ h4 {
 }
 
 /* SHOWCASE LIST */
-.showcase-list > ul {
+.showcase-list>ul {
   padding: 0;
   margin-bottom: 1rem;
   list-style-type: none;
@@ -260,7 +278,7 @@ figure {
   height: auto;
 }
 
-figure > img,
+figure>img,
 .showcase-list img {
   box-shadow: 2px 2px var(--secondary-color);
   border: 1px solid var(--main-color);
@@ -273,17 +291,17 @@ figure > img,
   object-position: 50% 60%;
 }
 
-.showcase-list > ul {
+.showcase-list>ul {
   display: grid;
   grid-template-columns: 1fr;
   gap: 0.5rem;
 }
 
-.showcase-list > ul > li > ul {
+.showcase-list>ul>li>ul {
   margin-bottom: 1rem;
 }
 
-.showcase-list > ul > li > ul > li {
+.showcase-list>ul>li>ul>li {
   list-style-type: disc;
 }
 
@@ -296,7 +314,7 @@ a:has(img) svg {
   right: 0.25rem;
 }
 
-.links > ul {
+.links>ul {
   display: flex;
 
   gap: 0.75rem;
@@ -314,6 +332,7 @@ a:has(img) svg {
   .table {
     display: none;
   }
+
   .table.table--mobile-only {
     display: table;
   }
@@ -324,10 +343,11 @@ a:has(img) svg {
     align-items: flex-start;
   }
 
-  .experience-list > ul > li > ul {
+  .experience-list>ul>li>ul {
     padding-left: 1rem;
   }
-  .experience-list > ul > li > ul > li > ul {
+
+  .experience-list>ul>li>ul>li>ul {
     padding-left: 2rem;
   }
 }
