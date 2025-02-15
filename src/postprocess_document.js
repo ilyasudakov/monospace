@@ -49,5 +49,5 @@ function fix_images() {
 
 (() => {
   replace_links();
-  fix_images();
+  // fix_images();
 })();
