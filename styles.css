@@ -261,10 +261,6 @@ ul {
   margin-bottom: 1rem;
 }
 
-/* .experience-list>ul>li>ul>li>ul {
-  padding-left: 0.5rem;
-} */
-
 .experience-list h3,
 h4 {
   margin: 0;
@@ -358,7 +354,7 @@ figure > img,
   flex-direction: row;
   gap: 0.5rem;
 
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 }
 
 .showcase-list > ul > li:last-child {
