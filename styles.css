@@ -78,7 +78,7 @@ body {
   display: flex;
   justify-content: center;
 
-  background-color: #efefef;
+  background-color: #fefefe;
 }
 
 h2 {
@@ -131,7 +131,6 @@ details[open] summary {
   align-items: stretch;
 
   background-color: #fefefe;
-  border: 1px solid var(--main-color);
 }
 
 ul {
@@ -174,6 +173,7 @@ ul {
   width: fit-content;
   border: 1px solid var(--main-color);
   padding: 1px 12px;
+  font-size: 14px;
 }
 
 .links {
