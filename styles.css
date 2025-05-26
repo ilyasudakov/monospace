@@ -6,15 +6,15 @@
   --main-color: #000;
   --secondary-color: #aaa;
   --shadow-color: #ddd;
-  --link-color: #0969da;
+  --link-color: #0000ef;
 
   --line-size: 2px;
 }
 
 * {
   box-sizing: border-box;
-  font-family: monospace;
-  text-align: justify;  
+  font-family: "Inter", sans-serif;
+  text-align: justify;
 }
 
 a {
@@ -78,7 +78,7 @@ body {
   display: flex;
   justify-content: center;
 
-  background-color: #efefef;
+  background-color: #fff;
 }
 
 h2 {
@@ -122,51 +122,75 @@ details[open] summary {
 
 .container {
   width: 100%;
-  --container-padding: 1rem;
-  max-width: calc(768px + var(--container-padding) * 2);
+  --container-padding: 72px;
+  max-width: calc(1920px + var(--container-padding) * 2);
   padding: var(--container-padding);
 
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-
-  background-color: #fefefe;
-  border: 1px solid var(--main-color);
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-rows: minmax(200px, 1fr);
+  grid-template-areas:
+    "name name about about"
+    "experience experience experience-list experience-list"
+    "education education education-list education-list";
+  gap: 36px;
 }
 
 ul {
   margin: 0;
 }
 
-#intro {
-  display: flex;
-  flex-direction: row;
-  gap: 1rem;
+#name {
+  grid-area: name;
+  font-size: 70px;
 }
 
-.intro__content {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  height: fit-content;
-
-  width: 100%;
+#about-me {
+  grid-area: about;
+  font-size: 30px;
 }
 
-.intro__image {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: fit-content;
-  height: fit-content;
-
-  border: 1px solid var(--main-color);
+#about-me a {
+  font-size: 24px;
 }
 
-.intro__image img {
-  --image-size: 125px;
-  width: var(--image-size);
-  height: var(--image-size);
+h2 {
+  font-size: 45px;
+}
+
+#experience {
+  grid-area: experience;
+}
+
+#experience-list {
+  grid-area: experience-list;
+  padding: 0;
+}
+
+#education {
+  grid-area: education;
+}
+
+#education-list {
+  grid-area: education-list;
+  padding: 0;
+}
+
+#showcase {
+  grid-area: showcase;
+}
+
+#showcase-list {
+  grid-area: showcase-list;
+  padding: 0;
+}
+
+#informer {
+  grid-area: informer;
+}
+
+#footer {
+  grid-area: footer;
 }
 
 .tag {
@@ -238,50 +262,143 @@ ul {
 
 /* LIST */
 
-.experience-list ul {
-  list-style-type: disc;
+#experience-list ul {
+  list-style-type: none;
   list-style-position: outside;
-  padding-left: 1.5rem;
+  padding-left: 0;
 }
 
-.experience-list > ul {
+#experience-list > ul {
   padding: 0;
   margin-bottom: 1rem;
   list-style-type: none;
 }
 
-.experience-list > ul > li > ul {
+#experience-list > li {
+  margin-bottom: 2rem;
+}
+
+#experience-list .company-content > ul {
   list-style-type: none;
   padding: 0;
 }
 
-.experience-list > ul > li > ul > li {
-  margin-bottom: 1rem;
+#experience-list .company-content > ul > li {
+  margin-bottom: 1.5rem;
 }
 
-.experience-list h3,
-h4 {
+#experience-list .company-content h3 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: bold;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+  list-style-type: none;
+}
+
+#experience-list .company-content h4 {
   margin: 0;
   font-size: 1rem;
   margin-bottom: 0.5rem;
   list-style-type: none;
-}
-
-.experience-list h4 {
   display: flex;
   align-items: center;
   justify-content: space-between;
-
-  border-bottom: 1px solid var(--main-color);
+  padding-bottom: 0.25rem;
 }
 
-.experience-list h4 span:first-child {
+#experience-list .company-content h4 span:first-child {
   font-weight: bold;
   text-transform: uppercase;
 }
 
-.experience-list h4 span:not(:first-child) {
+#experience-list .company-content h4 span:not(:first-child) {
   font-weight: 400;
+  font-size: 14px;
+}
+
+#experience-list .company-content p {
+  line-height: 1.4;
+}
+
+/* EDUCATION LIST */
+#education-list .company-content > ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+#education-list .company-content > ul > li {
+  list-style-type: none;
+  margin-bottom: 1.5rem;
+}
+
+#education-list .company-content h3 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: bold;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+  list-style-type: none;
+}
+
+#education-list .company-content h4 {
+  margin: 0;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  list-style-type: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 0.25rem;
+}
+
+#education-list .company-content h4 span:first-child {
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+#education-list .company-content h4 span:not(:first-child) {
+  font-weight: 400;
+  font-size: 14px;
+}
+
+#education-list .company-content ul ul {
+  list-style-type: none;
+  list-style-position: outside;
+  padding-left: 0;
+  margin-top: 0.5rem;
+}
+
+#education-list .company-content ul ul li {
+  line-height: 1.4;
+}
+
+/* COMPANY LAYOUT */
+.company-item {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.company-logo {
+  flex-shrink: 0;
+  width: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 0.25rem;
+}
+
+.logo-img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+.company-content {
+  flex: 1;
+  min-width: 0;
 }
 
 /* INFORMERS */
@@ -404,20 +521,56 @@ a:has(img) svg {
   list-style-type: none;
 }
 
+@media (max-width: 1400px) {
+  .container {
+    grid-template-areas:
+      "name about about about"
+      "experience experience-list experience-list experience-list"
+      "education education-list education-list education-list";
+  }
+}
+
+@media (max-width: 1200px) {
+  .container {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    grid-template-areas:
+      "name"
+      "about"
+      "experience"
+      "experience-list"
+      "education"
+      "education-list";
+  }
+
+  h2#name {
+    font-size: 50px;
+  }
+
+  #about-me {
+    font-size: 24px;
+  }
+
+  #about-me a {
+    font-size: 20px;
+  }
+
+  h2 {
+    font-size: 2rem;
+  }
+}
+
 @media (max-width: 900px) {
   body {
     padding: 0;
     background-color: #fefefe;
-  }
-
-  .container {
-    border-color: transparent;
   }
 }
 
 @media (max-width: 768px) {
   .container {
     overflow: hidden;
+    padding: 1rem;
   }
 
   .table {
@@ -428,10 +581,21 @@ a:has(img) svg {
     display: table;
   }
 
-  .experience-list h4 {
+  #experience-list .company-content h4 {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .company-item {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .company-logo {
+    width: 100%;
+    justify-content: flex-start;
+    padding-top: 0;
   }
 }
 
