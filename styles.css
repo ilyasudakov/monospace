@@ -94,7 +94,6 @@ h2 {
 
   font-size: 1.35rem;
   font-weight: 700;
-  text-transform: uppercase;
 }
 
 p {
@@ -273,6 +272,11 @@ h2 {
 .education-list .company-content > ul > li {
   margin-bottom: 1.5rem;
   list-style-type: none;
+}
+
+.experience-list .company-content > ul > li:last-child,
+.education-list .company-content > ul > li:last-child {
+  margin-bottom: 0;
 }
 
 .experience-list .company-content h3,
