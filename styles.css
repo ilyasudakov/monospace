@@ -7,6 +7,7 @@
   --secondary-color: #aaa;
   --shadow-color: #ddd;
   --link-color: #0000ef;
+  --secondary-text-color: rgba(0, 0, 0, 0.65);
 
   --line-size: 2px;
 }
@@ -24,8 +25,12 @@ a {
 
   width: fit-content;
 
-  text-decoration: underline;
+  text-decoration: none;
   color: var(--link-color);
+}
+
+a:hover {
+  text-decoration: underline;
 }
 
 a span {
@@ -76,6 +81,8 @@ body {
   padding: 20px 0;
 
   display: flex;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
 
   background-color: #fff;
@@ -86,7 +93,7 @@ h2 {
   margin-bottom: 1rem;
 
   font-size: 1.35rem;
-  font-weight: 900;
+  font-weight: 700;
   text-transform: uppercase;
 }
 
@@ -123,74 +130,41 @@ details[open] summary {
 .container {
   width: 100%;
   --container-padding: 72px;
-  max-width: calc(1920px + var(--container-padding) * 2);
-  padding: var(--container-padding);
+  max-width: calc(768px + var(--container-padding) * 2);
+  padding: 0 var(--container-padding);
 
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  grid-template-rows: minmax(200px, 1fr);
-  grid-template-areas:
-    "name name about about"
-    "experience experience experience-list experience-list"
-    "education education education-list education-list";
-  gap: 36px;
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
 }
 
 ul {
   margin: 0;
 }
 
-#name {
-  grid-area: name;
-  font-size: 70px;
+.hero h1 {
+  font-size: 35px;
+  margin-bottom: 1rem;
 }
 
-#about-me {
-  grid-area: about;
-  font-size: 30px;
-}
-
-#about-me a {
-  font-size: 24px;
+.about-me {
+  font-size: 18px;
 }
 
 h2 {
-  font-size: 45px;
+  font-size: 24px;
 }
 
-#experience {
-  grid-area: experience;
-}
-
-#experience-list {
-  grid-area: experience-list;
+.experience-list {
   padding: 0;
 }
 
-#education {
-  grid-area: education;
-}
-
-#education-list {
-  grid-area: education-list;
+.education-list {
   padding: 0;
 }
 
-#showcase {
-  grid-area: showcase;
-}
-
-#showcase-list {
-  grid-area: showcase-list;
+.showcase-list {
   padding: 0;
-}
-
-#informer {
-  grid-area: informer;
-}
-
-#footer {
-  grid-area: footer;
 }
 
 .tag {
@@ -245,7 +219,7 @@ h2 {
 
 .table .table__title {
   font-size: 2rem;
-  font-weight: 900;
+  font-weight: 700;
 }
 
 .table .table__sub-title {
@@ -263,41 +237,60 @@ h2 {
 
 /* LIST */
 
-#experience-list ul {
+/* SHARED LIST STYLES */
+
+.experience-list ul,
+.education-list ul {
   list-style-type: none;
   list-style-position: outside;
   padding-left: 0;
 }
 
-#experience-list > ul {
+.experience-list > ul,
+.education-list > ul {
   padding: 0;
   margin-bottom: 1rem;
   list-style-type: none;
 }
 
-#experience-list > li {
+.experience-list > li,
+.education-list > li {
   margin-bottom: 2rem;
 }
 
-#experience-list .company-content > ul {
+.experience-list > li:last-child,
+.education-list > li:last-child {
+  margin-bottom: 0;
+}
+
+.experience-list .company-content > ul,
+.education-list .company-content > ul {
   list-style-type: none;
   padding: 0;
 }
 
-#experience-list .company-content > ul > li {
+.experience-list .company-content > ul > li,
+.education-list .company-content > ul > li {
   margin-bottom: 1.5rem;
+  list-style-type: none;
 }
 
-#experience-list .company-content h3 {
+.experience-list .company-content h3,
+.education-list .company-content h3 {
   margin: 0;
   font-size: 20px;
   font-weight: bold;
   text-transform: uppercase;
-  margin-bottom: 4px;
+  margin-bottom: 8px;
   list-style-type: none;
 }
 
-#experience-list .company-content h4 {
+.company-content h3 a {
+  color: var(--main-color);
+}
+
+.experience-list .company-content h4,
+.education-list .company-content h4 {
   margin: 0;
   font-size: 1rem;
   margin-bottom: 0.5rem;
@@ -308,70 +301,25 @@ h2 {
   padding-bottom: 0.25rem;
 }
 
-#experience-list .company-content h4 span:first-child {
+.experience-list .company-content h4 span:first-child,
+.education-list .company-content h4 span:first-child {
   font-weight: bold;
   text-transform: uppercase;
 }
 
-#experience-list .company-content h4 span:not(:first-child) {
+.experience-list .company-content h4 span:not(:first-child),
+.education-list .company-content h4 span:not(:first-child) {
   font-weight: 400;
   font-size: 14px;
+  color: var(--secondary-text-color);
 }
 
-#experience-list .company-content p {
-  line-height: 1.4;
-}
-
-/* EDUCATION LIST */
-#education-list .company-content > ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-#education-list .company-content > ul > li {
-  list-style-type: none;
-  margin-bottom: 1.5rem;
-}
-
-#education-list .company-content h3 {
-  margin: 0;
-  font-size: 20px;
-  font-weight: bold;
-  text-transform: uppercase;
-  margin-bottom: 4px;
-  list-style-type: none;
-}
-
-#education-list .company-content h4 {
-  margin: 0;
-  font-size: 1rem;
-  margin-bottom: 0.5rem;
-  list-style-type: none;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding-bottom: 0.25rem;
-}
-
-#education-list .company-content h4 span:first-child {
-  font-weight: bold;
-  text-transform: uppercase;
-}
-
-#education-list .company-content h4 span:not(:first-child) {
-  font-weight: 400;
-  font-size: 14px;
-}
-
-#education-list .company-content ul ul {
+/* EDUCATION-SPECIFIC STYLES */
+.education-list .company-content ul ul {
   list-style-type: none;
   list-style-position: outside;
   padding-left: 0;
   margin-top: 0.5rem;
-}
-
-#education-list .company-content ul ul li {
-  line-height: 1.4;
 }
 
 /* COMPANY LAYOUT */
@@ -383,7 +331,7 @@ h2 {
 
 .company-logo {
   flex-shrink: 0;
-  width: 60px;
+  width: 30px;
   display: flex;
   justify-content: center;
   align-items: flex-start;
@@ -391,10 +339,10 @@ h2 {
 }
 
 .logo-img {
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
   object-fit: contain;
-  border-radius: 8px;
+  border-radius: 4px;
 }
 
 .company-content {
@@ -522,45 +470,6 @@ a:has(img) svg {
   list-style-type: none;
 }
 
-@media (max-width: 1400px) {
-  .container {
-    grid-template-areas:
-      "name about about about"
-      "experience experience-list experience-list experience-list"
-      "education education-list education-list education-list";
-  }
-}
-
-@media (max-width: 1200px) {
-  .container {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto;
-    grid-template-areas:
-      "name"
-      "about"
-      "experience"
-      "experience-list"
-      "education"
-      "education-list";
-  }
-
-  h2#name {
-    font-size: 50px;
-  }
-
-  #about-me {
-    font-size: 24px;
-  }
-
-  #about-me a {
-    font-size: 20px;
-  }
-
-  h2 {
-    font-size: 2rem;
-  }
-}
-
 @media (max-width: 900px) {
   body {
     padding: 0;
@@ -582,7 +491,8 @@ a:has(img) svg {
     display: table;
   }
 
-  #experience-list .company-content h4 {
+  .experience-list .company-content h4,
+  .education-list .company-content h4 {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
