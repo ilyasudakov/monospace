@@ -77,7 +77,6 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  gap: 50px;
   min-height: 100vh;
 
   background-color: #fff;
@@ -131,6 +130,8 @@ details[open] summary {
   display: flex;
   flex-direction: column;
   gap: 36px;
+
+  margin-bottom: 50px;
 }
 
 ul {
@@ -449,7 +450,7 @@ footer .footer-text {
 @media (max-width: 768px) {
   .container {
     overflow: hidden;
-    padding: 1rem;
+    padding: 0 2rem;
   }
 
   .table {
@@ -469,13 +470,18 @@ footer .footer-text {
 
   .company-item {
     flex-direction: column;
-    gap: 1rem;
+    gap: 4px;
   }
 
   .company-logo {
     width: 100%;
     justify-content: flex-start;
     padding-top: 0;
+  }
+
+  .logo-img {
+    width: 24px;
+    height: 24px;
   }
 }
 
@@ -495,5 +501,11 @@ footer .footer-text {
 
   .showcase-list__text {
     width: 100%;
+  }
+
+  footer .footer-content {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
   }
 }
