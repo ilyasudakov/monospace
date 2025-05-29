@@ -10,6 +10,7 @@
   --secondary-text-color: rgba(0, 0, 0, 0.65);
 
   --line-size: 2px;
+  --container-width: 576px;
 }
 
 * {
@@ -70,12 +71,14 @@ hr {
 
 body {
   margin: 0;
-  padding: 20px 0;
+  padding: 0;
 
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
+  gap: 50px;
+  min-height: 100vh;
 
   background-color: #fff;
 }
@@ -120,13 +123,14 @@ details[open] summary {
 
 .container {
   width: 100%;
+  height: 100%;
   --container-padding: 72px;
-  max-width: calc(576px + var(--container-padding) * 2);
+  max-width: calc(var(--container-width) + var(--container-padding) * 2);
   padding: 0 var(--container-padding);
 
   display: flex;
   flex-direction: column;
-  gap: 50px;
+  gap: 36px;
 }
 
 ul {
@@ -166,65 +170,14 @@ h2 {
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
-  margin-top: 1rem;
 }
 
-/* TABLE */
-
-.table {
-  width: 100%;
-  border-spacing: 0;
-  border: var(--line-size) solid var(--main-color);
-}
-
-.table.table--mobile-only {
-  display: none;
-}
-
-.table tr:not(:last-child) td {
-  border-bottom: var(--line-size) solid var(--main-color);
-}
-
-.table td {
-  width: 0%;
-  height: 38px;
-
-  padding: 0.25rem 0.75rem;
-}
-
-.table td.fit-content {
-  width: fit-content;
-}
-
-.table td.full-width {
-  width: 100%;
-}
-
-.table td:not(:last-child) {
-  border-right: var(--line-size) solid var(--main-color);
-}
-
-.table .table__title {
-  font-size: 2rem;
-  font-weight: 700;
-}
-
-.table .table__sub-title {
-  font-size: 1rem;
-}
-
-.table .table__column-name {
-  font-weight: 700;
-}
-
-.table .table__list {
-  display: flex;
-  gap: 1rem;
+.links a {
+  font-size: 14px;
+  color: var(--secondary-text-color);
 }
 
 /* LIST */
-
-/* SHARED LIST STYLES */
 
 .experience-list ul,
 .education-list ul {
@@ -258,7 +211,7 @@ h2 {
 
 .experience-list .company-content > ul > li,
 .education-list .company-content > ul > li {
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.25rem;
   list-style-type: none;
 }
 
@@ -270,9 +223,9 @@ h2 {
 .experience-list .company-content h3,
 .education-list .company-content h3 {
   margin: 0;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 500;
-  margin-bottom: 4px;
+  margin-bottom: 2px;
   list-style-type: none;
 }
 
@@ -284,13 +237,12 @@ h2 {
 .education-list .company-content h4 {
   margin: 0;
   font-size: 1rem;
-  margin-bottom: 0.5rem;
+  margin-bottom: 4px;
   list-style-type: none;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: space-between;
-  padding-bottom: 0.25rem;
 }
 
 .experience-list .company-content h4 span:first-child,
@@ -316,7 +268,7 @@ h2 {
 /* COMPANY LAYOUT */
 .company-item {
   display: flex;
-  gap: 1rem;
+  gap: 12px;
   align-items: flex-start;
 }
 
@@ -462,7 +414,29 @@ a:has(img) svg {
 }
 
 footer {
-  padding-top: 2rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 12px 1rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.15);
+  background-color: rgba(0, 0, 0, 0.04);
+  margin-top: auto;
+}
+
+footer .footer-content {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: var(--container-width);
+}
+
+footer .footer-text {
+  display: flex;
+  font-size: 14px;
+  color: var(--secondary-text-color);
 }
 
 @media (max-width: 900px) {
