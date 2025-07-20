@@ -10,7 +10,7 @@
   --secondary-text-color: rgba(0, 0, 0, 0.65);
 
   --line-size: 2px;
-  --container-width: 576px;
+  --container-width: 768px;
 }
 
 * {
@@ -138,9 +138,20 @@ ul {
   margin: 0;
 }
 
+.container section:not(:first-of-type) {
+  border-top: 1px solid rgba(0, 0, 0, 0.15);
+  padding-top: 1.5rem;
+}
+
 .hero h1 {
   font-size: 28px;
+  margin-top: 0;
   margin-bottom: 0.5rem;
+}
+
+.hero .email-link {
+  margin-top: 0.5rem;
+  text-decoration: none;
 }
 
 h2 {
@@ -176,6 +187,25 @@ h2 {
 .links a {
   font-size: 14px;
   color: var(--secondary-text-color);
+}
+
+#links {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-top: 1rem;
+}
+
+#links a {
+  opacity: 0.4;
+  transition: opacity 0s ease-in-out;
+}
+
+#links a:hover {
+  opacity: 1;
 }
 
 /* LIST */
