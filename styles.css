@@ -82,26 +82,11 @@ body {
   background-color: #fff;
 }
 
-h2 {
-  margin-top: 0;
-  margin-bottom: 0.5rem;
-
-  font-size: 1.25rem;
-  font-weight: 600;
-}
 
 p {
   margin: 0;
 }
 
-footer {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2rem;
-  margin-top: 2rem;
-  text-align: center;
-}
 
 details {
   border: var(--line-size) solid var(--main-color);
@@ -155,17 +140,14 @@ ul {
 }
 
 h2 {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
   font-size: 20px;
+  font-weight: 600;
 }
 
-.experience-list {
-  padding: 0;
-}
-
-.education-list {
-  padding: 0;
-}
-
+.experience-list,
+.education-list,
 .showcase-list {
   padding: 0;
 }
@@ -189,7 +171,7 @@ h2 {
   color: var(--secondary-text-color);
 }
 
-#links {
+header#links {
   display: flex;
   flex-direction: row;
   gap: 1rem;
@@ -197,6 +179,7 @@ h2 {
   align-items: center;
   width: 100%;
   margin-top: 1rem;
+  margin-bottom: 36px;
 }
 
 #links a {
@@ -221,7 +204,6 @@ h2 {
 .education-list > ul {
   padding: 0;
   margin-bottom: 1rem;
-  list-style-type: none;
 }
 
 .experience-list > li,
@@ -243,7 +225,6 @@ h2 {
 .experience-list .company-content > ul > li,
 .education-list .company-content > ul > li {
   margin-bottom: 1.25rem;
-  list-style-type: none;
 }
 
 .experience-list .company-content > ul > li:last-child,
@@ -253,11 +234,9 @@ h2 {
 
 .experience-list .company-content h3,
 .education-list .company-content h3 {
-  margin: 0;
+  margin: 0 0 2px 0;
   font-size: 16px;
   font-weight: 500;
-  margin-bottom: 2px;
-  list-style-type: none;
 }
 
 .company-content h3 a {
@@ -266,10 +245,8 @@ h2 {
 
 .experience-list .company-content h4,
 .education-list .company-content h4 {
-  margin: 0;
+  margin: 0 0 4px 0;
   font-size: 1rem;
-  margin-bottom: 4px;
-  list-style-type: none;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -290,8 +267,6 @@ h2 {
 
 /* EDUCATION-SPECIFIC STYLES */
 .education-list .company-content ul ul {
-  list-style-type: none;
-  list-style-position: outside;
   padding-left: 0;
   margin-top: 0.5rem;
 }
@@ -356,7 +331,6 @@ h2 {
 .showcase-list > ul {
   padding: 0;
   margin-bottom: 1rem;
-  list-style-type: none;
 }
 
 figure {
