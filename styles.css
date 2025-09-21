@@ -243,6 +243,13 @@ header#links {
   color: var(--main-color);
 }
 
+.company-content .company-period {
+  font-weight: 400;
+  font-size: 14px;
+  color: var(--secondary-text-color);
+  margin-bottom: 1rem;
+}
+
 .experience-list .company-content h4,
 .education-list .company-content h4 {
   margin: 0 0 4px 0;
