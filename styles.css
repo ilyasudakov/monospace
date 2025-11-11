@@ -7,7 +7,7 @@
   --secondary-color: #aaa;
   --shadow-color: #ddd;
   --link-color: #0000ef;
-  --secondary-text-color: rgba(0, 0, 0, 0.65);
+  --secondary-text-color: rgba(0, 0, 0, 0.5);
 
   --line-size: 2px;
   --container-width: 768px;
@@ -136,7 +136,7 @@ ul {
 
 .hero .email-link {
   margin-top: 0.5rem;
-  text-decoration: none;
+  color: var(--secondary-text-color);
 }
 
 h2 {
@@ -437,8 +437,8 @@ footer {
   align-items: center;
   gap: 0.5rem;
   padding: 12px 1rem;
-  border-top: 1px solid rgba(0, 0, 0, 0.15);
-  background-color: rgba(0, 0, 0, 0.04);
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  background-color: rgba(0, 0, 0, 0.02);
   margin-top: auto;
 }
 
