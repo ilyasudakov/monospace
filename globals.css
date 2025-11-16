@@ -1,0 +1,151 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
+
+:root {
+  font-size: 16px;
+
+  --main-color: #e8f1f6;
+  --secondary-color: #aaa;
+  --shadow-color: #ddd;
+  --link-color: #0000ef;
+  --secondary-text-color: rgba(0, 0, 0, 0.5);
+
+  --line-size: 2px;
+  --container-width: 768px;
+}
+
+* {
+  box-sizing: border-box;
+  font-family: "Inter", sans-serif;
+  text-align: left;
+  padding: 0;
+  margin: 0;
+}
+
+a {
+  position: relative;
+  display: inline-block;
+  width: fit-content;
+  color: var(--link-color);
+}
+
+a span {
+  width: fit-content;
+  padding-right: 1rem;
+}
+
+a svg {
+  position: absolute;
+  right: -1px;
+  top: 2px;
+}
+
+h1 a span,
+h2 a span,
+h3 a span,
+h4 a span,
+h5 a span,
+h6 a span {
+  padding-right: 1.25rem;
+}
+
+h1 a svg,
+h2 a svg,
+h3 a svg,
+h4 a svg,
+h5 a svg,
+h6 a svg {
+  right: -1px;
+  top: 2px;
+}
+
+hr {
+  position: relative;
+
+  margin: 40px 0;
+
+  border: 0;
+  border-bottom: 2px solid var(--secondary-color);
+  border-style: dashed;
+
+  width: 100%;
+  height: 1px;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 100vh;
+
+  background-color: #fff;
+}
+
+
+p {
+  margin: 0;
+}
+
+ul {
+  margin: 0;
+}
+
+/* CONTAINER */
+
+.container {
+  width: 100%;
+  height: 100%;
+  --container-padding: 72px;
+  max-width: calc(var(--container-width) + var(--container-padding) * 2);
+  padding: 0 var(--container-padding);
+
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+
+  margin-bottom: 50px;
+}
+
+footer {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 12px 1rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  background-color: rgba(0, 0, 0, 0.02);
+  margin-top: auto;
+}
+
+footer .footer-content {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: var(--container-width);
+}
+
+footer .footer-text {
+  display: flex;
+  font-size: 14px;
+  color: var(--secondary-text-color);
+}
+
+@media (max-width: 768px) {
+  .container {
+    overflow: hidden;
+    padding: 0 2rem;
+  }
+}
+
+@media (max-width: 500px) {
+  footer .footer-content {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+}

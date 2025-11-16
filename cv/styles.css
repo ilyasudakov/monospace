@@ -1,0 +1,45 @@
+.container {
+  padding: 3rem 0;
+  gap: 3rem;
+}
+
+header h1 {
+  margin: 0;
+}
+
+h2 {
+  margin-bottom: 1rem;
+}
+
+header span {
+  font-size: 14px;
+  font-weight: 400;
+  margin-left: 4px;
+}
+
+ul.list {
+  list-style-type: none;
+  padding: 0;
+}
+
+ul.list li:not(:last-child) {
+  margin-bottom: 2rem;
+}
+
+ul.list li .list-item__period {
+  font-weight: 600;
+}
+
+ul.list li .list-item__description {
+  padding-left: 1rem;
+}
+
+a {
+  color: var(--text-color);
+  padding-bottom: 1px;
+}
+
+a:hover {
+  background-color: #000;
+  color: #fff;
+}
