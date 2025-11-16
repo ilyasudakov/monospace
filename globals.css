@@ -3,7 +3,7 @@
 :root {
   font-size: 16px;
 
-  --main-color: #e8f1f6;
+  --main-color: #eef6e8;
   --secondary-color: #aaa;
   --shadow-color: #ddd;
   --link-color: #0000ef;
@@ -26,6 +26,16 @@ a {
   display: inline-block;
   width: fit-content;
   color: var(--link-color);
+}
+
+a {
+  color: var(--text-color);
+  padding-bottom: 1px;
+}
+
+a:hover {
+  background-color: #000;
+  color: #fff;
 }
 
 a span {
