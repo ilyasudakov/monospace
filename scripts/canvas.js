@@ -30,7 +30,6 @@ document.querySelectorAll('.sticker').forEach((el) => {
     opts.onTap = () => openPhotoWindow(el);
   }
   registerSticker(el, pos, opts);
-
 });
 
 // Any link with [data-window] opens in an OS window instead of navigating.

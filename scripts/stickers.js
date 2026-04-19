@@ -1,6 +1,5 @@
 import { view, homes, live, zRef } from './state.js';
 
-
 export function renderSticker(el) {
   const p = live.get(el);
   el.style.setProperty('--sx', `${p.x}px`);
