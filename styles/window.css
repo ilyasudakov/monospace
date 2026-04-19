@@ -1,0 +1,248 @@
+/* --- 2007 web 2.0 window — lives on the canvas --- */
+.os-window {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: 0 0;
+  background: transparent;   /* transparent so the titlebar's backdrop-filter can pick up canvas behind */
+  border: 1px solid rgba(50, 90, 155, 0.85);
+  border-radius: 8px;
+  box-shadow:
+    0 10px 30px -6px rgba(20, 50, 100, 0.5),
+    0 2px 6px rgba(20, 50, 100, 0.25),
+    inset 0 0 0 1px rgba(255,255,255,0.55);
+  overflow: hidden;
+  min-width: 340px;
+  min-height: 160px;
+  user-select: none;
+  font-family: Tahoma, Verdana, Geneva, "DejaVu Sans", sans-serif;
+  font-size: 12px;
+  display: flex;
+  flex-direction: column;
+}
+
+.os-window-titlebar,
+.os-window-addressbar,
+.os-window-footer { flex-shrink: 0; }
+.os-window-body { flex: 1 1 auto; min-height: 0; }
+
+/* Title bar — Frutiger Aero: soft translucent blue, glossy top half */
+.os-window-titlebar {
+  position: relative;
+  background:
+    linear-gradient(to bottom,
+      rgba(195, 225, 245, 0.38) 0%,
+      rgba(145, 195, 230, 0.40) 48%,
+      rgba(105, 160, 210, 0.45) 52%,
+      rgba(85, 140, 195, 0.52) 100%);
+  backdrop-filter: blur(16px) saturate(1.5);
+  -webkit-backdrop-filter: blur(16px) saturate(1.5);
+  border-bottom: 1px solid rgba(75, 120, 180, 0.5);
+  color: #1c3656;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.35);
+  padding: 4px 6px 4px 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: grab;
+  height: 30px;
+  box-sizing: border-box;
+  font-weight: 700;
+  font-size: 12px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+/* Glossy top-half highlight — the "wet glass" strip */
+.os-window-titlebar::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 50%;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0));
+  pointer-events: none;
+}
+.os-window-titlebar.dragging { cursor: grabbing; }
+
+.os-window-title {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: inherit;
+  letter-spacing: 0.01em;
+}
+
+/* Titlebar buttons — glossy pill */
+.os-window-controls {
+  display: flex;
+  gap: 3px;
+  flex-shrink: 0;
+}
+.os-win-btn {
+  width: 22px;
+  height: 20px;
+  padding: 0;
+  border: 1px solid rgba(0,0,0,0.35);
+  border-radius: 4px;
+  background:
+    linear-gradient(to bottom,
+      #d9e6f5 0%,
+      #a9c4e3 45%,
+      #8fb0d4 50%,
+      #7fa2c8 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.6),
+    0 1px 0 rgba(0,0,0,0.15);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #000;
+  font: inherit;
+  transition: filter 120ms ease, transform 120ms ease;
+}
+.os-win-btn:hover { filter: brightness(1.08); }
+.os-win-btn:active {
+  background: linear-gradient(to bottom, #6f92b6 0%, #85a6c6 50%, #a3bedb 100%);
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.3);
+  transform: translateY(1px);
+}
+.os-win-btn--close {
+  background: linear-gradient(to bottom, #f0aaaa 0%, #d66060 45%, #c24646 50%, #a83838 100%);
+  border-color: #7a1f1f;
+  color: #fff;
+  text-shadow: 0 -1px 0 rgba(0,0,0,0.35);
+}
+.os-win-btn--close:active {
+  background: linear-gradient(to bottom, #a43838 0%, #c04040 50%, #e88585 100%);
+}
+
+.os-win-btn::before {
+  content: '';
+  display: block;
+}
+.os-win-btn--close::before {
+  content: '×';
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1;
+  color: #fff;
+  width: auto;
+  height: auto;
+}
+
+/* Address bar — matches titlebar glass */
+.os-window-addressbar {
+  position: relative;
+  background:
+    linear-gradient(to bottom,
+      rgba(215, 235, 250, 0.32) 0%,
+      rgba(175, 210, 235, 0.35) 100%);
+  backdrop-filter: blur(14px) saturate(1.4);
+  -webkit-backdrop-filter: blur(14px) saturate(1.4);
+  border-bottom: 1px solid rgba(75, 120, 180, 0.35);
+  padding: 6px 8px;
+  display: flex;
+  align-items: center;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55);
+}
+.os-address-text {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-family: "Lucida Console", "Consolas", Tahoma, monospace;
+  font-size: 11px;
+  color: #1c3656;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.7),
+    inset 0 -1px 0 rgba(0, 30, 70, 0.1);
+}
+
+/* Body */
+.os-window-body {
+  background: #fff;
+  padding: 14px 16px;
+  color: #222;
+  font-size: 12px;
+  line-height: 1.5;
+  overflow: auto;
+}
+
+/* Photo variant body */
+.os-window--photo .os-window-body {
+  padding: 10px;
+  background: #2a2a2a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.os-window--photo .os-window-body img {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  border: 1px solid #000;
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.15), 0 4px 14px rgba(0,0,0,0.6);
+  pointer-events: none;
+}
+
+/* Page variant body */
+.os-window--page .os-window-body {
+  padding: 0;
+  background: #fff;
+  overflow: hidden;
+}
+.os-window--page .os-window-body iframe {
+  display: block;
+  border: 0;
+  width: 100%;
+  height: 100%;
+  background: #fff;
+}
+
+/* Resize handle — glossy corner */
+.os-window-resizer {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 16px;
+  height: 16px;
+  cursor: nwse-resize;
+  z-index: 3;
+  background-image:
+    linear-gradient(135deg,
+      transparent 0 54%,
+      #8ea2bc 54% 60%,
+      transparent 60% 70%,
+      #8ea2bc 70% 76%,
+      transparent 76% 86%,
+      #8ea2bc 86% 92%,
+      transparent 92%);
+}
+
+/* Footer — silvery status bar */
+.os-window-footer {
+  background: linear-gradient(to bottom, #eef2f7 0%, #d8e0ec 100%);
+  border-top: 1px solid #a9b9cf;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.6);
+  padding: 5px 8px;
+  font-size: 11px;
+  color: #334;
+  display: flex;
+  gap: 10px;
+}
+.os-window-footer > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.os-window-footer > span:first-child { flex: 1; }
+.os-window-footer > span:last-child { flex: 0 0 auto; color: #668; font-family: "Lucida Console", monospace; }

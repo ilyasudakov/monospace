@@ -1,41 +1,75 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Portfolio blog" />
-  <title>Ilya Sudakov - Resume</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <meta name="description" content="Ilya Sudakov — personal playground" />
+  <title>Ilya Sudakov</title>
   <link rel="stylesheet" href="./globals.css" />
-  <link rel="stylesheet" href="./styles.css" />
+  <link rel="stylesheet" href="./styles/canvas.css" />
+  <link rel="stylesheet" href="./styles/stickers.css" />
+  <link rel="stylesheet" href="./styles/window.css" />
   <link rel="icon" type="image/x-icon" href="./assets/favicon.ico" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <meta lang="ru-RU" />
 </head>
 
-<body>
-  <main>
-    <div class="container">
-      <p>Привет, меня зовут Илья. Я продакт-инженер из Санкт-Петербурга.</p>
-      <p>Люблю решать сложные задачи и создавать полезные продукты end-to-end: дизайн, код, поддержка.</p>
-      <p>Пишу музыку, делаю фото.</p>
-      <div class="links">
-        <a class="button-link" href="mailto:ilyasudakov.dev@gmail.com" target="_blank">Имейл</a>
-        <a class="button-link" href="/monospace/cv">Резюме</a>
-        <a class="button-link" href="https://www.linkedin.com/in/ilyasudakov/" target="_blank">LinkedIn</a>
-        <a class="button-link" href="https://t.me/ilyasudakov" target="_blank">Telegram</a>
+<body class="playground">
+  <div class="viewport" id="viewport">
+    <div class="canvas" id="canvas">
+
+      <div class="sticker sticker--paper" data-x="-260" data-y="-220" data-rot="-2.5">
+        <p>Привет, меня зовут <strong>Илья</strong>.</p>
+        <p>Продакт-инженер в <a href="https://improvado.io" target="_blank" rel="noopener" class="paper-link">Improvado</a>, из Санкт-Петербурга. Люблю решать сложные задачи и делать полезные продукты end-to-end: дизайн, код, поддержка.</p>
+        <p class="muted">Пишу музыку, делаю фото.</p>
       </div>
-      <h3>Интересы</h3>
-      <ul>
-        <li>Дизайн</li>
-        <li>Картография</li>
-        <li>Музыка</li>
-      </ul>
+
+      <div class="sticker sticker--photo" data-x="200" data-y="-260" data-rot="-3" data-full="./assets/img2.jpg">
+        <img src="./assets/img2_sm.jpg" alt="" draggable="false" />
+        <div class="photo-label">авг 2024</div>
+      </div>
+
+      <div class="sticker sticker--photo" data-x="480" data-y="60" data-rot="4" data-full="./assets/img1.jpg">
+        <img src="./assets/img1_sm.jpg" alt="" draggable="false" />
+        <div class="photo-label">фев 2025</div>
+      </div>
+
+      <a class="sticker sticker--chip chip--email" href="mailto:ilyasudakov.dev@gmail.com" data-x="-280" data-y="80" data-rot="-4">
+        <span>email</span>
+      </a>
+
+      <a class="sticker sticker--chip chip--cv" href="/monospace/cv" data-window="./cv.html" data-window-title="Резюме" data-x="-140" data-y="140" data-rot="2">
+        <span>резюме</span>
+      </a>
+
+      <a class="sticker sticker--chip chip--linkedin" href="https://www.linkedin.com/in/ilyasudakov/" target="_blank" rel="noopener" data-x="0" data-y="180" data-rot="-3">
+        <span>linkedin</span>
+      </a>
+
+      <a class="sticker sticker--chip chip--telegram" href="https://t.me/ilyasudakov" target="_blank" rel="noopener" data-x="160" data-y="220" data-rot="5">
+        <span>telegram</span>
+      </a>
+
+      <div class="sticker sticker--note note--pink" data-x="-420" data-y="260" data-rot="-5">
+        <span class="note-label">интерес</span>
+        <strong>Дизайн</strong>
+      </div>
+
+      <div class="sticker sticker--note note--blue" data-x="-240" data-y="340" data-rot="3">
+        <span class="note-label">интерес</span>
+        <strong>Картография</strong>
+      </div>
+
+      <div class="sticker sticker--note note--yellow" data-x="-60" data-y="380" data-rot="-2">
+        <span class="note-label">интерес</span>
+        <strong>Музыка</strong>
+      </div>
+
     </div>
-    <div class="gallery">
-    </div>
-  </main>
+  </div>
+
+  <script type="module" src="./scripts/canvas.js"></script>
 </body>
 
 </html>

@@ -1,0 +1,50 @@
+:root {
+  --paper: #fdfaf3;
+  --ink: #1a1a1a;
+  --muted: #6b6b6b;
+  --bg-1: #e9e4d8;
+  --bg-2: #d8d0be;
+  --accent: #0000ef;
+  --pink: #ffd4dc;
+  --blue: #cfe3ff;
+  --yellow: #fff3a8;
+}
+
+html, body.playground {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  background: var(--bg-1);
+  color: var(--ink);
+  overscroll-behavior: none;
+}
+
+body.playground {
+  background:
+    radial-gradient(circle at 20% 20%, #f1ecdd 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, #ddd4bf 0%, transparent 55%),
+    var(--bg-1);
+}
+
+.viewport {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  cursor: grab;
+  touch-action: none;
+  background-image:
+    radial-gradient(circle, rgba(0,0,0,0.08) 1px, transparent 1.5px);
+  background-size: 28px 28px;
+  background-position: 0 0;
+}
+.viewport.panning { cursor: grabbing; }
+
+.canvas {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 0;
+  height: 0;
+  transform-origin: 0 0;
+}
+
