@@ -3,7 +3,9 @@ import { view, homes, live, zRef } from './state.js';
 
 export function renderSticker(el) {
   const p = live.get(el);
-  el.style.transform = `translate(${p.x}px, ${p.y}px) rotate(${p.rot}deg)`;
+  el.style.setProperty('--sx', `${p.x}px`);
+  el.style.setProperty('--sy', `${p.y}px`);
+  el.style.setProperty('--srot', `${p.rot}deg`);
 }
 
 export function attachDrag(el, { onTap, onDragEnd } = {}) {

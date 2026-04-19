@@ -9,6 +9,8 @@
 
 import { view } from './state.js';
 
+const MAX_SIZE = 1000;
+
 export const openWindows = [];
 let windowZ = 1000;
 
@@ -186,8 +188,8 @@ export function openPageWindow({ src, title }) {
     variant: 'page',
     body: iframe,
     path: src,
-    width: Math.round(window.innerWidth * 0.8 / view.scale),
-    height: Math.round(window.innerHeight * 0.8 / view.scale),
+    width: MAX_SIZE,
+    height: Math.round(MAX_SIZE * 0.75),
   });
 }
 
@@ -204,10 +206,9 @@ export function openPhotoWindow(photoEl) {
     bodyImg.src = src;
     bodyImg.alt = '';
 
-    // Fit within 85vw × 75vh of the VISIBLE viewport, translated back to
-    // canvas-space via view.scale so it still looks ~that size on screen.
-    const maxW = Math.min(window.innerWidth * 0.85, 1100) / view.scale;
-    const maxH = (window.innerHeight * 0.75 - 60) / view.scale;
+    // Fit image into MAX_SIZE × (MAX_SIZE * 0.75), preserving aspect ratio
+    const maxW = MAX_SIZE;
+    const maxH = Math.round(MAX_SIZE * 0.75) - 60;   // reserve ~60px for titlebar + addressbar + footer
     let winW = 640, winH = 480;
     if (w && h) {
       const ratio = Math.min(1, maxW / w, maxH / h);

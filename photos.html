@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Фото — архив</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; overflow: hidden; font-family: Tahoma, Verdana, Geneva, sans-serif; color: #1c3656; font-size: 12px; }
+
+    body {
+      background:
+        radial-gradient(circle at 20% 10%, #e8f4ff 0%, transparent 50%),
+        radial-gradient(circle at 80% 90%, #b4dcf5 0%, transparent 55%),
+        linear-gradient(to bottom, #d9ecf9 0%, #a9cde8 100%);
+      display: grid;
+      grid-template-rows: 36px 1fr 24px;
+      grid-template-columns: 200px 1fr;
+      grid-template-areas:
+        "nav  nav"
+        "side main"
+        "foot foot";
+    }
+
+    /* --- Nav / breadcrumb --- */
+    .nav {
+      grid-area: nav;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 10px;
+      background: linear-gradient(to bottom, rgba(215, 235, 250, 0.38) 0%, rgba(175, 210, 235, 0.42) 100%);
+      backdrop-filter: blur(14px) saturate(1.4);
+      -webkit-backdrop-filter: blur(14px) saturate(1.4);
+      border-bottom: 1px solid rgba(75, 120, 180, 0.45);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    }
+    .nav-btn {
+      width: 24px;
+      height: 24px;
+      border: 1px solid rgba(75, 120, 180, 0.55);
+      border-radius: 4px;
+      background: linear-gradient(to bottom, rgba(255,255,255,0.7), rgba(220,235,250,0.55));
+      color: #1c3656;
+      font-size: 14px;
+      line-height: 1;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.8);
+    }
+    .nav-btn:hover { background: linear-gradient(to bottom, rgba(255,255,255,0.85), rgba(220,235,250,0.7)); }
+    .nav-btn:active { background: linear-gradient(to bottom, rgba(170,200,230,0.5), rgba(210,230,245,0.7)); }
+    .nav-btn:disabled { opacity: 0.4; cursor: default; }
+
+    .crumbs {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      background: rgba(255,255,255,0.6);
+      border: 1px solid rgba(255,255,255,0.55);
+      border-radius: 999px;
+      padding: 4px 12px;
+      font-family: "Lucida Console", "Consolas", Tahoma, monospace;
+      font-size: 11px;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.7),
+        inset 0 -1px 0 rgba(0,30,70,0.08);
+      min-width: 0;
+      overflow: hidden;
+    }
+    .crumbs .crumb {
+      cursor: pointer;
+      padding: 2px 6px;
+      border-radius: 3px;
+      white-space: nowrap;
+    }
+    .crumbs .crumb:hover { background: rgba(75,120,180,0.15); }
+    .crumbs .sep { opacity: 0.5; padding: 0 2px; user-select: none; }
+
+    .view-modes {
+      display: flex;
+      gap: 2px;
+    }
+
+    /* --- Sidebar --- */
+    .sidebar {
+      grid-area: side;
+      background: linear-gradient(to bottom, rgba(225, 240, 252, 0.55) 0%, rgba(195, 220, 240, 0.5) 100%);
+      backdrop-filter: blur(10px) saturate(1.2);
+      -webkit-backdrop-filter: blur(10px) saturate(1.2);
+      border-right: 1px solid rgba(75, 120, 180, 0.35);
+      overflow-y: auto;
+      padding: 10px 0;
+    }
+    .section { margin-bottom: 14px; }
+    .section-title {
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(28, 54, 86, 0.55);
+      padding: 0 12px 4px;
+      font-weight: 700;
+    }
+    .folder {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      cursor: pointer;
+      border-left: 2px solid transparent;
+      user-select: none;
+    }
+    .folder:hover { background: rgba(255, 255, 255, 0.4); }
+    .folder.active {
+      background: linear-gradient(to right, rgba(100, 160, 220, 0.35), rgba(100, 160, 220, 0.1));
+      border-left-color: #3a6bad;
+      font-weight: 600;
+    }
+    .folder-icon {
+      width: 16px;
+      height: 13px;
+      flex-shrink: 0;
+      background: linear-gradient(to bottom, #ffdb8a 0%, #f4bc55 100%);
+      border: 1px solid #9c6b1a;
+      border-radius: 1px 3px 1px 1px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.5);
+      position: relative;
+    }
+    .folder-icon::before {
+      content: '';
+      position: absolute;
+      top: -3px;
+      left: 2px;
+      width: 7px;
+      height: 3px;
+      background: linear-gradient(to bottom, #ffdb8a 0%, #f4bc55 100%);
+      border: 1px solid #9c6b1a;
+      border-bottom: none;
+      border-radius: 1px 1px 0 0;
+    }
+    .folder-name { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .folder-count {
+      font-family: "Lucida Console", monospace;
+      font-size: 10px;
+      opacity: 0.55;
+    }
+
+    /* --- Main grid --- */
+    .main {
+      grid-area: main;
+      overflow-y: auto;
+      padding: 16px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: 14px;
+    }
+
+    .item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+      padding: 8px 4px;
+      border-radius: 6px;
+      cursor: pointer;
+      user-select: none;
+      position: relative;
+    }
+    .item:hover { background: rgba(255, 255, 255, 0.35); }
+    .item.selected {
+      background: linear-gradient(to bottom, rgba(100, 160, 220, 0.42), rgba(100, 160, 220, 0.28));
+      border: 1px solid rgba(60, 120, 190, 0.6);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.5);
+    }
+
+    .item-thumb {
+      width: 100px;
+      height: 80px;
+      object-fit: cover;
+      border: 1px solid rgba(28, 54, 86, 0.5);
+      background: #000;
+      box-shadow: 0 4px 10px -3px rgba(0, 30, 70, 0.35);
+      pointer-events: none;
+    }
+    .item-name {
+      font-size: 11px;
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      text-align: center;
+    }
+    .item-meta {
+      font-size: 10px;
+      font-family: "Lucida Console", monospace;
+      color: rgba(28, 54, 86, 0.6);
+    }
+
+    .empty {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 60px 20px;
+      color: rgba(28, 54, 86, 0.5);
+      font-style: italic;
+    }
+
+    /* --- Status bar --- */
+    .statusbar {
+      grid-area: foot;
+      background: linear-gradient(to bottom, rgba(215, 235, 250, 0.4) 0%, rgba(175, 210, 235, 0.42) 100%);
+      backdrop-filter: blur(14px) saturate(1.3);
+      -webkit-backdrop-filter: blur(14px) saturate(1.3);
+      border-top: 1px solid rgba(75, 120, 180, 0.4);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
+      display: flex;
+      align-items: center;
+      padding: 0 12px;
+      font-size: 11px;
+      color: rgba(28, 54, 86, 0.75);
+      font-family: "Lucida Console", monospace;
+      gap: 12px;
+    }
+    .statusbar .sep-v {
+      width: 1px;
+      height: 14px;
+      background: rgba(75, 120, 180, 0.4);
+    }
+
+    /* --- Lightbox --- */
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      background: rgba(10, 25, 50, 0.75);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      z-index: 100;
+      cursor: zoom-out;
+    }
+    .lightbox.open { display: flex; }
+    .lightbox img {
+      max-width: 100%;
+      max-height: 100%;
+      border: 1px solid #1c3656;
+      box-shadow: 0 14px 40px rgba(0,0,0,0.5);
+      cursor: default;
+    }
+    .lightbox .lb-caption {
+      position: absolute;
+      bottom: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(255,255,255,0.85);
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-family: "Lucida Console", monospace;
+      font-size: 12px;
+      color: #1c3656;
+      border: 1px solid rgba(255,255,255,0.6);
+    }
+
+    /* Scrollbars — soft aero */
+    ::-webkit-scrollbar { width: 12px; height: 12px; }
+    ::-webkit-scrollbar-track { background: rgba(255,255,255,0.2); }
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(to right, rgba(120,170,220,0.6), rgba(90,140,195,0.7));
+      border: 1px solid rgba(75,120,180,0.4);
+      border-radius: 999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(to right, rgba(140,185,230,0.75), rgba(110,160,210,0.85));
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Top nav / breadcrumb -->
+  <div class="nav">
+    <button class="nav-btn" id="back" title="Назад" disabled>‹</button>
+    <button class="nav-btn" id="forward" title="Вперёд" disabled>›</button>
+    <div class="crumbs" id="crumbs"></div>
+  </div>
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar"></aside>
+
+  <!-- Main grid -->
+  <main class="main">
+    <div class="grid" id="grid"></div>
+  </main>
+
+  <!-- Status bar -->
+  <div class="statusbar" id="statusbar"></div>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox">
+    <img id="lightbox-img" alt="" />
+    <div class="lb-caption" id="lightbox-caption"></div>
+  </div>
+
+  <script>
+    // --- Data — add entries here as the archive grows ---
+    // Each file: { id, type, name, date, tag?, src?, full? }
+    //   type: 'photo' | 'pdf' | 'audio' | 'doc' | 'link' | 'note' | ...
+    //   src:  thumbnail (for photos) or null
+    //   full: high-res / file url — what opens when double-clicked
+    const FILES = [
+      {
+        id: 'home',
+        type: 'photo',
+        name: 'home.jpg',
+        tag: 'home',
+        date: '2024-08-03',
+        src: './assets/img2_sm.jpg',
+        full: './assets/img2.jpg',
+      },
+      {
+        id: 'spb',
+        type: 'photo',
+        name: 'spb.jpg',
+        tag: 'spb',
+        date: '2025-02-19',
+        src: './assets/img1_sm.jpg',
+        full: './assets/img1.jpg',
+      },
+    ];
+
+    const MONTHS_RU = ['янв','фев','мар','апр','май','июн','июл','авг','сен','окт','ноя','дек'];
+    const fmtDate = (iso) => {
+      const [y, m, d] = iso.split('-');
+      return `${parseInt(d)} ${MONTHS_RU[parseInt(m)-1]} ${y}`;
+    };
+
+    // --- View state ---
+    let currentFilter = { type: 'all', value: null };  // {type: 'all'|'year'|'place', value}
+    let selectedId = null;
+    const history = [{ ...currentFilter }];
+    let historyIdx = 0;
+
+    // --- Refs ---
+    const sidebarEl  = document.getElementById('sidebar');
+    const gridEl     = document.getElementById('grid');
+    const crumbsEl   = document.getElementById('crumbs');
+    const statusEl   = document.getElementById('statusbar');
+    const backBtn    = document.getElementById('back');
+    const fwdBtn     = document.getElementById('forward');
+    const lightbox   = document.getElementById('lightbox');
+    const lbImg      = document.getElementById('lightbox-img');
+    const lbCaption  = document.getElementById('lightbox-caption');
+
+    // --- Build sidebar ---
+    function buildSidebar() {
+      const years = [...new Set(FILES.map(f => f.date.slice(0, 4)))].sort();
+      const tags  = [...new Set(FILES.map(f => f.tag).filter(Boolean))].sort();
+      const kinds = [...new Set(FILES.map(f => f.type))].sort();
+
+      const folder = (label, count, filter) => `
+        <div class="folder" data-type="${filter.type}" data-value="${filter.value ?? ''}">
+          <span class="folder-icon"></span>
+          <span class="folder-name">${label}</span>
+          <span class="folder-count">${count}</span>
+        </div>`;
+
+      const kindLabel = (k) => ({ photo: 'фото', pdf: 'pdf', audio: 'аудио', doc: 'документы', link: 'ссылки', note: 'заметки' }[k] || k);
+
+      sidebarEl.innerHTML = `
+        <div class="section">
+          <div class="section-title">Всё</div>
+          ${folder('Все файлы', FILES.length, { type: 'all', value: null })}
+        </div>
+        <div class="section">
+          <div class="section-title">По типу</div>
+          ${kinds.map(k => folder(kindLabel(k), FILES.filter(f => f.type === k).length, { type: 'kind', value: k })).join('')}
+        </div>
+        <div class="section">
+          <div class="section-title">По годам</div>
+          ${years.map(y => folder(y, FILES.filter(f => f.date.startsWith(y)).length, { type: 'year', value: y })).join('')}
+        </div>
+        ${tags.length > 0 ? `
+        <div class="section">
+          <div class="section-title">Теги</div>
+          ${tags.map(t => folder(t, FILES.filter(f => f.tag === t).length, { type: 'tag', value: t })).join('')}
+        </div>` : ''}
+      `;
+      sidebarEl.querySelectorAll('.folder').forEach((el) => {
+        el.addEventListener('click', () => {
+          const type = el.dataset.type;
+          const value = el.dataset.value || null;
+          navigateTo({ type, value });
+        });
+      });
+    }
+
+    // --- Apply filter & render grid ---
+    function getFiltered() {
+      if (currentFilter.type === 'all') return FILES;
+      if (currentFilter.type === 'year') return FILES.filter(p => p.date.startsWith(currentFilter.value));
+      if (currentFilter.type === 'tag')  return FILES.filter(p => p.tag === currentFilter.value);
+      if (currentFilter.type === 'kind') return FILES.filter(p => p.type === currentFilter.value);
+      return FILES;
+    }
+
+    function render() {
+      // Sidebar active state
+      sidebarEl.querySelectorAll('.folder').forEach((el) => {
+        const match = el.dataset.type === currentFilter.type && (el.dataset.value || null) === currentFilter.value;
+        el.classList.toggle('active', match);
+      });
+
+      // Breadcrumbs
+      const parts = ['photos'];
+      if (currentFilter.type === 'year')  parts.push('by year', currentFilter.value);
+      if (currentFilter.type === 'place') parts.push('places', currentFilter.value);
+      if (currentFilter.type === 'all')   parts.push('all');
+      crumbsEl.innerHTML = parts
+        .map((p, i) => `<span class="crumb"${i === 0 ? ' data-home="1"' : ''}>${p}</span>`)
+        .join('<span class="sep">/</span>');
+      crumbsEl.querySelectorAll('.crumb').forEach((el) => {
+        if (el.dataset.home) {
+          el.addEventListener('click', () => navigateTo({ type: 'all', value: null }));
+        }
+      });
+
+      // Grid
+      const items = getFiltered();
+      if (items.length === 0) {
+        gridEl.innerHTML = '<div class="empty">Пусто в этой папке</div>';
+      } else {
+        gridEl.innerHTML = items.map(p => `
+          <div class="item" data-id="${p.id}">
+            <img class="item-thumb" src="${p.src}" alt="" draggable="false" />
+            <div class="item-name">${p.name}</div>
+            <div class="item-meta">${fmtDate(p.date)}</div>
+          </div>
+        `).join('');
+        gridEl.querySelectorAll('.item').forEach((el) => {
+          el.addEventListener('click', (e) => {
+            selectedId = el.dataset.id;
+            renderSelection();
+          });
+          el.addEventListener('dblclick', (e) => {
+            openLightbox(el.dataset.id);
+          });
+        });
+      }
+      renderSelection();
+      renderStatus();
+      renderNavButtons();
+    }
+
+    function renderSelection() {
+      gridEl.querySelectorAll('.item').forEach((el) => {
+        el.classList.toggle('selected', el.dataset.id === selectedId);
+      });
+    }
+
+    function renderStatus() {
+      const items = getFiltered();
+      const selected = items.find(p => p.id === selectedId);
+      const parts = [`${items.length} ${declension(items.length, ['элемент', 'элемента', 'элементов'])}`];
+      if (selected) parts.push('Выбрано: ' + selected.name + ' · ' + fmtDate(selected.date));
+      statusEl.innerHTML = parts.map((p, i) => i === 0 ? `<span>${p}</span>` : `<span class="sep-v"></span><span>${p}</span>`).join('');
+    }
+
+    function renderNavButtons() {
+      backBtn.disabled = historyIdx <= 0;
+      fwdBtn.disabled  = historyIdx >= history.length - 1;
+    }
+
+    function declension(n, forms) {
+      const n10 = n % 10, n100 = n % 100;
+      if (n10 === 1 && n100 !== 11) return forms[0];
+      if (n10 >= 2 && n10 <= 4 && (n100 < 10 || n100 >= 20)) return forms[1];
+      return forms[2];
+    }
+
+    function navigateTo(filter, { push = true } = {}) {
+      currentFilter = { ...filter };
+      if (push) {
+        history.splice(historyIdx + 1);
+        history.push({ ...currentFilter });
+        historyIdx = history.length - 1;
+      }
+      selectedId = null;
+      render();
+    }
+
+    backBtn.addEventListener('click', () => {
+      if (historyIdx <= 0) return;
+      historyIdx -= 1;
+      navigateTo(history[historyIdx], { push: false });
+    });
+    fwdBtn.addEventListener('click', () => {
+      if (historyIdx >= history.length - 1) return;
+      historyIdx += 1;
+      navigateTo(history[historyIdx], { push: false });
+    });
+
+    // --- Lightbox ---
+    function openLightbox(id) {
+      const p = FILES.find(x => x.id === id);
+      if (!p) return;
+      lbImg.src = p.full;
+      lbCaption.textContent = `${p.name} · ${fmtDate(p.date)} · ${p.place}`;
+      lightbox.classList.add('open');
+    }
+    function closeLightbox() { lightbox.classList.remove('open'); }
+    lightbox.addEventListener('click', (e) => {
+      if (e.target === lightbox) closeLightbox();
+    });
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && lightbox.classList.contains('open')) closeLightbox();
+      if (e.key === 'Enter' && selectedId && !lightbox.classList.contains('open')) openLightbox(selectedId);
+    });
+
+    // --- Init ---
+    buildSidebar();
+    render();
+  </script>
+</body>
+
+</html>

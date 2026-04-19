@@ -54,7 +54,12 @@ function tidyUp() {
   const duration = 700;
   const start = performance.now();
   const from = new Map();
-  homes.forEach((_, el) => from.set(el, { ...live.get(el) }));
+  const allStickers = [];
+  homes.forEach((_, el) => {
+    from.set(el, { ...live.get(el) });
+    el.classList.add('tidying');
+    allStickers.push(el);
+  });
 
   const center = computeHomeCenter();
   const viewFrom = { ...view };
@@ -87,6 +92,7 @@ function tidyUp() {
     renderView();
 
     if (t < 1) requestAnimationFrame(tick);
+    else allStickers.forEach((el) => el.classList.remove('tidying'));
   }
   requestAnimationFrame(tick);
 }
