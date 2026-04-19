@@ -4,6 +4,7 @@
   user-select: none;
   -webkit-user-drag: none;
   cursor: grab;
+  touch-action: none;
   transform-origin: 50% 50%;
   transform: translate(var(--sx, 0px), var(--sy, 0px)) rotate(var(--srot, 0deg));
   transition:

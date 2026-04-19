@@ -115,31 +115,90 @@ view.x = -initialCenter.x;
 view.y = -initialCenter.y;
 renderView();
 
-// Pan
+// Pan + pinch-zoom (multi-touch aware)
+const pointers = new Map();   // pointerId -> { x, y }
 let panning = false;
-let panStart = { x: 0, y: 0, vx: 0, vy: 0 };
+let panStart = null;
+let pinching = false;
+let pinchStart = null;
+
+function viewportCenterCoords(clientX, clientY) {
+  const rect = viewport.getBoundingClientRect();
+  return {
+    x: clientX - rect.left - rect.width / 2,
+    y: clientY - rect.top - rect.height / 2,
+  };
+}
 
 viewport.addEventListener('pointerdown', (e) => {
   if (e.target.closest('.sticker') || e.target.closest('.os-window')) return;
-  panning = true;
-  viewport.classList.add('panning');
-  panStart = { x: e.clientX, y: e.clientY, vx: view.x, vy: view.y };
-  viewport.setPointerCapture(e.pointerId);
+  pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+
+  if (pointers.size === 1) {
+    panning = true;
+    viewport.classList.add('panning');
+    panStart = { x: e.clientX, y: e.clientY, vx: view.x, vy: view.y };
+  } else if (pointers.size === 2) {
+    // Enter pinch — cancel pan
+    panning = false;
+    pinching = true;
+    const [a, b] = [...pointers.values()];
+    const dist = Math.hypot(b.x - a.x, b.y - a.y);
+    const midClientX = (a.x + b.x) / 2;
+    const midClientY = (a.y + b.y) / 2;
+    const mid = viewportCenterCoords(midClientX, midClientY);
+    pinchStart = {
+      dist,
+      vs: view.scale,
+      // world-space point under the initial midpoint (stays anchored)
+      wx: (mid.x - view.x) / view.scale,
+      wy: (mid.y - view.y) / view.scale,
+    };
+  }
 });
+
 viewport.addEventListener('pointermove', (e) => {
-  if (!panning) return;
-  view.x = panStart.vx + (e.clientX - panStart.x);
-  view.y = panStart.vy + (e.clientY - panStart.y);
-  renderView();
+  if (!pointers.has(e.pointerId)) return;
+  pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+
+  if (pinching && pointers.size >= 2) {
+    const [a, b] = [...pointers.values()];
+    const dist = Math.hypot(b.x - a.x, b.y - a.y);
+    const mid = viewportCenterCoords((a.x + b.x) / 2, (a.y + b.y) / 2);
+
+    let next = pinchStart.vs * (dist / pinchStart.dist);
+    next = Math.min(MAX_SCALE, Math.max(MIN_SCALE, next));
+    view.scale = next;
+    view.x = mid.x - pinchStart.wx * next;
+    view.y = mid.y - pinchStart.wy * next;
+    renderView();
+  } else if (panning && pointers.size === 1) {
+    view.x = panStart.vx + (e.clientX - panStart.x);
+    view.y = panStart.vy + (e.clientY - panStart.y);
+    renderView();
+  }
 });
-const endPan = (e) => {
-  if (!panning) return;
-  panning = false;
-  viewport.classList.remove('panning');
-  try { viewport.releasePointerCapture(e.pointerId); } catch {}
-};
-viewport.addEventListener('pointerup', endPan);
-viewport.addEventListener('pointercancel', endPan);
+
+function endPointer(e) {
+  if (!pointers.has(e.pointerId)) return;
+  pointers.delete(e.pointerId);
+
+  if (pinching && pointers.size < 2) {
+    pinching = false;
+    // If one finger is still down, resume pan from its current position
+    if (pointers.size === 1) {
+      const [remaining] = [...pointers.values()];
+      panning = true;
+      panStart = { x: remaining.x, y: remaining.y, vx: view.x, vy: view.y };
+    }
+  }
+  if (pointers.size === 0) {
+    panning = false;
+    viewport.classList.remove('panning');
+  }
+}
+viewport.addEventListener('pointerup', endPointer);
+viewport.addEventListener('pointercancel', endPointer);
 
 // Zoom
 viewport.addEventListener('wheel', (e) => {
