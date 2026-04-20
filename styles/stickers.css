@@ -148,6 +148,8 @@
 .chip--linkedin { background: #cfe3ff; }
 .chip--telegram { background: #e0d4ff; }
 .chip--photos   { background: #ffe0bf; }
+.chip--metro    { background: #f3e3e3; font-size: 12px; padding: 6px 9px 6px 12px; }
+.chip--metro::after { font-size: 1.1em; margin-left: 6px; }
 
 /* --- Sticky notes --- */
 .sticker--note {
