@@ -1,4 +1,4 @@
-import { view, MIN_SCALE, MAX_SCALE, homes, live } from './state.js';
+import { view, MIN_SCALE, MAX_SCALE, homes, live, bindCanvas, renderView } from './state.js';
 import {
   registerSticker,
   renderSticker,
@@ -13,10 +13,7 @@ import {
 
 const viewport = document.getElementById('viewport');
 const canvas = document.getElementById('canvas');
-
-function renderView() {
-  canvas.style.transform = `translate(${view.x}px, ${view.y}px) scale(${view.scale})`;
-}
+bindCanvas(canvas);
 
 // Register stickers from HTML + wire up variant-specific click handlers
 document.querySelectorAll('.sticker').forEach((el) => {
