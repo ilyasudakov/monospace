@@ -3,7 +3,9 @@
   position: fixed;
   top: 50%;
   left: 16px;
-  transform: translateY(-50%);
+  transform: translate(-130%, -50%);
+  opacity: 0;
+  pointer-events: none;
   z-index: 2000;
   display: flex;
   flex-direction: column;
@@ -22,8 +24,15 @@
   color: #1c3656;
   min-width: 56px;
   max-width: 220px;
+  transition:
+    transform 320ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 240ms ease;
 }
-.window-dock:empty { display: none; }
+.window-dock.is-visible {
+  transform: translate(0, -50%);
+  opacity: 1;
+  pointer-events: auto;
+}
 
 .dock-item {
   display: flex;
@@ -33,21 +42,17 @@
   border-radius: 999px;
   cursor: pointer;
   transition: background 160ms ease;
+  animation: dock-item-in 220ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes dock-item-in {
+  from { opacity: 0; transform: translateX(-10px); }
+  to   { opacity: 1; transform: translateX(0); }
 }
 .dock-item:hover { background: rgba(255, 255, 255, 0.6); }
 
-.dock-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #5b8cc3;
-  flex-shrink: 0;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
-}
-.dock-dot--photo { background: #8a6ab0; }
-.dock-dot--page  { background: #4f9b6f; }
-
 .dock-title {
+  flex: 1;
+  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -89,12 +94,12 @@
   left: 0;
   transform-origin: 0 0;
   background: transparent;   /* transparent so the titlebar's backdrop-filter can pick up canvas behind */
-  border: 1px solid rgba(50, 90, 155, 0.85);
+  border: 1px solid rgba(150, 155, 165, 0.55);
   border-radius: 8px;
   box-shadow:
-    0 10px 30px -6px rgba(20, 50, 100, 0.5),
-    0 2px 6px rgba(20, 50, 100, 0.25),
-    inset 0 0 0 1px rgba(255,255,255,0.55);
+    0 10px 30px -6px rgba(60, 65, 75, 0.32),
+    0 2px 6px rgba(60, 65, 75, 0.16),
+    inset 0 0 0 1px rgba(255,255,255,0.5);
   overflow: hidden;
   min-width: 340px;
   min-height: 160px;
@@ -292,25 +297,22 @@
   background: #fff;
 }
 
-/* Resize handle — glossy corner */
+/* Resize handles — edges + corners */
 .os-window-resizer {
   position: absolute;
-  right: 0;
-  bottom: 0;
-  width: 16px;
-  height: 16px;
-  cursor: nwse-resize;
   z-index: 3;
-  background-image:
-    linear-gradient(135deg,
-      transparent 0 54%,
-      #8ea2bc 54% 60%,
-      transparent 60% 70%,
-      #8ea2bc 70% 76%,
-      transparent 76% 86%,
-      #8ea2bc 86% 92%,
-      transparent 92%);
 }
+.os-window-resizer--n { top: 0; left: 10px; right: 10px; height: 4px; cursor: ns-resize; }
+.os-window-resizer--s { bottom: 0; left: 10px; right: 10px; height: 4px; cursor: ns-resize; }
+.os-window-resizer--e { top: 10px; right: 0; bottom: 10px; width: 4px; cursor: ew-resize; }
+.os-window-resizer--w { top: 10px; left: 0; bottom: 10px; width: 4px; cursor: ew-resize; }
+.os-window-resizer--nw { top: 0; left: 0; width: 10px; height: 10px; cursor: nwse-resize; }
+.os-window-resizer--ne { top: 0; right: 0; width: 10px; height: 10px; cursor: nesw-resize; }
+.os-window-resizer--sw { bottom: 0; left: 0; width: 10px; height: 10px; cursor: nesw-resize; }
+.os-window-resizer--se { bottom: 0; right: 0; width: 12px; height: 12px; cursor: nwse-resize; }
+
+/* Keep titlebar buttons clickable above corner resize handles */
+.os-window-controls { position: relative; z-index: 5; }
 
 /* Footer — silvery status bar */
 .os-window-footer {

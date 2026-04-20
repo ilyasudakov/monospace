@@ -7,7 +7,8 @@
 //   variant: 'photo' | 'page' | undefined
 //   path:    optional string for the address bar
 
-import { view, MAX_SCALE, renderView } from './state.js';
+import { view } from './state.js';
+import { renderDock } from './window-dock.js';
 
 const MAX_SIZE = 1000;
 
@@ -15,96 +16,6 @@ export const openWindows = [];
 let windowZ = 1000;
 
 const canvasEl = document.getElementById('canvas');
-
-// --- Dock (mini UI listing open windows) ---
-const dockEl = document.createElement('div');
-dockEl.className = 'window-dock';
-document.body.appendChild(dockEl);
-
-let viewAnimRaf = null;
-function animateView(target, duration = 480) {
-  if (viewAnimRaf) cancelAnimationFrame(viewAnimRaf);
-  const start = performance.now();
-  const from = { ...view };
-  const ease = (t) => 1 - Math.pow(1 - t, 3);  // easeOutCubic
-
-  function tick(now) {
-    const t = Math.min(1, (now - start) / duration);
-    const e = ease(t);
-    view.x = from.x + (target.x - from.x) * e;
-    view.y = from.y + (target.y - from.y) * e;
-    view.scale = from.scale + (target.scale - from.scale) * e;
-    renderView();
-    if (t < 1) viewAnimRaf = requestAnimationFrame(tick);
-    else viewAnimRaf = null;
-  }
-  viewAnimRaf = requestAnimationFrame(tick);
-}
-
-function focusWindow(win) {
-  // Bring to front
-  windowZ += 1;
-  win.style.zIndex = String(windowZ);
-
-  // Brief highlight pulse
-  win.animate(
-    [{ filter: 'brightness(1.18)' }, { filter: 'brightness(1)' }],
-    { duration: 320, easing: 'ease-out' }
-  );
-
-  // Zoom canvas so the window centers in viewport with margin
-  const w = parseFloat(win.style.width);
-  const h = parseFloat(win.style.height);
-  if (!w || !h || !win._pos) return;
-  const cx = win._pos.x + w / 2;
-  const cy = win._pos.y + h / 2;
-  const margin = 80;
-  const sx = (window.innerWidth - margin * 2) / w;
-  const sy = (window.innerHeight - margin * 2) / h;
-  const targetScale = Math.min(sx, sy, MAX_SCALE);
-  animateView({
-    x: -cx * targetScale,
-    y: -cy * targetScale,
-    scale: targetScale,
-  });
-}
-
-function escapeHtml(s) {
-  return String(s).replace(/[&<>"']/g, (c) => ({
-    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
-  }[c]));
-}
-
-function renderDock() {
-  dockEl.innerHTML = openWindows.map((win, i) => {
-    const title = win.querySelector('.os-window-title')?.textContent || '—';
-    const variantClass = [...win.classList].find((c) => c.startsWith('os-window--'));
-    const variant = variantClass ? variantClass.slice('os-window--'.length) : 'default';
-    return `<div class="dock-item" data-idx="${i}" title="${escapeHtml(title)}">
-      <span class="dock-dot dock-dot--${variant}"></span>
-      <span class="dock-title">${escapeHtml(title)}</span>
-      <button class="dock-close" data-idx="${i}" aria-label="close">×</button>
-    </div>`;
-  }).join('');
-
-  dockEl.querySelectorAll('.dock-item').forEach((item) => {
-    item.addEventListener('click', (e) => {
-      if (e.target.closest('.dock-close')) return;
-      const idx = parseInt(item.dataset.idx, 10);
-      const win = openWindows[idx];
-      if (win) focusWindow(win);
-    });
-  });
-  dockEl.querySelectorAll('.dock-close').forEach((btn) => {
-    btn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const idx = parseInt(btn.dataset.idx, 10);
-      const win = openWindows[idx];
-      if (win) closeWindow(win);
-    });
-  });
-
-}
 
 // --- Core ---
 export function openWindow({ title = '', body = '', footer = null, variant, path = null, width = 520, height = 420 } = {}) {
@@ -236,37 +147,61 @@ function attachWindowDrag(win, handle) {
 }
 
 function attachResize(win) {
-  const handle = document.createElement('div');
-  handle.className = 'os-window-resizer';
-  win.appendChild(handle);
+  const MIN_W = 320;
+  const MIN_H = 140;
+  const dirs = ['n', 's', 'e', 'w', 'nw', 'ne', 'sw', 'se'];
 
-  let resizing = false;
-  let startPtr = { x: 0, y: 0 };
-  let startSize = { w: 0, h: 0 };
+  for (const dir of dirs) {
+    const handle = document.createElement('div');
+    handle.className = `os-window-resizer os-window-resizer--${dir}`;
+    win.appendChild(handle);
 
-  handle.addEventListener('pointerdown', (e) => {
-    resizing = true;
-    startPtr = { x: e.clientX, y: e.clientY };
-    startSize = { w: parseFloat(win.style.width), h: parseFloat(win.style.height) };
-    handle.setPointerCapture(e.pointerId);
-    e.stopPropagation();
-  });
-  handle.addEventListener('pointermove', (e) => {
-    if (!resizing) return;
-    const dw = (e.clientX - startPtr.x) / view.scale;
-    const dh = (e.clientY - startPtr.y) / view.scale;
-    const w = Math.max(320, startSize.w + dw);
-    const h = Math.max(140, startSize.h + dh);
-    win.style.width = `${w}px`;
-    win.style.height = `${h}px`;
-  });
-  const end = (e) => {
-    if (!resizing) return;
-    resizing = false;
-    try { handle.releasePointerCapture(e.pointerId); } catch {}
-  };
-  handle.addEventListener('pointerup', end);
-  handle.addEventListener('pointercancel', end);
+    let resizing = false;
+    let startPtr = { x: 0, y: 0 };
+    let startSize = { w: 0, h: 0 };
+    let startPos = { x: 0, y: 0 };
+
+    handle.addEventListener('pointerdown', (e) => {
+      resizing = true;
+      startPtr = { x: e.clientX, y: e.clientY };
+      startSize = { w: parseFloat(win.style.width), h: parseFloat(win.style.height) };
+      startPos = { ...win._pos };
+      handle.setPointerCapture(e.pointerId);
+      e.stopPropagation();
+    });
+    handle.addEventListener('pointermove', (e) => {
+      if (!resizing) return;
+      const dx = (e.clientX - startPtr.x) / view.scale;
+      const dy = (e.clientY - startPtr.y) / view.scale;
+
+      let w = startSize.w;
+      let h = startSize.h;
+      let px = startPos.x;
+      let py = startPos.y;
+
+      if (dir.includes('e')) w = Math.max(MIN_W, startSize.w + dx);
+      if (dir.includes('w')) {
+        w = Math.max(MIN_W, startSize.w - dx);
+        px = startPos.x + (startSize.w - w);
+      }
+      if (dir.includes('s')) h = Math.max(MIN_H, startSize.h + dy);
+      if (dir.includes('n')) {
+        h = Math.max(MIN_H, startSize.h - dy);
+        py = startPos.y + (startSize.h - h);
+      }
+
+      win.style.width = `${w}px`;
+      win.style.height = `${h}px`;
+      setWindowPos(win, px, py);
+    });
+    const end = (e) => {
+      if (!resizing) return;
+      resizing = false;
+      try { handle.releasePointerCapture(e.pointerId); } catch {}
+    };
+    handle.addEventListener('pointerup', end);
+    handle.addEventListener('pointercancel', end);
+  }
 }
 
 // --- Specialised helpers ---
