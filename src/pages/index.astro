@@ -1,0 +1,133 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import '../styles/globals.css';
+import '../styles/canvas.css';
+import '../styles/stickers.css';
+import '../styles/window.css';
+
+const baseUrl = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+const asset = (name: string) => `${baseUrl}assets/${name}`;
+const route = (name: string) => `${baseUrl}${name}/`;
+---
+
+<BaseLayout
+  title="Ilya Sudakov"
+  description="Ilya Sudakov — personal playground"
+  bodyClass="playground"
+  disableViewportZoom
+>
+  <div class="viewport" id="viewport">
+    <div class="canvas" id="canvas">
+      <div class="sticker sticker--paper" data-x="-260" data-y="-220" data-rot="-2.5">
+        <p>Привет, меня зовут <strong>Илья</strong>.</p>
+        <p>
+          Продакт-инженер в <a
+            href="https://improvado.io"
+            target="_blank"
+            rel="noopener"
+            class="paper-link">Improvado</a
+          >, из Санкт-Петербурга. Люблю решать сложные задачи и делать полезные продукты end-to-end:
+          дизайн, код, поддержка.
+        </p>
+        <p class="muted">Пишу музыку, делаю фото.</p>
+      </div>
+
+      <div
+        class="sticker sticker--photo"
+        data-x="200"
+        data-y="-260"
+        data-rot="-3"
+        data-full={asset('img2.jpg')}
+      >
+        <img src={asset('img2_sm.jpg')} alt="" draggable="false" />
+        <div class="photo-label">авг 2024</div>
+      </div>
+
+      <div
+        class="sticker sticker--photo"
+        data-x="480"
+        data-y="60"
+        data-rot="4"
+        data-full={asset('img1.jpg')}
+      >
+        <img src={asset('img1_sm.jpg')} alt="" draggable="false" />
+        <div class="photo-label">фев 2025</div>
+      </div>
+
+      <a
+        class="sticker sticker--chip chip--email"
+        href="mailto:ilyasudakov.dev@gmail.com"
+        data-x="-280"
+        data-y="80"
+        data-rot="-4"
+      >
+        <span>email</span>
+      </a>
+
+      <a
+        class="sticker sticker--chip chip--cv"
+        href={route('cv')}
+        data-window={route('cv')}
+        data-window-title="Резюме"
+        data-x="-140"
+        data-y="140"
+        data-rot="2"
+      >
+        <span>резюме</span>
+      </a>
+
+      <a
+        class="sticker sticker--chip chip--linkedin"
+        href="https://www.linkedin.com/in/ilyasudakov/"
+        target="_blank"
+        rel="noopener"
+        data-x="0"
+        data-y="180"
+        data-rot="-3"
+      >
+        <span>linkedin</span>
+      </a>
+
+      <a
+        class="sticker sticker--chip chip--telegram"
+        href="https://t.me/ilyasudakov"
+        target="_blank"
+        rel="noopener"
+        data-x="160"
+        data-y="220"
+        data-rot="5"
+      >
+        <span>telegram</span>
+      </a>
+
+      <a
+        class="sticker sticker--chip chip--photos"
+        href={route('photos')}
+        data-window={route('photos')}
+        data-window-title="Фото"
+        data-x="500"
+        data-y="-140"
+        data-rot="-4"
+      >
+        <span>фото архив</span>
+      </a>
+
+      <div class="sticker sticker--note note--pink" data-x="-420" data-y="260" data-rot="-5">
+        <span class="note-label">интерес</span>
+        <strong>Дизайн</strong>
+      </div>
+
+      <div class="sticker sticker--note note--blue" data-x="-240" data-y="340" data-rot="3">
+        <span class="note-label">интерес</span>
+        <strong>Картография</strong>
+      </div>
+
+      <div class="sticker sticker--note note--yellow" data-x="-60" data-y="380" data-rot="-2">
+        <span class="note-label">интерес</span>
+        <strong>Музыка</strong>
+      </div>
+    </div>
+  </div>
+
+  <script src="../scripts/canvas.js"></script>
+</BaseLayout>

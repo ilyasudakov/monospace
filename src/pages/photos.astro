@@ -1,40 +1,27 @@
-<!DOCTYPE html>
-<html lang="ru">
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import '../styles/photos.css';
+---
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Фото — архив</title>
-  <link rel="stylesheet" href="./photos.css" />
-  <script src="./scripts/posthog.js"></script>
-</head>
-
-<body>
-  <!-- Top nav / breadcrumb -->
+<BaseLayout title="Фото — архив">
   <div class="nav">
     <button class="nav-btn" id="back" title="Назад" disabled>‹</button>
     <button class="nav-btn" id="forward" title="Вперёд" disabled>›</button>
     <div class="crumbs" id="crumbs"></div>
   </div>
 
-  <!-- Sidebar -->
   <aside class="sidebar" id="sidebar"></aside>
 
-  <!-- Main grid -->
   <main class="main">
     <div class="grid" id="grid"></div>
   </main>
 
-  <!-- Status bar -->
   <div class="statusbar" id="statusbar"></div>
 
-  <!-- Lightbox -->
   <div class="lightbox" id="lightbox">
     <img id="lightbox-img" alt="" />
     <div class="lb-caption" id="lightbox-caption"></div>
   </div>
 
-  <script src="./photos.js"></script>
-</body>
-
-</html>
+  <script src="../scripts/photos.js"></script>
+</BaseLayout>

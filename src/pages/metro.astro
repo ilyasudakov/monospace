@@ -1,0 +1,15 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import 'leaflet/dist/leaflet.css';
+import '../styles/metro.css';
+---
+
+<BaseLayout title="Петербургский метрополитен — OSM">
+  <header class="topbar">
+    <h1>Петербургский метрополитен · OSM</h1>
+    <span class="status" id="status">загрузка через Overpass…</span>
+  </header>
+  <div id="map"></div>
+
+  <script src="../scripts/metro.js"></script>
+</BaseLayout>
