@@ -1,0 +1,99 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import 'leaflet/dist/leaflet.css';
+---
+
+<BaseLayout title="Петербургский метрополитен — OSM">
+  <header class="topbar">
+    <h1>Петербургский метрополитен · OSM</h1>
+    <span class="status" id="status">загрузка через Overpass…</span>
+  </header>
+  <div id="map"></div>
+
+  <script src="../scripts/metro.js"></script>
+</BaseLayout>
+
+<style>
+  :global(:root) {
+    --paper: #fff;
+    --ink: #1b1612;
+  }
+
+  :global(*) {
+    box-sizing: border-box;
+  }
+
+  :global(html),
+  :global(body) {
+    margin: 0;
+    height: 100%;
+    background: var(--paper);
+    color: var(--ink);
+  }
+
+  :global(body) {
+    font-family: ui-monospace, "JetBrains Mono", "IBM Plex Mono", Menlo, Consolas, monospace;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .topbar {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--ink);
+    display: flex;
+    gap: 18px;
+    align-items: baseline;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .topbar h1 {
+    margin: 0;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    font-weight: 600;
+  }
+
+  .status {
+    color: #55483c;
+    font-size: 10px;
+    letter-spacing: 0.06em;
+  }
+
+  .status.err {
+    color: #b3261e;
+    text-transform: none;
+    letter-spacing: 0;
+  }
+
+  #map {
+    flex: 1;
+    background: #fff;
+  }
+
+  :global(.leaflet-tooltip.st-label) {
+    background: rgba(255, 255, 255, 0.85);
+    border: none;
+    box-shadow: none;
+    color: var(--ink);
+    font-family: ui-monospace, "JetBrains Mono", Menlo, Consolas, monospace;
+    font-size: 10px;
+    padding: 1px 4px;
+    white-space: nowrap;
+    font-weight: 500;
+  }
+
+  :global(.leaflet-tooltip.st-label::before) {
+    display: none;
+  }
+
+  :global(.leaflet-container) {
+    font-family: inherit;
+  }
+
+  :global(.leaflet-control-attribution) {
+    font-size: 9px;
+    background: rgba(255, 255, 255, 0.85);
+  }
+</style>

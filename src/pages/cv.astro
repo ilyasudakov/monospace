@@ -1,0 +1,110 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import '../styles/globals.css';
+---
+
+<BaseLayout title="Ilya Sudakov CV 2025" description="Portfolio and work experience" lang="ru">
+  <main class="container">
+    <header>
+      <h1>
+        Илья Судаков
+        <span>г.р. 1998</span>
+      </h1>
+    </header>
+
+    <section id="experience">
+      <h2>Работа</h2>
+      <ul class="list">
+        <li>
+          <div class="list-item__period">2025 - сейчас</div>
+          <div class="list-item__description">
+            <p>Продакт-инженер, <a href="https://improvado.io" target="_blank" rel="noopener">Improvado</a></p>
+            <p>
+              Анализ и проработка требований. Курирование реализации на всём цикле разработки. Код — Frontend
+              (React) + Backend (Django) с Claude Code.
+            </p>
+          </div>
+        </li>
+        <li>
+          <div class="list-item__period">2024 - 2025</div>
+          <div class="list-item__description">
+            <p>Младший продакт-менеджер, <a href="https://improvado.io" target="_blank" rel="noopener">Improvado</a></p>
+            <p>Описание требований, макеты в Figma, прототипы с React + Cursor/Claude Code, v0.</p>
+          </div>
+        </li>
+        <li>
+          <div class="list-item__period">2023 - 2024</div>
+          <div class="list-item__description">
+            <p>Технический писатель/Бизнес-аналитик, <a href="https://improvado.io" target="_blank" rel="noopener">Improvado</a></p>
+            <p>Анализ и описание требований для продуктовых фичей. Работа с дизайнером, командой разработчиков и менеджером по продукту.</p>
+          </div>
+        </li>
+        <li>
+          <div class="list-item__period">2022 - 2023</div>
+          <div class="list-item__description">
+            <p>Младший технический писатель, <a href="https://improvado.io" target="_blank" rel="noopener">Improvado</a></p>
+            <p>Написание и поддержка документации продукта. Видео, инструкции и статьи на английском для клиентов.</p>
+          </div>
+        </li>
+        <li>
+          <div class="list-item__period">2020 - 2021</div>
+          <div class="list-item__description">
+            <p>Фронтенд-разработчик, <a href="https://osfix.ru" target="_blank" rel="noopener">Osfix</a></p>
+            <p>Разработка React-приложения, дизайн CRM/ERP-системы для малого предприятия.</p>
+          </div>
+        </li>
+      </ul>
+    </section>
+
+    <section id="education">
+      <h2>Образование</h2>
+      <ul class="list">
+        <li>
+          <div class="list-item__period">2016 - 2020</div>
+          <div class="list-item__description">
+            <p>СПбГУТ им. проф. М.А. Бонч-Бруевича</p>
+            <p>Бакалавриат, Программная инженерия</p>
+          </div>
+        </li>
+      </ul>
+    </section>
+  </main>
+</BaseLayout>
+
+<style>
+  .container {
+    padding: 3rem 0;
+    gap: 3rem;
+  }
+
+  header h1 {
+    margin: 0;
+  }
+
+  h2 {
+    margin-bottom: 1rem;
+  }
+
+  header span {
+    font-size: 14px;
+    font-weight: 400;
+    margin-left: 4px;
+  }
+
+  ul.list {
+    list-style-type: none;
+    padding: 0;
+  }
+
+  ul.list li:not(:last-child) {
+    margin-bottom: 2rem;
+  }
+
+  .list-item__period {
+    font-weight: 600;
+  }
+
+  .list-item__description {
+    padding-left: 1rem;
+  }
+</style>

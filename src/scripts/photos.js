@@ -3,6 +3,8 @@
 //   type: 'photo' | 'pdf' | 'audio' | 'doc' | 'link' | 'note' | ...
 //   src:  thumbnail (for photos) or null
 //   full: high-res / file url — what opens when double-clicked
+const assetsUrl = `${import.meta.env.BASE_URL.replace(/\/?$/, '/')}assets/`;
+
 const FILES = [
   {
     id: 'home',
@@ -10,8 +12,8 @@ const FILES = [
     name: 'home.jpg',
     tag: 'home',
     date: '2024-08-03',
-    src: './assets/img2_sm.jpg',
-    full: './assets/img2.jpg',
+    src: `${assetsUrl}img2_sm.jpg`,
+    full: `${assetsUrl}img2.jpg`,
   },
   {
     id: 'spb',
@@ -19,8 +21,8 @@ const FILES = [
     name: 'spb.jpg',
     tag: 'spb',
     date: '2025-02-19',
-    src: './assets/img1_sm.jpg',
-    full: './assets/img1.jpg',
+    src: `${assetsUrl}img1_sm.jpg`,
+    full: `${assetsUrl}img1.jpg`,
   },
 ];
 
