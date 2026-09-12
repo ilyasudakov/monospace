@@ -1,7 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import '../styles/globals.css';
-import '../styles/cv.css';
 ---
 
 <BaseLayout title="Ilya Sudakov CV 2025" description="Portfolio and work experience" lang="ru">
@@ -71,3 +70,41 @@ import '../styles/cv.css';
     </section>
   </main>
 </BaseLayout>
+
+<style>
+  .container {
+    padding: 3rem 0;
+    gap: 3rem;
+  }
+
+  header h1 {
+    margin: 0;
+  }
+
+  h2 {
+    margin-bottom: 1rem;
+  }
+
+  header span {
+    font-size: 14px;
+    font-weight: 400;
+    margin-left: 4px;
+  }
+
+  ul.list {
+    list-style-type: none;
+    padding: 0;
+  }
+
+  ul.list li:not(:last-child) {
+    margin-bottom: 2rem;
+  }
+
+  .list-item__period {
+    font-weight: 600;
+  }
+
+  .list-item__description {
+    padding-left: 1rem;
+  }
+</style>
