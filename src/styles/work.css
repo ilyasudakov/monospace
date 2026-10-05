@@ -9,6 +9,8 @@ a { text-underline-offset: 3px; overflow-wrap: anywhere; }
 a:focus-visible { outline: 2px solid #0000ef; outline-offset: 3px; }
 .portfolio-header h1 { margin: 0 0 1rem; }
 .portfolio-header p { line-height: 1.5; }
+.role-explanation { margin-top: 1.5rem; font-size: 14px; }
+.role-explanation p + p { margin-top: .75rem; }
 h2 { margin-bottom: 1rem; }
 .personal-project + .personal-project { margin-top: 2rem; }
 .project-heading { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 12px; }

@@ -16,6 +16,10 @@ const formatDate = (date: string) => new Intl.DateTimeFormat('ru', {
       <header class="portfolio-header">
         <h1>Портфолио</h1>
         <p>Свои проекты и продуктовые релизы<br class="desktop-break" /> как разработчика и менеджера.</p>
+        <div class="role-explanation">
+          <p><strong>{roleLabels.owner}</strong> — <span>Отвечал за проект целиком: от требований и дизайна до разработки, запуска и поддержки.</span></p>
+          <p><strong>{roleLabels.manager}</strong> — <span>Прорабатывал требования, координировал дизайн и разработку, доводил проект до релиза.</span></p>
+        </div>
       </header>
       {personalProjects.length > 0 && <section class="personal-projects" aria-labelledby="personal-projects-title">
         <h2 class="section-heading" id="personal-projects-title">Свои проекты</h2>

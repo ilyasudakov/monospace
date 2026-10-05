@@ -26,6 +26,8 @@ const translations = {
   'Бакалавриат, Программная инженерия': 'Bachelor’s degree in Software Engineering',
   'Главная': 'Home', 'Свои проекты и продуктовые релизы': 'Personal projects and product releases',
   'как разработчика и менеджера.': 'as a developer and manager.', 'Свои проекты': 'Personal projects',
+  'Отвечал за проект целиком: от требований и дизайна до разработки, запуска и поддержки.': 'Owned the project end to end: requirements, design, development, launch, and support.',
+  'Прорабатывал требования, координировал дизайн и разработку, доводил проект до релиза.': 'Defined requirements, coordinated design and development, and guided the project through release.',
   'Расширение Chrome': 'Chrome extension',
   'Переносит cookies с выбранных хостов на localhost и staging, чтобы тестировать приложение с рабочей сессией. Автоматически, при загрузке страницы.': 'Automatically syncs cookies from selected hosts to localhost and staging on page load, so you can test your app with an authenticated session.',
   'Настраиваемые источники и назначения': 'Configurable sources and destinations',
@@ -92,7 +94,7 @@ function applyLanguage() {
     if (node.textContent !== result) node.textContent = result;
   }
   document.querySelectorAll('[title], [aria-label], [placeholder], [data-window-title]').forEach(element => {
-    if (element.closest('[data-language-switch]')) return;
+    if (element.closest('[data-language-switch], [data-video-switch]')) return;
     let sources = attributeOriginals.get(element);
     if (!sources) { sources = new Map(); attributeOriginals.set(element, sources); }
     for (const attribute of ['title', 'aria-label', 'placeholder', 'data-window-title']) {
