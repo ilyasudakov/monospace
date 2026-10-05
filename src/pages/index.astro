@@ -16,7 +16,8 @@ const route = (name: string) => `${baseUrl}${name}/`;
   <button class="language-switch" data-language-switch data-language="ru" type="button" aria-label="Переключить на английский" title="Переключить на английский">
     <span class="language-label" data-language-label>RU</span>
   </button>
-  <div class="viewport" id="viewport" style={`--wallpaper: url('${baseUrl}assets/coast-wallpaper.webp')`}>
+  <div class="viewport" id="viewport" style={`--wallpaper: url('${baseUrl}assets/autumn-background.webp')`}>
+    <video class="wallpaper-video" data-background-video data-src={`${baseUrl}assets/autumn-background.mp4`} poster={`${baseUrl}assets/autumn-background.webp`} muted loop playsinline preload="none" aria-hidden="true" tabindex="-1"></video>
     <div class="canvas" id="canvas">
       <div class="sticker sticker--paper" data-x="-220" data-y="-200" data-rot="-2.5">
         <p>Привет, меня зовут <strong>Илья</strong>.</p>
@@ -72,6 +73,7 @@ const route = (name: string) => `${baseUrl}${name}/`;
   </div>
 
   <script src="../scripts/canvas.js"></script>
+  <script src="../scripts/background-video.js"></script>
 </BaseLayout>
 
 <style>
@@ -146,6 +148,16 @@ const route = (name: string) => `${baseUrl}${name}/`;
     width: 0;
     height: 0;
     transform-origin: 0 0;
+    z-index: 1;
+  }
+  .wallpaper-video {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    pointer-events: none;
   }
 
   .sticker {
