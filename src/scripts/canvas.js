@@ -1,4 +1,4 @@
-import { view, MIN_SCALE, MAX_SCALE, homes, live, bindCanvas, renderView } from './state.js';
+import { view, homeView, viewMotion, MIN_SCALE, MAX_SCALE, homes, live, bindCanvas, renderView } from './state.js';
 import {
   registerSticker,
   renderSticker,
@@ -9,6 +9,7 @@ import {
   closeWindow,
   openPhotoWindow,
   openPageWindow,
+  resetWindowLayout,
 } from './window.js';
 import { isOverviewOpen, closeOverview } from './window-overview.js';
 import './language.js';
@@ -73,8 +74,11 @@ function arrangeHomeNotes() {
 arrangeHomeNotes();
 window.addEventListener('languagechange', arrangeHomeNotes);
 
+let tidyFrame = null;
 function tidyUp() {
-  const duration = 700;
+  if (isOverviewOpen()) closeOverview();
+  if (tidyFrame !== null) cancelAnimationFrame(tidyFrame);
+  const duration = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 1 : 700;
   const start = performance.now();
   const from = new Map();
   const allStickers = [];
@@ -85,8 +89,9 @@ function tidyUp() {
   });
 
   const center = computeHomeCenter();
-  const viewFrom = { ...view };
-  const viewTo = { x: -center.x, y: -center.y, scale: 1 };
+  const scale = Math.min(1, (window.innerWidth - 48) / 460,
+    (window.innerHeight - 100) / (document.querySelector('.sticker--paper').offsetHeight + 120));
+  resetWindowLayout({ x: -center.x * scale, y: -center.y * scale, scale });
 
   const easeOutBack = (t) => {
     const c1 = 1.70158, c3 = c1 + 1;
@@ -109,16 +114,15 @@ function tidyUp() {
       renderSticker(el);
     });
 
-    view.x = viewFrom.x + (viewTo.x - viewFrom.x) * eCubic;
-    view.y = viewFrom.y + (viewTo.y - viewFrom.y) * eCubic;
-    view.scale = viewFrom.scale + (viewTo.scale - viewFrom.scale) * eCubic;
-    renderView();
-
-    if (t < 1) requestAnimationFrame(tick);
-    else allStickers.forEach((el) => el.classList.remove('tidying'));
+    if (t < 1) tidyFrame = requestAnimationFrame(tick);
+    else {
+      tidyFrame = null;
+      allStickers.forEach((el) => el.classList.remove('tidying'));
+    }
   }
-  requestAnimationFrame(tick);
+  tidyFrame = requestAnimationFrame(tick);
 }
+document.querySelector('[data-view-reset]')?.addEventListener('click', tidyUp);
 
 // Keyboard
 window.addEventListener('keydown', (e) => {
@@ -144,7 +148,23 @@ const initialHeight = paper.offsetHeight + 120;
 view.scale = Math.min(1, (window.innerWidth - 48) / initialWidth, (window.innerHeight - 100) / initialHeight);
 view.x = -initialCenter.x * view.scale;
 view.y = -initialCenter.y * view.scale;
+Object.assign(homeView, view);
 renderView();
+
+const resetButton = document.querySelector('[data-view-reset]');
+function updateResetControl() {
+  if (!resetButton) return;
+  const moved = [...homes].some(([element, home]) => {
+    const position = live.get(element);
+    return Math.abs(position.x - home.x) > .5 || Math.abs(position.y - home.y) > .5
+      || Math.abs(position.rot - home.rot) > .1;
+  });
+  const changedView = Math.abs(view.x - homeView.x) > .5 || Math.abs(view.y - homeView.y) > .5
+    || Math.abs(view.scale - homeView.scale) > .001;
+  resetButton.hidden = !moved && (!changedView || viewMotion.active);
+}
+window.addEventListener('canvaschange', updateResetControl);
+updateResetControl();
 
 // Open shared links only after the stickers and initial view are positioned.
 setupPageRoutes();

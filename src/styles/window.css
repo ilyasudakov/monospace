@@ -300,9 +300,10 @@ body.playground.show-window-overview .sticker {
   scrollbar-width: none;
 }
 .os-tabbar::-webkit-scrollbar { display: none; }
-.os-tab-item { position: relative; display: flex; min-width: 0; flex: 0 1 auto; }
+.os-tab-item { position: relative; display: flex; min-width: 0; flex: 0 1 152px; }
 .os-tab {
   display: flex;
+  width: 100%;
   align-items: center;
   gap: 6px;
   position: relative;
@@ -423,7 +424,8 @@ body.playground.show-window-overview .sticker {
   }
   .os-window--page .os-window-titlebar { height: 54px; padding-inline: 6px; gap: 6px; }
   .os-tabbar { gap: 4px; }
-  .os-tab { padding: 10px 34px 10px 12px; font-size: 12px; }
+  .os-tab-item { flex-basis: auto; }
+  .os-tab { width: auto; padding: 10px 34px 10px 12px; font-size: 12px; }
   .os-win-btn { width: 36px; height: 36px; }
   .os-window-controls { gap: 4px; }
   .os-window-resizer { display: none; }

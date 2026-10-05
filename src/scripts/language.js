@@ -1,4 +1,6 @@
 const translations = {
+  'Сбросить вид': 'Reset view', 'Сбросить вид (R)': 'Reset view (R)',
+  ', в': ', on',
   'Привет, меня зовут': 'Hi, I’m', 'Илья': 'Ilya', 'Илья Судаков': 'Ilya Sudakov',
   'Продакт-инженер в': 'Product engineer at',
   ', из Санкт-Петербурга. Люблю решать сложные задачи и делать полезные продукты end-to-end: дизайн, код, поддержка.': ', based in Saint Petersburg. I enjoy solving complex problems and building useful products end to end: design, code, and support.',
@@ -124,12 +126,11 @@ function applyLanguage() {
       timeZone: 'UTC',
     }).format(date);
   });
-  document.querySelectorAll('[data-language-switch]').forEach(button => {
-    button.dataset.language = language;
-    button.querySelector('[data-language-label]').textContent = language.toUpperCase();
-    const label = language === 'ru' ? 'Переключить на английский' : 'Switch to Russian';
-    button.setAttribute('aria-label', label);
-    button.title = label;
+  document.querySelectorAll('[data-language-switch]').forEach(control => {
+    control.dataset.language = language;
+    control.querySelectorAll('[data-language-option]').forEach(option => {
+      option.setAttribute('aria-pressed', String(option.dataset.languageOption === language));
+    });
   });
   observer.observe(document.body, { childList: true, subtree: true, characterData: true });
 }
@@ -156,9 +157,9 @@ window.addEventListener('site-language', event => setLanguage(event.detail));
 window.addEventListener('storage', event => {
   if (event.key === 'site-language') setLanguage(event.newValue === 'ru' ? 'ru' : 'en');
 });
-document.querySelectorAll('[data-language-switch]').forEach(button => {
+document.querySelectorAll('[data-language-option]').forEach(button => {
   button.addEventListener('click', () => {
-    setLanguage(language === 'ru' ? 'en' : 'ru');
+    setLanguage(button.dataset.languageOption);
   });
 });
 applyLanguage();

@@ -1,5 +1,7 @@
 // Shared mutable state across modules.
 export const view = { x: 0, y: 0, scale: 1 };
+export const homeView = { x: 0, y: 0, scale: 1 };
+export const viewMotion = { active: false };
 export const MIN_SCALE = 0.4;
 export const MAX_SCALE = 2.2;
 
@@ -14,4 +16,5 @@ export function bindCanvas(el) { canvasEl = el; }
 export function renderView() {
   if (!canvasEl) return;
   canvasEl.style.transform = `translate(${view.x}px, ${view.y}px) scale(${view.scale})`;
+  window.dispatchEvent(new Event('canvaschange'));
 }

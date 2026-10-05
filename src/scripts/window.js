@@ -17,6 +17,21 @@ export const openWindows = [];
 let windowZ = 1000;
 let homeView = null;
 
+export function resetWindowLayout(target) {
+  homeView = { ...target };
+  const lastWindow = openWindows.at(-1);
+  if (lastWindow && placeBesideCanvas(lastWindow)) return;
+  openWindows.forEach((win, index) => {
+    const width = Math.min(win._preferredSize.width, (window.innerWidth - 56) / target.scale);
+    const height = Math.min(win._preferredSize.height, (window.innerHeight - 112) / target.scale);
+    win.style.width = `${width}px`;
+    win.style.height = `${height}px`;
+    setWindowPos(win, -target.x / target.scale - width / 2 + index * 16,
+      -target.y / target.scale - height / 2 + index * 16);
+  });
+  animateView(target);
+}
+
 export function placeBesideCanvas(win) {
   if (window.innerWidth < 900 || !homes.size) return false;
   document.body.classList.add('has-side-window');

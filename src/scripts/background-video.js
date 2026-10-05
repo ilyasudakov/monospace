@@ -13,6 +13,10 @@ if (video) {
   let handoff = null;
   let focused = document.hasFocus();
   let lastFrameAt = performance.now();
+  let recoveryTimer = null;
+  let playAttempt = 0;
+  let wasAway = false;
+  let returnedAt = 0;
   if (typeof video.requestVideoFrameCallback === 'function') {
     const standby = video.cloneNode(false);
     standby.removeAttribute('data-background-video');
@@ -66,7 +70,10 @@ if (video) {
   });
   layers.forEach(layer => {
     layer.addEventListener('play', updateControl);
-    layer.addEventListener('pause', updateControl);
+    layer.addEventListener('pause', () => {
+      updateControl();
+      if (layer === video && !document.hidden && motionAllowed()) scheduleRecovery();
+    });
     layer.addEventListener('playing', () => {
       if (layer !== video) return;
       prepareStandby();
@@ -157,7 +164,13 @@ if (video) {
       cancelHandoff();
       layers.forEach(layer => layer.pause());
     }
-    video.play().catch(error => {
+    const player = video;
+    const attempt = ++playAttempt;
+    player.play().then(() => {
+      if (player === video && attempt === playAttempt) autoplayBlocked = false;
+    }).catch(error => {
+      // A pending play() from before blur must not disable newer recovery attempts.
+      if (player !== video || attempt !== playAttempt || document.hidden) return;
       autoplayBlocked = error.name === 'NotAllowedError';
       if (error.name === 'AbortError' && retryTimer === null && !document.hidden) {
         retryTimer = setTimeout(() => {
@@ -168,20 +181,66 @@ if (video) {
     });
   }
 
+  function cancelRecovery() {
+    if (recoveryTimer !== null) clearTimeout(recoveryTimer);
+    recoveryTimer = null;
+  }
+  function restoreDecoder() {
+    if (document.hidden || !motionAllowed()) return;
+    cancelHandoff();
+    const player = video;
+    const position = player.currentTime;
+    const attempt = ++playAttempt;
+    player.addEventListener('loadedmetadata', () => {
+      if (player !== video || attempt !== playAttempt || document.hidden || !motionAllowed()) return;
+      player.currentTime = Math.min(position, Math.max(0, player.duration - 1 / 30));
+      lastFrameAt = performance.now();
+      syncPlayback();
+    }, { once: true });
+    player.load();
+  }
+  function scheduleRecovery() {
+    cancelRecovery();
+    if (document.hidden || !motionAllowed()) return;
+    const delays = [0, 250, 750];
+    let step = 0;
+    function recover() {
+      recoveryTimer = null;
+      if (document.hidden || !motionAllowed()) return;
+      if (wasAway && step > 0 && typeof video.requestVideoFrameCallback === 'function') {
+        wasAway = false;
+        if (lastFrameAt <= returnedAt) {
+          restoreDecoder();
+          if (++step < delays.length) recoveryTimer = setTimeout(recover, delays[step]);
+          return;
+        }
+      }
+      if (video.paused || autoplayBlocked) syncPlayback();
+      if (++step < delays.length) recoveryTimer = setTimeout(recover, delays[step]);
+    }
+    recoveryTimer = setTimeout(recover, delays[0]);
+  }
+
   function resumePlayback() {
     if (document.hidden) return;
     autoplayBlocked = false;
     lastTime = null;
     stalledChecks = 0;
     lastFrameAt = performance.now();
+    returnedAt = lastFrameAt;
     cancelHandoff();
     // Don't interrupt a player that kept running while the window was unfocused.
     // The frame watchdog below recovers suspended decoders if play() is a no-op.
     syncPlayback();
+    // Browser suspension may finish after focus/visibilitychange has fired.
+    scheduleRecovery();
   }
 
   document.addEventListener('visibilitychange', () => {
+    ++playAttempt;
+    cancelRecovery();
     cancelHandoff();
+    if (document.hidden) wasAway = true;
     if (!document.hidden) {
       focused = document.hasFocus();
       resumePlayback();
@@ -189,6 +248,9 @@ if (video) {
   });
   window.addEventListener('blur', () => {
     focused = false;
+    wasAway = true;
+    ++playAttempt;
+    cancelRecovery();
     // Background timers can be throttled between the two handoff steps.
     // Keep the active layer's native loop running instead of swapping players.
     cancelHandoff();
@@ -218,7 +280,8 @@ if (video) {
     if (video.paused || stalledChecks >= 2 || framesStalled) {
       stalledChecks = 0;
       lastFrameAt = performance.now();
-      syncPlayback(true);
+      if (framesStalled) restoreDecoder();
+      else syncPlayback(true);
     }
   }, 1000);
   syncPlayback();

@@ -18,13 +18,17 @@ const route = (name: string) => `${baseUrl}${name}/`;
     <link rel="preload" as="image" href={`${baseUrl}assets/autumn-background.webp`} media="(max-width: 899px)" fetchpriority="high" />
   </Fragment>
   <div class="page-controls">
+    <button class="language-switch video-switch view-reset" data-view-reset type="button" aria-label="Сбросить вид" title="Сбросить вид (R)" hidden>
+      <svg viewBox="0 0 16 16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 2H2v3m9-3h3v3M2 11v3h3m9-3v3h-3"/><circle cx="8" cy="8" r="2"/></svg>
+    </button>
     <button class="language-switch video-switch" data-video-switch data-paused="true" type="button" aria-label="Запустить фоновое видео" title="Запустить фоновое видео">
       <svg class="play-icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3.5 12 8l-7 4.5z" fill="currentColor" /></svg>
       <svg class="pause-icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M5 4v8M11 4v8" stroke="currentColor" stroke-width="2" stroke-linecap="round" /></svg>
     </button>
-    <button class="language-switch" data-language-switch data-language="ru" type="button" aria-label="Переключить на английский" title="Переключить на английский">
-      <span class="language-label" data-language-label>RU</span>
-    </button>
+    <div class="language-switch language-links" data-language-switch data-language="ru" role="group" aria-label="Language / Язык">
+      <button class="language-option" data-language-option="ru" type="button" aria-pressed="true" aria-label="Русский">RU</button>
+      <button class="language-option" data-language-option="en" type="button" aria-pressed="false" aria-label="English">EN</button>
+    </div>
   </div>
   <div class="viewport" id="viewport" style={`--wallpaper: url('${baseUrl}assets/autumn-background.webp'); --wallpaper-wide: url('${baseUrl}assets/autumn-wide-background.webp')`}>
     <video class="wallpaper-video" data-background-video data-src={`${baseUrl}assets/autumn-mobile-web.mp4`} data-wide-src={`${baseUrl}assets/autumn-wide-web.mp4`} data-poster={`${baseUrl}assets/autumn-background.webp`} data-wide-poster={`${baseUrl}assets/autumn-wide-background.webp`} muted loop playsinline preload="none" aria-hidden="true" tabindex="-1"></video>
@@ -41,8 +45,8 @@ const route = (name: string) => `${baseUrl}${name}/`;
           дизайн, код, поддержка.
         </p>
         <p>
-          Можно связаться со мной <a class="paper-link" href="mailto:ilyasudakov.dev@gmail.com">по почте</a>
-          или в <a class="paper-link" href="https://t.me/ilyasudakov" target="_blank" rel="noopener">Telegram</a>.
+          Можно связаться со мной <a class="paper-link" href="mailto:ilyasudakov.dev@gmail.com">по почте</a><span>, в</span> <a class="paper-link" href="https://t.me/ilyasudakov" target="_blank" rel="noopener">Telegram</a>
+          <span>или в</span> <a class="paper-link" href="https://www.linkedin.com/in/ilyasudakov/" target="_blank" rel="noopener">LinkedIn</a>.
         </p>
       </div>
 
@@ -75,7 +79,7 @@ const route = (name: string) => `${baseUrl}${name}/`;
         <strong>Дизайн</strong>
       </div>
 
-      <div class="sticker sticker--note note--yellow" data-x="-32" data-y="140" data-rot="-2">
+      <div class="sticker sticker--note note--yellow" data-x="-60" data-y="140" data-rot="-2">
         <span class="note-label">интерес</span>
         <strong>Музыка</strong>
       </div>
@@ -118,6 +122,45 @@ const route = (name: string) => `${baseUrl}${name}/`;
   }
   .language-switch:hover { background: rgba(255,255,255,.85); color: #243d54; }
   .language-switch:focus-visible { outline: 2px solid #355774; outline-offset: 3px; }
+  .language-links {
+    display: flex;
+    align-items: center;
+    column-gap: 0;
+    width: auto;
+    height: 32px;
+    padding: 0;
+    overflow: visible;
+    border-radius: 0;
+    background: transparent;
+    backdrop-filter: none;
+    box-shadow: none;
+    color: #fff;
+    font-size: 12px;
+    letter-spacing: .04em;
+    text-shadow: 0 0 2px rgba(0,0,0,.9), 0 1px 3px rgba(0,0,0,.65);
+  }
+  .language-links:hover { background: transparent; color: #fff; }
+  .language-option {
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    font: inherit;
+    letter-spacing: inherit;
+    color: inherit;
+    text-shadow: inherit;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    cursor: pointer;
+  }
+  .language-option + .language-option { margin-left: -2px; }
+  .language-option[aria-pressed="true"] { font-weight: 700; }
+  .language-option[aria-pressed="false"] { opacity: .7; }
+  .language-option:hover, .language-option:focus-visible { opacity: 1; }
+  .language-option:focus-visible { outline: 2px solid #fff; outline-offset: 2px; border-radius: 2px; }
   .video-switch {
     width: 32px;
     color: #fff;
@@ -127,6 +170,7 @@ const route = (name: string) => `${baseUrl}${name}/`;
     border-radius: 0;
   }
   .video-switch:hover { background: transparent; color: #fff; }
+  .view-reset[hidden] { display: none; }
   .video-switch:focus-visible { outline-color: #fff; }
   .video-switch svg {
     width: 16px;
@@ -137,6 +181,7 @@ const route = (name: string) => `${baseUrl}${name}/`;
   .video-switch[data-paused="false"] .play-icon { display: none; }
   @media (prefers-reduced-motion: reduce) {
     .language-switch { transition: none; }
+
   }
   :global(:root) {
     --paper: #fdfaf3;
@@ -384,9 +429,11 @@ const route = (name: string) => `${baseUrl}${name}/`;
   }
 
   .chip--cv {
-    background: rgba(255,255,255,.55);
+    background: linear-gradient(to bottom, rgba(250,253,255,.88) 0%, rgba(230,241,250,.78) 48%, rgba(204,224,240,.72) 52%, rgba(220,235,247,.82) 100%);
     color: #35516a;
     backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    text-shadow: 0 1px 0 rgba(255,255,255,.65);
     box-shadow: inset 0 0 0 1px rgba(53,81,106,.35), inset 0 1px 0 rgba(255,255,255,.8), 0 4px 10px -6px rgba(25,55,85,.2);
   }
 
@@ -398,7 +445,7 @@ const route = (name: string) => `${baseUrl}${name}/`;
     box-shadow: inset 0 0 0 1px #285c88, inset 0 2px 0 rgba(255,255,255,.4), 0 6px 14px -5px rgba(20,65,105,.4);
   }
   .sticker--chip.chip--work:hover { background: linear-gradient(to bottom, #7aaedb, #3674a9); }
-  .sticker--chip.chip--cv:hover { background: rgba(255,255,255,.85); color: #243d54; }
+  .sticker--chip.chip--cv:hover { background: linear-gradient(to bottom, rgba(255,255,255,.96) 0%, rgba(239,247,253,.9) 48%, rgba(218,236,249,.85) 52%, rgba(233,244,252,.92) 100%); color: #243d54; }
 
   .chip--linkedin {
     background: #cfe3ff;
@@ -413,11 +460,11 @@ const route = (name: string) => `${baseUrl}${name}/`;
   }
 
   .sticker--note {
-    width: 172px;
-    padding: 18px 16px;
+    width: 144px;
+    padding: 14px 12px;
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 5px;
     box-shadow:
       0 1px 0 rgba(0, 0, 0, 0.05),
       0 10px 22px -10px rgba(0, 0, 0, 0.3);
@@ -437,22 +484,24 @@ const route = (name: string) => `${baseUrl}${name}/`;
   }
 
   .sticker--note .note-label {
-    font-size: 10px;
+    font-size: 9px;
     text-transform: uppercase;
     letter-spacing: 0.12em;
     color: rgba(0, 0, 0, 0.5);
   }
 
   .sticker--note strong {
-    font-size: 20px;
+    font-size: 18px;
     line-height: 1.1;
     font-weight: 600;
   }
 
   @media (max-width: 640px) {
+    .view-reset { display: none; }
     :global(body.playground) { overflow: hidden; }
     .page-controls { top: max(16px, env(safe-area-inset-top)); right: max(16px, env(safe-area-inset-right)); }
     .language-switch { height: 44px; }
+    .language-links .language-option { width: 44px; height: 44px; }
     .video-switch { width: 44px; }
     .viewport { overflow-y: auto; overflow-x: hidden; touch-action: pan-y; }
     .canvas {
@@ -480,7 +529,7 @@ const route = (name: string) => `${baseUrl}${name}/`;
     .sticker--chip { justify-content: center; width: 100%; min-height: 48px; padding: 12px 10px; font-size: 14px; }
     .chip--work { grid-row: 2; grid-column: 1; }
     .chip--cv { grid-row: 2; grid-column: 2; }
-    .sticker--note { width: 100%; padding: 18px 14px; }
+    .sticker--note { width: 100%; padding: 14px 12px; }
     :global(body.mobile-window-open .viewport) { overflow: hidden; }
     :global(body.mobile-window-open .sticker) { pointer-events: none; }
     @media (max-width: 360px) {

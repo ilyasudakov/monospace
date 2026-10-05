@@ -1,6 +1,6 @@
 // Shared window focus and canvas animations.
 
-import { view, MAX_SCALE, renderView } from './state.js';
+import { view, homeView, viewMotion, MAX_SCALE, renderView } from './state.js';
 import { openWindows, bringToFront, placeBesideCanvas } from './window.js';
 import { closeOverview, isOverviewOpen, layoutOverview } from './window-overview.js';
 
@@ -8,8 +8,11 @@ let viewAnimRaf = null;
 export function stopViewAnimation() {
   if (viewAnimRaf) cancelAnimationFrame(viewAnimRaf);
   viewAnimRaf = null;
+  viewMotion.active = false;
 }
 export function animateView(target, duration = 480) {
+  Object.assign(homeView, target);
+  viewMotion.active = true;
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) duration = 1;
   if (viewAnimRaf) cancelAnimationFrame(viewAnimRaf);
   const start = performance.now();
@@ -24,7 +27,11 @@ export function animateView(target, duration = 480) {
     view.scale = from.scale + (target.scale - from.scale) * e;
     renderView();
     if (t < 1) viewAnimRaf = requestAnimationFrame(tick);
-    else viewAnimRaf = null;
+    else {
+      viewAnimRaf = null;
+      viewMotion.active = false;
+      renderView();
+    }
   }
   viewAnimRaf = requestAnimationFrame(tick);
 }

@@ -5,6 +5,7 @@ export function renderSticker(el) {
   el.style.setProperty('--sx', `${p.x}px`);
   el.style.setProperty('--sy', `${p.y}px`);
   el.style.setProperty('--srot', `${p.rot}deg`);
+  window.dispatchEvent(new Event('canvaschange'));
 }
 
 export function attachDrag(el, { onTap, onDragEnd } = {}) {
