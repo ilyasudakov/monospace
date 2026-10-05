@@ -13,7 +13,7 @@ document.addEventListener('click', event => {
   const link = event.target.closest('a[href]');
   if (!link || link.target === '_blank') return;
   const url = new URL(link.href, location.href);
-  const title = pages.get(url.pathname);
+  const title = link.matches('[data-portfolio-card]') ? link.querySelector('h2')?.textContent : pages.get(url.pathname);
   if (url.origin !== location.origin || !title) return;
   try {
     if (!window.parent.document.getElementById('canvas')) return;

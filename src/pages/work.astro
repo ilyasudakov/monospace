@@ -2,9 +2,16 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { workplaces, roleLabels } from '../data/work';
 import { personalProjects } from '../data/personal-projects';
+import { universityProjects } from '../data/university-projects';
 import '../styles/globals.css';
 import '../styles/work.css';
 
+const baseUrl = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+const portfolioCards = [
+  ...workplaces.map(company => ({ id: company.id, name: company.name, logo: company.logo, summary: company.description, meta: 'Работа', period: company.period, count: company.updates.length })),
+  ...personalProjects.map(project => ({ id: project.id, name: project.name, logo: project.logo, summary: project.summary || project.description, meta: project.kind, period: '', count: 0 })),
+  ...universityProjects.map(project => ({ id: project.id, name: project.name, logo: project.logo, summary: project.summary, meta: project.context, period: project.year, count: 0 })),
+];
 const formatDate = (date: string) => new Intl.DateTimeFormat('ru', {
   day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC',
 }).format(new Date(`${date}T00:00:00Z`));
@@ -13,14 +20,30 @@ const formatDate = (date: string) => new Intl.DateTimeFormat('ru', {
 <BaseLayout title="Портфолио — Илья Судаков" description="Свои проекты и продуктовые релизы в компаниях, где я работал." bodyClass="work-archive">
   <div class="work-shell">
     <main class="container work-main">
-      <header class="portfolio-header">
+      <header class="portfolio-header" data-portfolio-header>
         <h1>Портфолио</h1>
-        <p>Свои проекты и продуктовые релизы<br class="desktop-break" /> как разработчика и менеджера.</p>
+        <p><span>Свои проекты и продуктовые релизы</span> <span>как разработчика и менеджера.</span></p>
       </header>
-      {personalProjects.length > 0 && <section class="personal-projects" aria-labelledby="personal-projects-title">
-        <h2 class="section-heading" id="personal-projects-title">Свои проекты</h2>
+      <div class="portfolio-list" data-portfolio-overview>
+        {portfolioCards.map(card => (
+          <a class="portfolio-card" href={`#${card.id}`} data-portfolio-card={card.id}>
+            <div class="portfolio-card-heading">
+              {card.logo ? <img src={`${baseUrl}${card.logo}`} alt="" width="40" height="40" /> : <span class="portfolio-monogram" aria-hidden="true">{card.name[0]}</span>}
+              <h2>{card.name}</h2>
+            </div>
+            <p class="portfolio-card-meta">{card.meta}</p>
+            <p class="portfolio-card-summary">{card.summary}</p>
+            <div class="portfolio-card-footer">
+              {card.period && <span>{card.period}</span>}
+              {card.count > 0 && <span>{card.count} <span>релизов</span></span>}
+            </div>
+          </a>
+        ))}
+      </div>
+      <a class="portfolio-back" href={`${baseUrl}work/`} data-portfolio-back hidden>← Портфолио</a>
+      {personalProjects.length > 0 && <div class="personal-projects">
         {personalProjects.map((project) => (
-          <article class="personal-project" id={project.id}>
+          <article class="personal-project" id={project.id} data-project-detail hidden>
             <div class="project-heading">
               <h3><a href={project.url} target="_blank" rel="noopener">{project.name} <span aria-hidden="true">↗</span></a></h3>
               <span>{project.kind}</span>
@@ -33,22 +56,15 @@ const formatDate = (date: string) => new Intl.DateTimeFormat('ru', {
             </div>
           </article>
         ))}
-      </section>}
-      {workplaces.length > 1 && <nav class="company-nav" aria-label="Места работы">
-        {workplaces.map((company) => (
-          <a class="company-link" href={`#${company.id}`} data-company-link={company.id}>
-            {company.name}<span>{company.updates.length}</span>
-          </a>
-        ))}
-      </nav>}
+      </div>}
       {workplaces.map((company) => {
         const sorted = [...company.updates].sort((a, b) => b.date.localeCompare(a.date));
         const featured = sorted.filter((update) => update.featured).slice(0, 3);
         return (
-          <section class="company-section" id={company.id} data-company={company.id}>
+          <section class="company-section" id={company.id} data-company={company.id} data-project-detail hidden>
             <header class="company-header">
               <div class="company-title"><h2>{company.name}</h2><span>{company.period}</span></div>
-              <a class="source-link" href={company.website} target="_blank" rel="noopener">Product updates <span aria-hidden="true">↗</span></a>
+              {company.id !== 'improvado' && <a class="source-link" href={company.website} target="_blank" rel="noopener">Product updates <span aria-hidden="true">↗</span></a>}
             </header>
 
             {company.id === 'improvado' && <div class="role-explanation">
@@ -72,6 +88,7 @@ const formatDate = (date: string) => new Intl.DateTimeFormat('ru', {
               </section>
             )}
 
+                {company.id === 'improvado' && <h2 class="release-heading">Релизы</h2>}
                 <ol class="update-list">
                   {sorted.map((update) => (
                     <li data-update data-role={update.role}>
@@ -94,7 +111,22 @@ const formatDate = (date: string) => new Intl.DateTimeFormat('ru', {
           </section>
         );
       })}
+      {universityProjects.map((project) => (
+        <section class="company-section" id={project.id} aria-labelledby={`${project.id}-title`} data-project-detail hidden>
+          <header class="company-header">
+            <div class="company-title"><h2 id={`${project.id}-title`}>{project.name}</h2><span>{project.year}</span></div>
+          </header>
+          <article class="personal-project university-project">
+            <div class="project-heading"><h3>{project.title}</h3><span>{project.context}</span></div>
+            <p>{project.description}</p>
+            <ul>{project.features.map((feature) => <li>{feature}</li>)}</ul>
+            <div class="project-links"><a href={`${baseUrl}${project.document}`} target="_blank" rel="noopener">Дипломная работа · PDF ↗</a></div>
+          </article>
+        </section>
+      ))}
       <p class="work-contact"><a href="mailto:ilyasudakov.dev@gmail.com">Написать мне ↗</a></p>
     </main>
   </div>
+  <script src="../scripts/portfolio.js"></script>
+  <noscript><style>[data-project-detail][hidden] { display: block !important; }</style></noscript>
 </BaseLayout>

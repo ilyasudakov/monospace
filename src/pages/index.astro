@@ -13,6 +13,10 @@ const route = (name: string) => `${baseUrl}${name}/`;
   description="Ilya Sudakov — personal playground"
   bodyClass="playground"
 >
+  <Fragment slot="head">
+    <link rel="preload" as="image" href={`${baseUrl}assets/autumn-wide-background.webp`} media="(min-width: 900px)" fetchpriority="high" />
+    <link rel="preload" as="image" href={`${baseUrl}assets/autumn-background.webp`} media="(max-width: 899px)" fetchpriority="high" />
+  </Fragment>
   <div class="page-controls">
     <button class="language-switch video-switch" data-video-switch data-paused="true" type="button" aria-label="Запустить фоновое видео" title="Запустить фоновое видео">
       <svg class="play-icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3.5 12 8l-7 4.5z" fill="currentColor" /></svg>
@@ -23,7 +27,7 @@ const route = (name: string) => `${baseUrl}${name}/`;
     </button>
   </div>
   <div class="viewport" id="viewport" style={`--wallpaper: url('${baseUrl}assets/autumn-background.webp'); --wallpaper-wide: url('${baseUrl}assets/autumn-wide-background.webp')`}>
-    <video class="wallpaper-video" data-background-video data-src={`${baseUrl}assets/autumn-background.mp4`} data-wide-src={`${baseUrl}assets/autumn-wide-background.mp4`} data-poster={`${baseUrl}assets/autumn-background.webp`} data-wide-poster={`${baseUrl}assets/autumn-wide-background.webp`} poster={`${baseUrl}assets/autumn-background.webp`} muted loop playsinline preload="none" aria-hidden="true" tabindex="-1"></video>
+    <video class="wallpaper-video" data-background-video data-src={`${baseUrl}assets/autumn-mobile-web.mp4`} data-wide-src={`${baseUrl}assets/autumn-wide-web.mp4`} data-poster={`${baseUrl}assets/autumn-background.webp`} data-wide-poster={`${baseUrl}assets/autumn-wide-background.webp`} muted loop playsinline preload="none" aria-hidden="true" tabindex="-1"></video>
     <div class="canvas" id="canvas">
       <div class="sticker sticker--paper" data-x="-220" data-y="-200" data-rot="-2.5">
         <p>Привет, меня зовут <strong>Илья</strong>.</p>
@@ -183,6 +187,7 @@ const route = (name: string) => `${baseUrl}${name}/`;
     z-index: 1;
   }
   .wallpaper-video {
+    opacity: 0;
     position: fixed;
     inset: 0;
     width: 100%;

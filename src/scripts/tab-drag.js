@@ -30,7 +30,7 @@ export function attachTabDrag(win, tabbar) {
     if (win._tabs.indexOf(tab) === index) return;
     others.splice(index, 0, tab);
     win._tabs = others;
-    tabbar.insertBefore(tab.button, others[index + 1]?.button || null);
+    tabbar.insertBefore(tab.item, others[index + 1]?.item || null);
   });
 
   function finish(event) {

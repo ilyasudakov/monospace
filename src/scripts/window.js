@@ -55,6 +55,10 @@ export function bringToFront(win) {
 const canvasEl = document.getElementById('canvas');
 let pageWindow = null;
 let tabSequence = 0;
+const pageKey = src => {
+  const url = new URL(src, location.href);
+  return `${url.pathname}${url.search}${url.hash}`;
+};
 
 // --- Core ---
 export function openWindow({ title = '', body = '', footer = null, variant, path = null, width = 520, height = 420 } = {}) {
@@ -265,22 +269,20 @@ function attachResize(win) {
 // --- Specialised helpers ---
 
 export function openPageWindow({ src, title }) {
-  const key = new URL(src, location.href).pathname;
+  const key = pageKey(src);
   if (pageWindow?.isConnected) {
     const tab = pageWindow._tabs.find(tab => tab.key === key);
     if (tab) {
       tab.src = src;
       pageWindow._selectTab(tab);
       const hash = new URL(src, location.href).hash;
-      if (hash) {
-        const navigateToSection = () => {
-          try { tab.frame.contentWindow.location.hash = hash; } catch {}
-        };
-        try {
-          if (tab.frame.contentWindow.location.pathname === key) navigateToSection();
-          else tab.frame.addEventListener('load', navigateToSection, { once: true });
-        } catch {}
-      }
+      const navigateToSection = () => {
+        try { tab.frame.contentWindow.location.hash = hash; } catch {}
+      };
+      try {
+        if (tab.frame.contentWindow.location.pathname === new URL(src, location.href).pathname) navigateToSection();
+        else tab.frame.addEventListener('load', navigateToSection, { once: true });
+      } catch {}
       bringToFront(pageWindow);
       placeBesideCanvas(pageWindow);
       return pageWindow;
@@ -323,22 +325,57 @@ export function openPageWindow({ src, title }) {
         tab.panel.hidden = !selected;
         if (selected && !tab.frame.hasAttribute('src')) tab.frame.src = tab.src;
       });
-      win.querySelector('.os-window-title').textContent = active.button.textContent;
+      win.querySelector('.os-window-title').textContent = active.label.textContent;
       renderDock();
       window.dispatchEvent(new CustomEvent('page-tab-change', { detail: { src: active.src } }));
     };
+    win._closeTab = tab => {
+      const index = win._tabs.indexOf(tab);
+      if (index < 0) return;
+      const hadFocus = tab.item.contains(document.activeElement);
+      win._tabs.splice(index, 1);
+      tab.item.remove();
+      tab.panel.remove();
+      if (!win._tabs.length) {
+        closeWindow(win);
+        return;
+      }
+      if (win._activeTab === tab) win._selectTab(win._tabs[Math.min(index, win._tabs.length - 1)]);
+      if (hadFocus) win._activeTab.button.focus();
+    };
     win._addTab = (tabSrc, tabTitle) => {
-      const tabKey = new URL(tabSrc, location.href).pathname;
+      const tabKey = pageKey(tabSrc);
       const existing = win._tabs.find(tab => tab.key === tabKey);
       if (existing) return existing;
       const id = ++tabSequence;
+      const item = document.createElement('div');
+      item.className = 'os-tab-item';
+      item.setAttribute('role', 'presentation');
       const button = document.createElement('button');
       button.className = 'os-tab';
       button.type = 'button';
       button.id = `window-tab-${id}`;
       button.setAttribute('role', 'tab');
       button.setAttribute('aria-controls', `window-panel-${id}`);
-      button.textContent = tabTitle;
+      const icon = document.createElement('span');
+      icon.className = 'os-tab-icon';
+      icon.setAttribute('aria-hidden', 'true');
+      icon.innerHTML = new URL(tabSrc, location.href).pathname.endsWith('/cv/')
+        ? '<svg viewBox="0 0 16 16" fill="none"><path d="M4 1.5h5l3 3v10H4z" fill="#f8fbff" stroke="#66839e"/><path d="M9 1.5v3h3M6 7h4M6 9h4M6 11h3" stroke="#66839e" stroke-linecap="round"/></svg>'
+        : '<svg viewBox="0 0 16 16" fill="none"><path d="M1.5 4V2.5h5l1.5 2h6.5v9h-13z" fill="#efcf75" stroke="#a38237" stroke-linejoin="round"/><path d="M1.5 6h13v7.5h-13z" fill="#f8df98" stroke="#a38237" stroke-linejoin="round"/></svg>';
+      const label = document.createElement('span');
+      label.className = 'os-tab-label';
+      label.id = `window-tab-label-${id}`;
+      label.textContent = tabTitle;
+      button.append(icon, label);
+      const close = document.createElement('button');
+      close.className = 'os-tab-close';
+      close.type = 'button';
+      close.innerHTML = '<svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="m4 4 8 8m0-8-8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>';
+      close.setAttribute('aria-label', 'Закрыть вкладку');
+      close.setAttribute('aria-describedby', label.id);
+      close.title = 'Закрыть вкладку';
+      item.append(button, close);
       const panel = document.createElement('div');
       panel.className = 'os-tab-panel';
       panel.id = `window-panel-${id}`;
@@ -347,13 +384,45 @@ export function openPageWindow({ src, title }) {
       panel.hidden = true;
       const frame = document.createElement('iframe');
       frame.title = tabTitle;
+      if (new URL(tabSrc, location.href).hash) frame.dataset.projectFrame = '';
       panel.appendChild(frame);
       panels.appendChild(panel);
-      tabbar.appendChild(button);
-      const tab = { key: tabKey, src: tabSrc, button, panel, frame };
+      tabbar.appendChild(item);
+      const tab = { key: tabKey, src: tabSrc, item, button, label, panel, frame };
       win._tabs.push(tab);
+      frame.addEventListener('load', () => {
+        const hash = new URL(tab.src, location.href).hash.slice(1);
+        if (!hash) return;
+        try {
+          const logo = [...frame.contentDocument.querySelectorAll('[data-portfolio-card]')].find(card => card.dataset.portfolioCard === hash)?.querySelector('img');
+          if (logo) {
+            const image = document.createElement('img');
+            image.src = logo.src;
+            image.alt = '';
+            image.width = 16;
+            image.height = 16;
+            icon.replaceChildren(image);
+          }
+          const heading = frame.contentDocument.getElementById(hash)?.querySelector('h2, h3');
+          if (!heading) return;
+          label.textContent = heading.textContent.replace(/↗/g, '').trim();
+          frame.title = label.textContent;
+          if (win._activeTab === tab) win.querySelector('.os-window-title').textContent = label.textContent;
+        } catch {}
+      });
+      close.addEventListener('pointerdown', event => event.stopPropagation());
+      close.addEventListener('click', event => {
+        event.stopPropagation();
+        win._closeTab(tab);
+      });
       button.addEventListener('click', () => win._selectTab(tab));
       button.addEventListener('keydown', event => {
+        if (event.key === 'Delete') {
+          event.preventDefault();
+          event.stopPropagation();
+          win._closeTab(tab);
+          return;
+        }
         const index = win._tabs.indexOf(tab);
         let next;
         if (event.key === 'ArrowRight') next = (index + 1) % win._tabs.length;

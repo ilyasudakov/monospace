@@ -11,6 +11,8 @@ if (video) {
   video.playbackRate = 0.65;
   const layers = [video];
   let handoff = null;
+  let focused = document.hasFocus();
+  let lastFrameAt = performance.now();
   if (typeof video.requestVideoFrameCallback === 'function') {
     const standby = video.cloneNode(false);
     standby.removeAttribute('data-background-video');
@@ -36,7 +38,7 @@ if (video) {
   }
   function prepareStandby() {
     const standby = layers.find(layer => layer !== video);
-    if (!standby || !video.hasAttribute('src')) return;
+    if (!standby || !video.hasAttribute('src') || video.readyState < 2 || video.paused) return;
     if (standby.getAttribute('src') !== video.getAttribute('src')) {
       standby.src = video.getAttribute('src');
     }
@@ -65,10 +67,19 @@ if (video) {
   layers.forEach(layer => {
     layer.addEventListener('play', updateControl);
     layer.addEventListener('pause', updateControl);
+    layer.addEventListener('playing', () => {
+      if (layer !== video) return;
+      prepareStandby();
+      if (typeof layer.requestVideoFrameCallback !== 'function') layer.style.opacity = '1';
+    });
     if (typeof layer.requestVideoFrameCallback !== 'function') return;
     function observeFrame(now, frame) {
       layer.requestVideoFrameCallback(observeFrame);
-      if (layer !== video || document.hidden || !motionAllowed() || handoff !== null) return;
+      if (layer === video && !layer.paused) {
+        layer.style.opacity = '1';
+        lastFrameAt = now;
+      }
+      if (layer !== video || document.hidden || !focused || !motionAllowed() || handoff !== null) return;
       const remaining = layer.duration - frame.mediaTime;
       if (remaining > 1 / 30 + 0.002 || remaining <= 0) return;
       const standby = layers.find(other => other !== layer);
@@ -77,19 +88,20 @@ if (video) {
       // Keep the last frame visible for its normal duration; no visual blend.
       const delay = remaining / layer.playbackRate * 1000;
       handoff = setTimeout(() => {
-        if (video !== layer || document.hidden || !motionAllowed()) {
+        if (video !== layer || document.hidden || !focused || !motionAllowed()) {
           cancelHandoff();
           return;
         }
         standby.play().catch(() => {});
         handoff = setTimeout(() => {
           handoff = null;
-          if (video !== layer || document.hidden || !motionAllowed() || standby.paused) {
+          if (video !== layer || document.hidden || !focused || !motionAllowed() || standby.paused) {
             standby.pause();
             standby.currentTime = 0;
             return;
           }
           video = standby;
+          lastFrameAt = performance.now();
           standby.style.opacity = '1';
           layer.style.opacity = '0';
           layer.pause();
@@ -119,7 +131,10 @@ if (video) {
     cancelHandoff();
     layers.filter(layer => layer !== video).forEach(layer => layer.pause());
     video.poster = wideScreen.matches ? video.dataset.widePoster : video.dataset.poster;
-    if (video.hasAttribute('src') && video.getAttribute('src') !== source()) video.src = source();
+    if (video.hasAttribute('src') && video.getAttribute('src') !== source()) {
+      video.style.opacity = '0';
+      video.src = source();
+    }
     prepareStandby();
   }
   updateSource();
@@ -158,12 +173,30 @@ if (video) {
     autoplayBlocked = false;
     lastTime = null;
     stalledChecks = 0;
-    // play() alone is a no-op when a suspended player still reports paused=false.
-    syncPlayback(true);
+    lastFrameAt = performance.now();
+    cancelHandoff();
+    // Don't interrupt a player that kept running while the window was unfocused.
+    // The frame watchdog below recovers suspended decoders if play() is a no-op.
+    syncPlayback();
   }
 
-  document.addEventListener('visibilitychange', resumePlayback);
-  window.addEventListener('focus', resumePlayback);
+  document.addEventListener('visibilitychange', () => {
+    cancelHandoff();
+    if (!document.hidden) {
+      focused = document.hasFocus();
+      resumePlayback();
+    }
+  });
+  window.addEventListener('blur', () => {
+    focused = false;
+    // Background timers can be throttled between the two handoff steps.
+    // Keep the active layer's native loop running instead of swapping players.
+    cancelHandoff();
+  });
+  window.addEventListener('focus', () => {
+    focused = true;
+    resumePlayback();
+  });
   window.addEventListener('pageshow', resumePlayback);
   motion.addEventListener('change', () => syncPlayback());
   navigator.connection?.addEventListener('change', () => syncPlayback());
@@ -180,8 +213,11 @@ if (video) {
     }
     stalledChecks = lastTime === video.currentTime ? stalledChecks + 1 : 0;
     lastTime = video.currentTime;
-    if (video.paused || stalledChecks >= 2) {
+    const framesStalled = focused && typeof video.requestVideoFrameCallback === 'function'
+      && performance.now() - lastFrameAt >= 2500;
+    if (video.paused || stalledChecks >= 2 || framesStalled) {
       stalledChecks = 0;
+      lastFrameAt = performance.now();
       syncPlayback(true);
     }
   }, 1000);

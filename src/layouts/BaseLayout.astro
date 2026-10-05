@@ -28,6 +28,7 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/?$/, '/');
     />
     {description && <meta name="description" content={description} />}
     <title>{title}</title>
+    <slot name="head" />
     <link rel="icon" type="image/x-icon" href={`${baseUrl}assets/favicon.ico`} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
