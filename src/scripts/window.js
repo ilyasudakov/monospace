@@ -179,7 +179,7 @@ function attachWindowDrag(win, handle) {
   let startPos = { x: 0, y: 0 };
 
   handle.addEventListener('pointerdown', (e) => {
-    if (e.target.closest('.os-win-btn')) return;
+    if (e.target.closest('button')) return;
     dragging = true;
     startPtr = { x: e.clientX, y: e.clientY };
     startPos = { ...win._pos };
@@ -294,7 +294,7 @@ export function openPageWindow({ src, title }) {
     tabbar.className = 'os-tabbar';
     tabbar.setAttribute('role', 'tablist');
     tabbar.setAttribute('aria-label', 'Разделы сайта');
-    win.querySelector('.os-window-body').before(tabbar);
+    win.querySelector('.os-window-controls').before(tabbar);
     win._tabs = [];
     win._selectTab = active => {
       win._tabs.forEach(tab => {
