@@ -3,6 +3,8 @@ const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
 if (video) {
   video.muted = true;
+  video.defaultPlaybackRate = 0.8;
+  video.playbackRate = 0.8;
   function syncPlayback() {
     if (document.hidden || motion.matches || navigator.connection?.saveData) {
       video.pause();
