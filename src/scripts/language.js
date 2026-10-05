@@ -1,5 +1,6 @@
 const translations = {
   'Сбросить вид': 'Reset view', 'Сбросить вид (R)': 'Reset view (R)',
+  ', в': ', on',
   'Привет, меня зовут': 'Hi, I’m', 'Илья': 'Ilya', 'Илья Судаков': 'Ilya Sudakov',
   'Продакт-инженер в': 'Product engineer at',
   ', из Санкт-Петербурга. Люблю решать сложные задачи и делать полезные продукты end-to-end: дизайн, код, поддержка.': ', based in Saint Petersburg. I enjoy solving complex problems and building useful products end to end: design, code, and support.',
