@@ -27,7 +27,7 @@ a:focus-visible { outline: 2px solid #0000ef; outline-offset: 3px; }
 .portfolio-card span { padding: 0; }
 .portfolio-card-heading { display: contents; }
 .portfolio-card-heading img { grid-column: 1; grid-row: 1 / 5; width: 40px; height: 40px; object-fit: contain; }
-.portfolio-card-heading h2 { grid-column: 2; margin: 0; font-size: 22px; letter-spacing: -.02em; }
+.portfolio-card-heading h2 { grid-column: 2; margin: 0; font-size: 22px; letter-spacing: -.02em; text-decoration: underline; text-underline-offset: 4px; }
 .portfolio-monogram { display: grid; place-items: center; width: 40px; height: 40px; font-size: 24px; background: #f4f4f4; border-radius: 8px; }
 .portfolio-monogram { grid-column: 1; grid-row: 1 / 5; }
 .portfolio-card-meta { grid-column: 2; margin: 0; font-size: 12px; color: #666; }
