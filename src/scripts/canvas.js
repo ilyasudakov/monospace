@@ -161,6 +161,7 @@ function viewportCenterCoords(clientX, clientY) {
 }
 
 viewport.addEventListener('pointerdown', (e) => {
+  if (window.matchMedia('(max-width: 640px)').matches) return;
   if (isOverviewOpen()) return;
   if (e.target.closest('.sticker') || e.target.closest('.os-window')) return;
   pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
@@ -233,6 +234,7 @@ viewport.addEventListener('pointercancel', endPointer);
 
 // Zoom
 viewport.addEventListener('wheel', (e) => {
+  if (window.matchMedia('(max-width: 640px)').matches) return;
   if (isOverviewOpen()) { e.preventDefault(); return; }
   e.preventDefault();
   const rect = viewport.getBoundingClientRect();
@@ -251,4 +253,6 @@ viewport.addEventListener('wheel', (e) => {
   renderView();
 }, { passive: false });
 
-document.addEventListener('gesturestart', (e) => e.preventDefault());
+document.addEventListener('gesturestart', (e) => {
+  if (!window.matchMedia('(max-width: 640px)').matches) e.preventDefault();
+});

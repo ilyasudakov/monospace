@@ -117,4 +117,13 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/?$/, '/');
     font-size: 13px;
     text-underline-offset: 3px;
   }
+  @media (max-width: 600px) {
+    .container { padding: 28px 24px 40px; gap: 32px; }
+    header h1 { font-size: 28px; line-height: 1.2; }
+    header span { display: block; margin: 8px 0 0; }
+    h2 { font-size: 22px; }
+    .list-item__description { padding-left: 0; margin-top: 8px; line-height: 1.6; overflow-wrap: anywhere; }
+    .list-item__description p + p { margin-top: 8px; }
+    .work-link { padding-block: 8px; }
+  }
 </style>

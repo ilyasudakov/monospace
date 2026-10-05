@@ -112,6 +112,7 @@ export function openWindow({ title = '', body = '', footer = null, variant, path
   windowZ += 1;
   win.style.zIndex = String(windowZ);
   openWindows.push(win);
+  document.body.classList.add('mobile-window-open');
 
   // Initial canvas-space position: center of current viewport,
   // offset slightly per stacked window.
@@ -155,6 +156,7 @@ export function closeWindow(win) {
   win.remove();
   const i = openWindows.indexOf(win);
   if (i !== -1) openWindows.splice(i, 1);
+  if (!openWindows.length) document.body.classList.remove('mobile-window-open');
   renderDock();
   if (!openWindows.length && homeView) {
     document.body.classList.remove('has-side-window');
@@ -174,6 +176,7 @@ function attachWindowDrag(win, handle) {
   let startPos = { x: 0, y: 0 };
 
   handle.addEventListener('pointerdown', (e) => {
+    if (window.matchMedia('(max-width: 640px)').matches) return;
     if (e.target.closest('button, a')) return;
     dragging = true;
     startPtr = { x: e.clientX, y: e.clientY };

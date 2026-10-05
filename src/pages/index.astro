@@ -12,7 +12,6 @@ const route = (name: string) => `${baseUrl}${name}/`;
   title="Ilya Sudakov"
   description="Ilya Sudakov — personal playground"
   bodyClass="playground"
-  disableViewportZoom
 >
   <button class="language-switch" data-language-switch data-language="ru" type="button" aria-label="Переключить на английский" title="Переключить на английский">
     <span class="language-tint" aria-hidden="true"></span>
@@ -411,14 +410,40 @@ const route = (name: string) => `${baseUrl}${name}/`;
   }
 
   @media (max-width: 640px) {
-    .sticker--paper {
-      width: 260px;
-      font-size: 15px;
+    :global(body.playground) { overflow: hidden; }
+    .language-switch { top: max(16px, env(safe-area-inset-top)); right: max(16px, env(safe-area-inset-right)); height: 44px; }
+    .viewport { overflow-y: auto; overflow-x: hidden; touch-action: pan-y; }
+    .canvas {
+      position: relative;
+      left: 0;
+      top: 0;
+      width: min(100%, 440px);
+      height: auto;
+      margin: 0 auto;
+      padding: calc(88px + env(safe-area-inset-top)) 24px calc(40px + env(safe-area-inset-bottom));
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 24px 16px;
+      transform: none !important;
     }
-
-    .sticker--photo img {
-      width: 180px;
-      height: 180px;
+    .sticker { position: relative; min-width: 0; transform: rotate(var(--srot, 0deg)) !important; }
+    .sticker--paper {
+      grid-column: 1 / -1;
+      width: 100%;
+      padding: 24px;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+    .sticker--chip { justify-content: center; width: 100%; min-height: 48px; padding: 12px 10px; font-size: 14px; }
+    .chip--work { grid-row: 2; grid-column: 1; }
+    .chip--cv { grid-row: 2; grid-column: 2; }
+    .sticker--note { width: 100%; padding: 18px 14px; }
+    :global(body.mobile-window-open .viewport) { overflow: hidden; }
+    :global(body.mobile-window-open .sticker) { pointer-events: none; }
+    @media (max-width: 360px) {
+      .canvas { padding-inline: 20px; gap: 20px 12px; }
+      .sticker--paper { padding: 22px 20px; }
+      .sticker--chip { font-size: 13px; }
     }
   }
 </style>

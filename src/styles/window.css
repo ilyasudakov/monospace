@@ -369,3 +369,23 @@ body.playground.show-window-overview .sticker {
 }
 .os-window-footer > span:first-child { flex: 1; }
 .os-window-footer > span:last-child { flex: 0 0 auto; color: #668; font-family: "Lucida Console", monospace; }
+
+@media (max-width: 640px) {
+  .os-window {
+    position: fixed;
+    left: 8px;
+    top: calc(72px + env(safe-area-inset-top));
+    width: calc(100% - 16px) !important;
+    height: calc(100dvh - 80px - env(safe-area-inset-top) - env(safe-area-inset-bottom)) !important;
+    min-width: 0;
+    min-height: 0;
+    transform: none !important;
+  }
+  .os-window--page .os-window-titlebar { height: 54px; padding-inline: 6px; gap: 6px; }
+  .os-tabbar { gap: 4px; }
+  .os-tab { padding: 10px 12px; font-size: 12px; }
+  .os-win-btn { width: 36px; height: 36px; }
+  .os-window-controls { gap: 4px; }
+  .os-window-resizer { display: none; }
+  .os-window-body iframe { touch-action: auto; }
+}
