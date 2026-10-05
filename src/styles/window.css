@@ -307,7 +307,9 @@ body.playground.show-window-overview .sticker {
   font-size: 13px;
   font-weight: 500;
   cursor: pointer;
+  touch-action: none;
 }
+.os-tab.is-dragging { cursor: grabbing; opacity: .65; border-color: rgba(55,105,150,.7); }
 .os-tab:hover { color: #1c3656; background: linear-gradient(to bottom, rgba(255,255,255,.55), rgba(195,225,245,.4)); }
 .os-tab[aria-selected="true"] {
   border-color: rgba(75,120,180,.45);

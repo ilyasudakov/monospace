@@ -9,6 +9,7 @@
 
 import { view, homes } from './state.js';
 import { renderDock, animateView } from './window-dock.js';
+import { attachTabDrag } from './tab-drag.js';
 
 const MAX_SIZE = 1000;
 
@@ -305,6 +306,7 @@ export function openPageWindow({ src, title }) {
       } catch {}
     });
     win._tabs = [];
+    attachTabDrag(win, tabbar);
     win._selectTab = active => {
       win._activeTab = active;
       external.href = active.src;
