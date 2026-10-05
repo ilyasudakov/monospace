@@ -23,8 +23,7 @@ The production build is generated with `npm run build` and deployed to GitHub Pa
 
 Portfolio and CV share a canvas window with Aqua-style tabs. Reopening a link
 focuses the existing tab and preserves its page state. On wide screens, the
-canvas shifts left to make room for the window. The titlebar's overview button
-shows open windows over a blurred canvas.
+canvas shifts left to make room for the window.
 
 The homepage's RU / EN switch translates the canvas and embedded pages and saves
 the preference locally. UI translations live in `src/scripts/language.js`.

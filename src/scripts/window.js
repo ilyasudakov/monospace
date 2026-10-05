@@ -9,7 +9,6 @@
 
 import { view, homes } from './state.js';
 import { renderDock, animateView } from './window-dock.js';
-import { toggleOverview } from './window-overview.js';
 
 const MAX_SIZE = 1000;
 
@@ -71,7 +70,6 @@ export function openWindow({ title = '', body = '', footer = null, variant, path
   titlebar.innerHTML = `
     <div class="os-window-title"></div>
     <div class="os-window-controls">
-      <button class="os-win-btn os-win-btn--overview" aria-label="Обзор открытых окон" title="Обзор открытых окон">▦</button>
       <button class="os-win-btn os-win-btn--close" aria-label="close"></button>
     </div>
   `;
@@ -134,10 +132,6 @@ export function openWindow({ title = '', body = '', footer = null, variant, path
   ], { duration: reducedMotion ? 0 : 460, easing: 'cubic-bezier(.22, 1, .36, 1)' });
 
   // Close button
-  titlebar.querySelector('.os-win-btn--overview').addEventListener('click', (e) => {
-    e.stopPropagation();
-    toggleOverview();
-  });
   titlebar.querySelector('.os-win-btn--close').addEventListener('click', (e) => {
     e.stopPropagation();
     closeWindow(win);
