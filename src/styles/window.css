@@ -190,6 +190,9 @@ body.playground.show-window-overview .sticker {
 .os-win-btn--close:active {
   background: linear-gradient(to bottom, #a43838 0%, #c04040 50%, #e88585 100%);
 }
+.os-win-btn--external { text-decoration: none; }
+.os-win-btn--external svg { position: static; width: 12px; height: 12px; }
+.os-win-btn--external:hover { background: linear-gradient(to bottom, #eaf5ff, #9dbfe0); color: #1c3656; }
 
 .os-win-btn::before {
   content: '';

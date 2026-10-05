@@ -173,7 +173,7 @@ function attachWindowDrag(win, handle) {
   let startPos = { x: 0, y: 0 };
 
   handle.addEventListener('pointerdown', (e) => {
-    if (e.target.closest('button')) return;
+    if (e.target.closest('button, a')) return;
     dragging = true;
     startPtr = { x: e.clientX, y: e.clientY };
     startPos = { ...win._pos };
@@ -289,8 +289,25 @@ export function openPageWindow({ src, title }) {
     tabbar.setAttribute('role', 'tablist');
     tabbar.setAttribute('aria-label', 'Разделы сайта');
     win.querySelector('.os-window-controls').before(tabbar);
+    const external = document.createElement('a');
+    external.className = 'os-win-btn os-win-btn--external';
+    external.target = '_blank';
+    external.rel = 'noopener noreferrer';
+    external.title = 'Открыть в новой вкладке';
+    external.setAttribute('aria-label', 'Открыть в новой вкладке');
+    external.innerHTML = '<svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M9 2h5v5M14 2 7 9M7 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    win.querySelector('.os-win-btn--close').before(external);
+    external.addEventListener('click', event => {
+      event.stopPropagation();
+      try {
+        const current = win._activeTab.frame.contentWindow.location.href;
+        if (current !== 'about:blank') external.href = current;
+      } catch {}
+    });
     win._tabs = [];
     win._selectTab = active => {
+      win._activeTab = active;
+      external.href = active.src;
       win._tabs.forEach(tab => {
         const selected = tab === active;
         tab.button.setAttribute('aria-selected', String(selected));

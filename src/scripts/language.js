@@ -39,6 +39,7 @@ const translations = {
   'Сбросить фильтры': 'Reset filters', 'Показать ещё': 'Show more', 'Написать мне ↗': 'Email me ↗',
   'Навигация': 'Navigation', 'Роль в работе': 'Role', 'Места работы': 'Workplaces',
   'Разделы сайта': 'Site sections',
+  'Открыть в новой вкладке': 'Open in a new tab',
   'Выбранные работы': 'Selected work', 'Выбранное': 'Selected work',
   'Назад': 'Back', 'Вперёд': 'Forward', 'Всё': 'All', 'Все файлы': 'All files',
   'По типу': 'By type', 'По годам': 'By year', 'Теги': 'Tags', 'фото': 'photos',
