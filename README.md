@@ -26,7 +26,9 @@ focuses the existing tab and preserves its page state. On wide screens, the
 canvas shifts left to make room for the window.
 
 The homepage's RU / EN switch translates the canvas and embedded pages and saves
-the preference locally. UI translations live in `src/scripts/language.js`.
+the preference locally. On the first visit, the browser's preferred language is
+used: Russian for `ru`, English for other languages. A saved choice takes priority.
+UI translations live in `src/scripts/language.js`.
 Personal projects such as Yoink are configured in `src/data/personal-projects.ts`.
 
 Edit `src/data/work.ts` to add workplaces and selected releases. Each workplace

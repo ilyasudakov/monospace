@@ -57,9 +57,13 @@ function sourceText(value) {
 }
 const originals = new WeakMap();
 const attributeOriginals = new WeakMap();
-let language = 'en';
+const browserLanguage = navigator.languages?.[0] || navigator.language || 'en';
+let language = /^ru(?:-|$)/i.test(browserLanguage) ? 'ru' : 'en';
 const originalTitle = document.title;
-try { language = localStorage.getItem('site-language') === 'ru' ? 'ru' : 'en'; } catch {}
+try {
+  const savedLanguage = localStorage.getItem('site-language');
+  if (savedLanguage === 'ru' || savedLanguage === 'en') language = savedLanguage;
+} catch {}
 export const getLanguage = () => language;
 export function translate(value) {
   const key = normalize(value);
