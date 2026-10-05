@@ -10,6 +10,8 @@ import {
   openPhotoWindow,
   openPageWindow,
 } from './window.js';
+import { isOverviewOpen, closeOverview } from './window-overview.js';
+import './language.js';
 
 const viewport = document.getElementById('viewport');
 const canvas = document.getElementById('canvas');
@@ -45,7 +47,31 @@ document.querySelectorAll('.canvas a[data-window]').forEach((link) => {
   });
 });
 
+// Embedded pages reuse this window's tabs.
+window.addEventListener('open-page-tab', event => {
+  const { src, title } = event.detail || {};
+  if (src) openPageWindow({ src, title });
+});
+
 // Tidy (R key): spring every sticker home + recenter view
+function arrangeHomeNotes() {
+  const paper = document.querySelector('.sticker--paper');
+  const paperHome = homes.get(paper);
+  if (!paperHome) return;
+  document.querySelectorAll('.sticker--note').forEach((note) => {
+    const home = homes.get(note);
+    const position = live.get(note);
+    const atHome = position.x === home.x && position.y === home.y;
+    home.y = paperHome.y + paper.offsetHeight + 22;
+    if (atHome) {
+      position.y = home.y;
+      renderSticker(note);
+    }
+  });
+}
+arrangeHomeNotes();
+window.addEventListener('languagechange', arrangeHomeNotes);
+
 function tidyUp() {
   const duration = 700;
   const start = performance.now();
@@ -95,6 +121,10 @@ function tidyUp() {
 
 // Keyboard
 window.addEventListener('keydown', (e) => {
+  if (isOverviewOpen()) {
+    if (e.key === 'Escape') { e.preventDefault(); closeOverview(); }
+    return;
+  }
   if (e.target.matches('input, textarea')) return;
   if (e.key === 'Escape' && openWindows.length > 0) {
     closeWindow(openWindows[openWindows.length - 1]);
@@ -107,8 +137,12 @@ window.addEventListener('keydown', (e) => {
 
 // Initial centering
 const initialCenter = computeHomeCenter();
-view.x = -initialCenter.x;
-view.y = -initialCenter.y;
+const initialWidth = 460;
+const paper = document.querySelector('.sticker--paper');
+const initialHeight = paper.offsetHeight + 120;
+view.scale = Math.min(1, (window.innerWidth - 48) / initialWidth, (window.innerHeight - 100) / initialHeight);
+view.x = -initialCenter.x * view.scale;
+view.y = -initialCenter.y * view.scale;
 renderView();
 
 // Pan + pinch-zoom (multi-touch aware)
@@ -127,6 +161,8 @@ function viewportCenterCoords(clientX, clientY) {
 }
 
 viewport.addEventListener('pointerdown', (e) => {
+  if (window.matchMedia('(max-width: 640px)').matches) return;
+  if (isOverviewOpen()) return;
   if (e.target.closest('.sticker') || e.target.closest('.os-window')) return;
   pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
 
@@ -198,6 +234,8 @@ viewport.addEventListener('pointercancel', endPointer);
 
 // Zoom
 viewport.addEventListener('wheel', (e) => {
+  if (window.matchMedia('(max-width: 640px)').matches) return;
+  if (isOverviewOpen()) { e.preventDefault(); return; }
   e.preventDefault();
   const rect = viewport.getBoundingClientRect();
   const cx = e.clientX - rect.left - rect.width / 2;
@@ -215,4 +253,6 @@ viewport.addEventListener('wheel', (e) => {
   renderView();
 }, { passive: false });
 
-document.addEventListener('gesturestart', (e) => e.preventDefault());
+document.addEventListener('gesturestart', (e) => {
+  if (!window.matchMedia('(max-width: 640px)').matches) e.preventDefault();
+});

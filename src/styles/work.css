@@ -1,0 +1,110 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+:root { font-family: Inter, sans-serif; color: #1a1a1a; background: #fff; }
+body { margin: 0; }
+a { color: inherit; text-underline-offset: 4px; }
+button, input, select { font: inherit; }
+button, select { cursor: pointer; }
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible { outline: 2px solid #0000ef; outline-offset: 5px; }
+.work-shell { width: min(100% - 64px, 960px); margin: 0 auto; }
+.site-header { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 32px 0; font-size: 13px; }
+.site-header a { text-decoration: none; }
+.identity { font-weight: 600; }
+.site-header nav { display: flex; gap: 24px; color: #777; }
+.site-header nav a:hover { color: #1a1a1a; }
+.portfolio-header { margin: 72px 0 80px; }
+.portfolio-header h1 { font-size: clamp(44px, 7vw, 72px); font-weight: 500; letter-spacing: -.055em; line-height: 1.05; margin: 0 0 24px; }
+.portfolio-header p { color: #777; font-size: 17px; line-height: 1.65; margin: 0; }
+.personal-projects { margin-bottom: 64px; }
+.personal-project { padding: 24px 0 32px; border-top: 1px solid #eee; }
+.project-heading { display: flex; flex-wrap: wrap; align-items: baseline; gap: 16px; }
+.project-heading h3 { margin: 0; font-size: 28px; font-weight: 500; letter-spacing: -.03em; }
+.project-heading h3 a { text-decoration: none; }
+.project-heading h3 a:hover { text-decoration: underline; }
+.project-heading h3 a span { font-size: 18px; color: #aaa; }
+.project-heading > span { font-size: 12px; color: #888; }
+.personal-project > p { max-width: 620px; font-size: 15px; line-height: 1.7; color: #666; margin: 18px 0; }
+.personal-project ul { list-style: none; padding: 0; margin: 0 0 22px; font-size: 12px; line-height: 1.9; color: #888; }
+.project-source { font-size: 12px; }
+.project-links { display: flex; flex-wrap: wrap; gap: 24px; }
+.company-nav { display: flex; flex-wrap: wrap; gap: 24px; margin-bottom: 48px; }
+.company-link { text-decoration: none; color: #888; font-size: 15px; padding-bottom: 8px; border-bottom: 1px solid transparent; }
+.company-link[aria-current] { color: #1a1a1a; border-color: #1a1a1a; }
+.company-link span { margin-left: 8px; font-size: 11px; color: #999; }
+.company-header { display: flex; justify-content: space-between; align-items: baseline; gap: 24px; margin-bottom: 36px; }
+.company-title { display: flex; flex-wrap: wrap; align-items: baseline; gap: 16px; }
+.company-title h2 { font-size: 27px; font-weight: 500; letter-spacing: -.035em; margin: 0; }
+.company-title > span { font-size: 12px; color: #888; }
+.source-link { color: #888; font-size: 12px; text-decoration: none; white-space: nowrap; }
+.source-link:hover { color: #1a1a1a; }
+.role-filters { display: flex; flex-wrap: wrap; gap: 28px; border-bottom: 1px solid #eee; }
+.role-filters button { border: 0; border-bottom: 1px solid transparent; background: none; color: #888; padding: 0 0 14px; margin-bottom: -1px; font-size: 13px; }
+.role-filters button[aria-pressed=true] { border-color: #1a1a1a; color: #1a1a1a; }
+.role-filters button:hover { color: #1a1a1a; }
+.role-filters button span { margin-left: 7px; font-size: 10px; color: #999; }
+.search-row { display: flex; align-items: center; gap: 24px; margin-top: 22px; }
+.search-field { flex: 1; min-width: 0; }
+.search-field input { width: 100%; border: 0; background: none; padding: 5px 0; font-size: 12px; color: #1a1a1a; }
+.search-field input::placeholder { color: #999; }
+.year-field select { border: 0; background: none; font-size: 12px; color: #888; padding: 5px 0; max-width: 120px; }
+.result-note { font-size: 12px; color: #888; margin: 24px 0 0; }
+.year-group { display: grid; grid-template-columns: 80px minmax(0, 1fr); gap: 24px; margin-top: 36px; }
+.year-group > h3 { font-size: 13px; font-weight: 400; color: #888; margin: 0; padding-top: 18px; font-variant-numeric: tabular-nums; }
+.update-list { list-style: none; padding: 0; margin: 0; }
+.update-link { display: grid; grid-template-columns: minmax(0, 1fr) 14px; gap: 6px 18px; padding: 17px 0 19px; border-bottom: 1px solid #eee; text-decoration: none; }
+.update-content { grid-column: 1; grid-row: 1; }
+.update-content h4 { font-size: 16px; line-height: 1.5; font-weight: 400; letter-spacing: -.015em; margin: 0; }
+.update-link:hover h4 { text-decoration: underline; text-underline-offset: 4px; }
+.update-content p { font-size: 13px; color: #777; line-height: 1.6; margin: 8px 0; }
+.update-link time { grid-column: 1; grid-row: 2; font-size: 11px; color: #999; font-variant-numeric: tabular-nums; }
+.update-link .role-label { grid-column: 1; grid-row: 2; margin-left: 75px; }
+.role-label { font-size: 11px; color: #888; }
+.update-arrow { grid-column: 2; grid-row: 1; color: #aaa; font-size: 15px; padding-top: 2px; }
+.load-more { display: block; margin: 32px 0 0 104px; border: 0; background: none; padding: 8px 0; font-size: 13px; text-decoration: underline; text-underline-offset: 4px; }
+.load-more span { color: #888; margin: 0 5px; }
+.archive-empty, .search-empty { padding: 64px 0; }
+.archive-empty h3, .search-empty h3 { font-size: 18px; font-weight: 400; margin: 0 0 12px; }
+.archive-empty p, .search-empty p { font-size: 14px; color: #888; line-height: 1.6; }
+.archive-empty a, .search-empty button { font-size: 13px; }
+.search-empty button { border: 0; padding: 0; background: none; text-decoration: underline; text-underline-offset: 4px; }
+.section-heading { font-size: 13px; font-weight: 400; color: #888; margin: 0 0 18px; }
+.featured-section { margin-bottom: 48px; }
+.featured-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 32px; }
+.featured-card { text-decoration: none; padding: 0 0 24px; border-bottom: 1px solid #ddd; }
+.featured-card h3 { font-size: 20px; font-weight: 400; letter-spacing: -.025em; line-height: 1.45; margin: 12px 0; }
+.featured-card:hover h3 { text-decoration: underline; text-underline-offset: 4px; }
+.featured-card p { font-size: 13px; color: #888; line-height: 1.6; }
+.featured-card time { font-size: 11px; color: #999; }
+.work-footer { display: flex; justify-content: space-between; gap: 24px; padding: 30px 0; border-top: 1px solid #eee; margin-top: 80px; font-size: 12px; color: #888; }
+.work-footer a { color: #1a1a1a; text-decoration: none; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
+@media (max-width: 600px) {
+  .work-shell { width: calc(100% - 40px); }
+  .site-header { padding: 16px 0; font-size: 12px; flex-wrap: wrap; gap: 8px 16px; }
+  .site-header a { display: inline-flex; align-items: center; min-height: 44px; }
+  .site-header nav { gap: 16px; }
+  .portfolio-header { margin: 28px 0 40px; }
+  .portfolio-header h1 { font-size: clamp(36px, 10vw, 48px); }
+  .portfolio-header p { font-size: 15px; }
+  .desktop-break { display: none; }
+  .company-header { align-items: flex-start; gap: 12px; flex-wrap: wrap; }
+  .company-title { flex-direction: column; gap: 8px; }
+  .company-title h2 { font-size: 24px; }
+  .source-link { padding-top: 6px; font-size: 11px; }
+  .role-filters { gap: 0 16px; }
+  .role-filters button { font-size: 12px; min-height: 44px; padding: 10px 0; }
+  .role-filters button span { margin-left: 4px; }
+  .year-group { grid-template-columns: 1fr; gap: 8px; margin-top: 32px; }
+  .year-group > h3 { padding-top: 0; }
+  .update-content h4 { font-size: 15px; }
+  .load-more { margin-left: 0; }
+  .search-row { gap: 12px; flex-wrap: wrap; }
+  .search-field { flex-basis: 180px; }
+  .search-field input, .year-field select { min-height: 44px; font-size: 16px; }
+  .project-source, .load-more, .search-empty button { display: inline-flex; align-items: center; min-height: 44px; }
+  .project-links { gap: 8px 20px; }
+  .personal-project > p, .update-content { overflow-wrap: anywhere; }
+  .work-footer { flex-wrap: wrap; gap: 8px 24px; margin-top: 48px; padding-bottom: max(24px, env(safe-area-inset-bottom)); }
+}

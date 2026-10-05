@@ -1,3 +1,4 @@
+import { getLanguage } from './language.js';
 // --- Data — add entries here as the archive grows ---
 // Each file: { id, type, name, date, tag?, src?, full? }
 //   type: 'photo' | 'pdf' | 'audio' | 'doc' | 'link' | 'note' | ...
@@ -29,6 +30,7 @@ const FILES = [
 const MONTHS_RU = ['янв','фев','мар','апр','май','июн','июл','авг','сен','окт','ноя','дек'];
 const fmtDate = (iso) => {
   const [y, m, d] = iso.split('-');
+  if (getLanguage() === 'en') return new Intl.DateTimeFormat('en', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' }).format(new Date(`${iso}T00:00:00Z`));
   return `${parseInt(d)} ${MONTHS_RU[parseInt(m)-1]} ${y}`;
 };
 
@@ -157,8 +159,8 @@ function renderSelection() {
 function renderStatus() {
   const items = getFiltered();
   const selected = items.find(f => f.id === selectedId);
-  const parts = [`${items.length} ${declension(items.length, ['элемент', 'элемента', 'элементов'])}`];
-  if (selected) parts.push('Выбрано: ' + selected.name + ' · ' + fmtDate(selected.date));
+  const parts = [getLanguage() === 'en' ? `${items.length} ${items.length === 1 ? 'item' : 'items'}` : `${items.length} ${declension(items.length, ['элемент', 'элемента', 'элементов'])}`];
+  if (selected) parts.push((getLanguage() === 'en' ? 'Selected: ' : 'Выбрано: ') + selected.name + ' · ' + fmtDate(selected.date));
   statusEl.innerHTML = parts
     .map((p, i) => i === 0 ? `<span>${p}</span>` : `<span class="sep-v"></span><span>${p}</span>`)
     .join('');
@@ -220,3 +222,7 @@ window.addEventListener('keydown', (e) => {
 // --- Init ---
 buildSidebar();
 render();
+window.addEventListener('languagechange', () => {
+  render();
+  if (lightbox.classList.contains('open') && selectedId) openLightbox(selectedId);
+});

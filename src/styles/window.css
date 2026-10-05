@@ -1,91 +1,75 @@
-/* --- Window dock — vertical micro UI on the left --- */
-.window-dock {
-  position: fixed;
-  top: 50%;
-  left: 16px;
-  transform: translate(-130%, -50%);
-  opacity: 0;
+.viewport::before {
+  content: '';
+  position: absolute;
+  inset: 0;
   pointer-events: none;
-  z-index: 2000;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  padding: 6px;
-  background: rgba(255, 255, 255, 0.45);
-  backdrop-filter: blur(16px) saturate(1.4);
-  -webkit-backdrop-filter: blur(16px) saturate(1.4);
-  border: 1px solid rgba(255, 255, 255, 0.55);
-  border-radius: 16px;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.7),
-    0 8px 22px -6px rgba(0, 30, 70, 0.35);
-  font-family: Tahoma, Verdana, Geneva, sans-serif;
-  font-size: 11px;
+  backdrop-filter: blur(0px);
+  -webkit-backdrop-filter: blur(0px);
+  transition: backdrop-filter 460ms ease, -webkit-backdrop-filter 460ms ease;
+}
+.show-window-overview .viewport::before {
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+body.playground .sticker {
+  transition: opacity 300ms ease, transform 280ms cubic-bezier(.34, 1.56, .64, 1), box-shadow 180ms ease, filter 180ms ease;
+}
+body.playground.show-window-overview .sticker {
+  filter: blur(8px);
+  pointer-events: none;
+}
+.show-window-overview .os-window { pointer-events: none; }
+.window-overview {
+  position: fixed;
+  inset: 0;
+  z-index: 1900;
+}
+.window-overview[hidden] { display: none; }
+.overview-dismiss {
+  position: absolute;
+  top: 20px;
+  left: 24px;
+  border: 0;
+  border-radius: 20px;
+  padding: 10px 16px;
+  background: rgba(255,255,255,.8);
   color: #1c3656;
-  min-width: 56px;
-  max-width: 220px;
-  transition:
-    transform 320ms cubic-bezier(0.22, 1, 0.36, 1),
-    opacity 240ms ease;
-}
-.window-dock.is-visible {
-  transform: translate(0, -50%);
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.dock-item {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 5px 10px;
-  border-radius: 999px;
   cursor: pointer;
-  transition: background 160ms ease;
-  animation: dock-item-in 220ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
-@keyframes dock-item-in {
-  from { opacity: 0; transform: translateX(-10px); }
-  to   { opacity: 1; transform: translateX(0); }
+.overview-tile {
+  position: absolute;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  background: transparent;
+  cursor: pointer;
+  transition: border-color 160ms, box-shadow 160ms;
 }
-.dock-item:hover { background: rgba(255, 255, 255, 0.6); }
-
-.dock-title {
-  flex: 1;
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+.overview-tile:hover, .overview-tile:focus-visible {
+  outline: none;
+  border-color: #578bba;
+  box-shadow: 0 0 0 4px rgba(87,139,186,.18);
 }
-
-.dock-close {
-  width: 16px;
-  height: 16px;
+.overview-close {
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(28,54,86,.15);
   border-radius: 50%;
-  border: none;
-  background: rgba(0, 30, 70, 0.12);
+  background: #fff;
   color: #1c3656;
-  font-size: 12px;
-  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(28,54,86,.18);
+  font-size: 20px;
   line-height: 1;
   cursor: pointer;
-  padding: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  opacity: 0;
-  transform: scale(0.85);
-  transition: opacity 160ms ease, transform 160ms ease, background 160ms ease, color 160ms ease;
 }
-.dock-item:hover .dock-close {
-  opacity: 1;
-  transform: scale(1);
+.overview-close:hover { background: #c03c3c; color: white; }
+.overview-close:focus-visible { outline: 3px solid #578bba; outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) {
+  body.playground .sticker, .overview-tile, .viewport::before { transition: none; }
 }
-.dock-close:hover {
-  background: #c03c3c;
-  color: #fff;
-}
+
 
 /* --- 2007 web 2.0 window — lives on the canvas --- */
 .os-window {
@@ -206,6 +190,9 @@
 .os-win-btn--close:active {
   background: linear-gradient(to bottom, #a43838 0%, #c04040 50%, #e88585 100%);
 }
+.os-win-btn--external { text-decoration: none; }
+.os-win-btn--external svg { position: static; width: 12px; height: 12px; }
+.os-win-btn--external:hover { background: linear-gradient(to bottom, #eaf5ff, #9dbfe0); color: #1c3656; }
 
 .os-win-btn::before {
   content: '';
@@ -284,6 +271,56 @@
 }
 
 /* Page variant body */
+.os-window--page .os-window-titlebar {
+  height: 44px;
+  padding: 6px 8px 0 10px;
+}
+.os-window--page .os-window-title {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  clip-path: inset(50%);
+}
+.os-window--page .os-window-controls { margin-bottom: 6px; }
+.os-tabbar {
+  display: flex;
+  align-self: stretch;
+  align-items: stretch;
+  flex: 1;
+  min-width: 0;
+  gap: 6px;
+}
+.os-tab {
+  position: relative;
+  padding: 8px 16px;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-bottom: -1px;
+  border: 1px solid rgba(95,140,180,.24);
+  border-radius: 9px 9px 0 0;
+  background: linear-gradient(to bottom, rgba(240,250,255,.3), rgba(155,197,228,.16));
+  color: #355774;
+  text-shadow: 0 1px 0 rgba(255,255,255,.5);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.45);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  touch-action: none;
+}
+.os-tab.is-dragging { cursor: grabbing; opacity: .65; border-color: rgba(55,105,150,.7); }
+.os-tab:hover { color: #1c3656; background: linear-gradient(to bottom, rgba(255,255,255,.55), rgba(195,225,245,.4)); }
+.os-tab[aria-selected="true"] {
+  border-color: rgba(75,120,180,.45);
+  border-bottom-color: rgba(225,241,251,.9);
+  background: linear-gradient(to bottom, rgba(255,255,255,.8) 0%, rgba(220,241,255,.65) 48%, rgba(181,215,241,.58) 52%, rgba(225,241,251,.85) 100%);
+  color: #1c3656;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.95), 0 -2px 8px rgba(65,115,160,.12);
+}
+.os-tab:focus-visible { outline: 2px solid #578bba; outline-offset: -4px; }
+.os-tab-panels, .os-tab-panel { height: 100%; }
+.os-tab-panel[hidden] { display: none; }
 .os-window--page .os-window-body {
   padding: 0;
   background: #fff;
@@ -332,3 +369,23 @@
 }
 .os-window-footer > span:first-child { flex: 1; }
 .os-window-footer > span:last-child { flex: 0 0 auto; color: #668; font-family: "Lucida Console", monospace; }
+
+@media (max-width: 640px) {
+  .os-window {
+    position: fixed;
+    left: 8px;
+    top: calc(72px + env(safe-area-inset-top));
+    width: calc(100% - 16px) !important;
+    height: calc(100dvh - 80px - env(safe-area-inset-top) - env(safe-area-inset-bottom)) !important;
+    min-width: 0;
+    min-height: 0;
+    transform: none !important;
+  }
+  .os-window--page .os-window-titlebar { height: 54px; padding-inline: 6px; gap: 6px; }
+  .os-tabbar { gap: 4px; }
+  .os-tab { padding: 10px 12px; font-size: 12px; }
+  .os-win-btn { width: 36px; height: 36px; }
+  .os-window-controls { gap: 4px; }
+  .os-window-resizer { display: none; }
+  .os-window-body iframe { touch-action: auto; }
+}

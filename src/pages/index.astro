@@ -5,7 +5,6 @@ import '../styles/globals.css';
 import '../styles/window.css';
 
 const baseUrl = import.meta.env.BASE_URL.replace(/\/?$/, '/');
-const asset = (name: string) => `${baseUrl}assets/${name}`;
 const route = (name: string) => `${baseUrl}${name}/`;
 ---
 
@@ -13,11 +12,13 @@ const route = (name: string) => `${baseUrl}${name}/`;
   title="Ilya Sudakov"
   description="Ilya Sudakov — personal playground"
   bodyClass="playground"
-  disableViewportZoom
 >
-  <div class="viewport" id="viewport">
+  <button class="language-switch" data-language-switch data-language="ru" type="button" aria-label="Переключить на английский" title="Переключить на английский">
+    <span class="language-label" data-language-label>RU</span>
+  </button>
+  <div class="viewport" id="viewport" style={`--wallpaper: url('${baseUrl}assets/aqua-wallpaper.webp')`}>
     <div class="canvas" id="canvas">
-      <div class="sticker sticker--paper" data-x="-260" data-y="-220" data-rot="-2.5">
+      <div class="sticker sticker--paper" data-x="-220" data-y="-200" data-rot="-2.5">
         <p>Привет, меня зовут <strong>Илья</strong>.</p>
         <p>
           Продакт-инженер в <a
@@ -28,100 +29,42 @@ const route = (name: string) => `${baseUrl}${name}/`;
           >, из Санкт-Петербурга. Люблю решать сложные задачи и делать полезные продукты end-to-end:
           дизайн, код, поддержка.
         </p>
-        <p class="muted">Пишу музыку, делаю фото.</p>
+        <p>
+          Можно связаться со мной <a class="paper-link" href="mailto:ilyasudakov.dev@gmail.com">по почте</a>
+          или в <a class="paper-link" href="https://t.me/ilyasudakov" target="_blank" rel="noopener">Telegram</a>.
+        </p>
       </div>
-
-      <div
-        class="sticker sticker--photo"
-        data-x="200"
-        data-y="-260"
-        data-rot="-3"
-        data-full={asset('img2.jpg')}
-      >
-        <img src={asset('img2_sm.jpg')} alt="" draggable="false" />
-        <div class="photo-label">авг 2024</div>
-      </div>
-
-      <div
-        class="sticker sticker--photo"
-        data-x="480"
-        data-y="60"
-        data-rot="4"
-        data-full={asset('img1.jpg')}
-      >
-        <img src={asset('img1_sm.jpg')} alt="" draggable="false" />
-        <div class="photo-label">фев 2025</div>
-      </div>
-
-      <a
-        class="sticker sticker--chip chip--email"
-        href="mailto:ilyasudakov.dev@gmail.com"
-        data-x="-280"
-        data-y="80"
-        data-rot="-4"
-      >
-        <span>email</span>
-      </a>
 
       <a
         class="sticker sticker--chip chip--cv"
         href={route('cv')}
         data-window={route('cv')}
         data-window-title="Резюме"
-        data-x="-140"
-        data-y="140"
+        data-x="122"
+        data-y="-144"
         data-rot="2"
       >
         <span>резюме</span>
       </a>
 
       <a
-        class="sticker sticker--chip chip--linkedin"
-        href="https://www.linkedin.com/in/ilyasudakov/"
-        target="_blank"
-        rel="noopener"
-        data-x="0"
-        data-y="180"
-        data-rot="-3"
+        class="sticker sticker--chip chip--work"
+        href={route('work')}
+        data-window={route('work')}
+        data-window-title="Портфолио"
+        data-x="116"
+        data-y="-200"
+        data-rot="-2"
       >
-        <span>linkedin</span>
+        <span>портфолио</span>
       </a>
 
-      <a
-        class="sticker sticker--chip chip--telegram"
-        href="https://t.me/ilyasudakov"
-        target="_blank"
-        rel="noopener"
-        data-x="160"
-        data-y="220"
-        data-rot="5"
-      >
-        <span>telegram</span>
-      </a>
-
-      <a
-        class="sticker sticker--chip chip--photos"
-        href={route('photos')}
-        data-window={route('photos')}
-        data-window-title="Фото"
-        data-x="500"
-        data-y="-140"
-        data-rot="-4"
-      >
-        <span>фото архив</span>
-      </a>
-
-      <div class="sticker sticker--note note--pink" data-x="-420" data-y="260" data-rot="-5">
+      <div class="sticker sticker--note note--pink" data-x="-220" data-y="140" data-rot="-5">
         <span class="note-label">интерес</span>
         <strong>Дизайн</strong>
       </div>
 
-      <div class="sticker sticker--note note--blue" data-x="-240" data-y="340" data-rot="3">
-        <span class="note-label">интерес</span>
-        <strong>Картография</strong>
-      </div>
-
-      <div class="sticker sticker--note note--yellow" data-x="-60" data-y="380" data-rot="-2">
+      <div class="sticker sticker--note note--yellow" data-x="-32" data-y="140" data-rot="-2">
         <span class="note-label">интерес</span>
         <strong>Музыка</strong>
       </div>
@@ -132,12 +75,41 @@ const route = (name: string) => `${baseUrl}${name}/`;
 </BaseLayout>
 
 <style>
+  .language-switch {
+    position: fixed;
+    top: 20px;
+    right: 24px;
+    z-index: 2100;
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 30px;
+    padding: 0;
+    overflow: hidden;
+    isolation: isolate;
+    border: 0;
+    border-radius: 20px;
+    background: rgba(255,255,255,.55);
+    backdrop-filter: blur(12px);
+    box-shadow: inset 0 0 0 1px rgba(53,81,106,.35), inset 0 1px 0 rgba(255,255,255,.8), 0 4px 10px -6px rgba(25,55,85,.2);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: .06em;
+    color: #35516a;
+    cursor: pointer;
+    transition: background 160ms ease;
+  }
+  .language-switch:hover { background: rgba(255,255,255,.85); color: #243d54; }
+  .language-switch:focus-visible { outline: 2px solid #355774; outline-offset: 3px; }
+  @media (prefers-reduced-motion: reduce) {
+    .language-switch { transition: none; }
+  }
   :global(:root) {
     --paper: #fdfaf3;
     --ink: #1a1a1a;
     --muted: #6b6b6b;
-    --bg-1: #e9e4d8;
-    --bg-2: #d8d0be;
+    --bg-1: #c7d8e7;
+    --bg-2: #a6bfd5;
     --accent: #0000ef;
     --pink: #ffd4dc;
     --blue: #cfe3ff;
@@ -154,22 +126,13 @@ const route = (name: string) => `${baseUrl}${name}/`;
     overscroll-behavior: none;
   }
 
-  :global(body.playground) {
-    background:
-      radial-gradient(circle at 20% 20%, #f1ecdd 0%, transparent 50%),
-      radial-gradient(circle at 80% 80%, #ddd4bf 0%, transparent 55%),
-      var(--bg-1);
-  }
-
   .viewport {
     position: fixed;
     inset: 0;
     overflow: hidden;
     cursor: grab;
     touch-action: none;
-    background-image: radial-gradient(circle, rgba(0, 0, 0, 0.08) 1px, transparent 1.5px);
-    background-size: 28px 28px;
-    background-position: 0 0;
+    background: var(--bg-1) var(--wallpaper) center / cover no-repeat;
   }
 
   .viewport.panning {
@@ -364,8 +327,21 @@ const route = (name: string) => `${baseUrl}${name}/`;
   }
 
   .chip--cv {
-    background: #d7ffd7;
+    background: rgba(255,255,255,.55);
+    color: #35516a;
+    backdrop-filter: blur(12px);
+    box-shadow: inset 0 0 0 1px rgba(53,81,106,.35), inset 0 1px 0 rgba(255,255,255,.8), 0 4px 10px -6px rgba(25,55,85,.2);
   }
+
+  .chip--work {
+    background: linear-gradient(to bottom, #699dcb 0%, #477fb2 48%, #326b9e 52%, #285f91 100%);
+    color: #fff;
+    font-weight: 600;
+    text-shadow: 0 1px 1px rgba(15,45,75,.3);
+    box-shadow: inset 0 0 0 1px #285c88, inset 0 2px 0 rgba(255,255,255,.4), 0 6px 14px -5px rgba(20,65,105,.4);
+  }
+  .sticker--chip.chip--work:hover { background: linear-gradient(to bottom, #7aaedb, #3674a9); }
+  .sticker--chip.chip--cv:hover { background: rgba(255,255,255,.85); color: #243d54; }
 
   .chip--linkedin {
     background: #cfe3ff;
@@ -417,14 +393,40 @@ const route = (name: string) => `${baseUrl}${name}/`;
   }
 
   @media (max-width: 640px) {
-    .sticker--paper {
-      width: 260px;
-      font-size: 15px;
+    :global(body.playground) { overflow: hidden; }
+    .language-switch { top: max(16px, env(safe-area-inset-top)); right: max(16px, env(safe-area-inset-right)); height: 44px; }
+    .viewport { overflow-y: auto; overflow-x: hidden; touch-action: pan-y; }
+    .canvas {
+      position: relative;
+      left: 0;
+      top: 0;
+      width: min(100%, 440px);
+      height: auto;
+      margin: 0 auto;
+      padding: calc(88px + env(safe-area-inset-top)) 24px calc(40px + env(safe-area-inset-bottom));
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 24px 16px;
+      transform: none !important;
     }
-
-    .sticker--photo img {
-      width: 180px;
-      height: 180px;
+    .sticker { position: relative; min-width: 0; transform: rotate(var(--srot, 0deg)) !important; }
+    .sticker--paper {
+      grid-column: 1 / -1;
+      width: 100%;
+      padding: 24px;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+    .sticker--chip { justify-content: center; width: 100%; min-height: 48px; padding: 12px 10px; font-size: 14px; }
+    .chip--work { grid-row: 2; grid-column: 1; }
+    .chip--cv { grid-row: 2; grid-column: 2; }
+    .sticker--note { width: 100%; padding: 18px 14px; }
+    :global(body.mobile-window-open .viewport) { overflow: hidden; }
+    :global(body.mobile-window-open .sticker) { pointer-events: none; }
+    @media (max-width: 360px) {
+      .canvas { padding-inline: 20px; gap: 20px 12px; }
+      .sticker--paper { padding: 22px 20px; }
+      .sticker--chip { font-size: 13px; }
     }
   }
 </style>
