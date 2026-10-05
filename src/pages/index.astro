@@ -14,7 +14,6 @@ const route = (name: string) => `${baseUrl}${name}/`;
   bodyClass="playground"
 >
   <button class="language-switch" data-language-switch data-language="ru" type="button" aria-label="Переключить на английский" title="Переключить на английский">
-    <span class="language-tint" aria-hidden="true"></span>
     <span class="language-label" data-language-label>RU</span>
   </button>
   <div class="viewport" id="viewport" style={`--wallpaper: url('${baseUrl}assets/aqua-wallpaper.webp')`}>
@@ -88,38 +87,22 @@ const route = (name: string) => `${baseUrl}${name}/`;
     padding: 0;
     overflow: hidden;
     isolation: isolate;
-    border: 1px solid rgba(255,255,255,.55);
+    border: 0;
     border-radius: 20px;
-    background: rgba(255,255,255,.5);
-    backdrop-filter: blur(16px);
-    box-shadow: inset 0 1px 0 rgba(255,255,255,.85), inset 0 -2px 5px rgba(69,104,138,.12), 0 2px 8px rgba(60,65,75,.12);
+    background: rgba(255,255,255,.55);
+    backdrop-filter: blur(12px);
+    box-shadow: inset 0 0 0 1px rgba(53,81,106,.35), inset 0 1px 0 rgba(255,255,255,.8), 0 4px 10px -6px rgba(25,55,85,.2);
     font-size: 12px;
-    font-weight: 600;
+    font-weight: 500;
     letter-spacing: .06em;
-    color: #253d52;
+    color: #35516a;
     cursor: pointer;
+    transition: background 160ms ease;
   }
-  .language-label { position: relative; z-index: 1; text-shadow: 0 1px 0 rgba(255,255,255,.7); }
-  .language-tint { position: absolute; inset: 0; pointer-events: none; }
-  .language-tint::before, .language-tint::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    transition: opacity 500ms ease;
-  }
-  .language-tint::before {
-    background: linear-gradient(170deg, rgba(111,166,229,.34), rgba(63,109,187,.15) 50%, rgba(215,96,111,.22));
-  }
-  .language-tint::after {
-    background: linear-gradient(165deg, rgba(255,255,255,.5), rgba(212,86,108,.32));
-    opacity: 0;
-  }
-  .language-switch[data-language="en"] .language-tint::before { opacity: 0; }
-  .language-switch[data-language="en"] .language-tint::after { opacity: 1; }
-  .language-switch:hover { border-color: rgba(255,255,255,.95); }
+  .language-switch:hover { background: rgba(255,255,255,.85); color: #243d54; }
   .language-switch:focus-visible { outline: 2px solid #355774; outline-offset: 3px; }
   @media (prefers-reduced-motion: reduce) {
-    .language-tint::before, .language-tint::after { transition: none; }
+    .language-switch { transition: none; }
   }
   :global(:root) {
     --paper: #fdfaf3;
