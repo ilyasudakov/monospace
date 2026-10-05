@@ -36,7 +36,7 @@ if (video) {
   }
   function prepareStandby() {
     const standby = layers.find(layer => layer !== video);
-    if (!standby || !video.hasAttribute('src')) return;
+    if (!standby || !video.hasAttribute('src') || video.readyState < 2 || video.paused) return;
     if (standby.getAttribute('src') !== video.getAttribute('src')) {
       standby.src = video.getAttribute('src');
     }
@@ -65,9 +65,15 @@ if (video) {
   layers.forEach(layer => {
     layer.addEventListener('play', updateControl);
     layer.addEventListener('pause', updateControl);
+    layer.addEventListener('playing', () => {
+      if (layer !== video) return;
+      prepareStandby();
+      if (typeof layer.requestVideoFrameCallback !== 'function') layer.style.opacity = '1';
+    });
     if (typeof layer.requestVideoFrameCallback !== 'function') return;
     function observeFrame(now, frame) {
       layer.requestVideoFrameCallback(observeFrame);
+      if (layer === video && !layer.paused) layer.style.opacity = '1';
       if (layer !== video || document.hidden || !motionAllowed() || handoff !== null) return;
       const remaining = layer.duration - frame.mediaTime;
       if (remaining > 1 / 30 + 0.002 || remaining <= 0) return;
@@ -119,7 +125,10 @@ if (video) {
     cancelHandoff();
     layers.filter(layer => layer !== video).forEach(layer => layer.pause());
     video.poster = wideScreen.matches ? video.dataset.widePoster : video.dataset.poster;
-    if (video.hasAttribute('src') && video.getAttribute('src') !== source()) video.src = source();
+    if (video.hasAttribute('src') && video.getAttribute('src') !== source()) {
+      video.style.opacity = '0';
+      video.src = source();
+    }
     prepareStandby();
   }
   updateSource();
