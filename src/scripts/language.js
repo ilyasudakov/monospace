@@ -16,7 +16,7 @@ const translations = {
   'Продакт-инженер,': 'Product engineer,', 'Младший продакт-менеджер,': 'Junior product manager,',
   'Технический писатель/Бизнес-аналитик,': 'Technical writer / Business analyst,',
   'Младший технический писатель,': 'Junior technical writer,', 'Фронтенд-разработчик,': 'Frontend developer,',
-  'Анализ и проработка требований. Курирование реализации на всём цикле разработки. Код — Frontend (React) + Backend (Django) с Claude Code.': 'Requirements analysis and refinement. Leading implementation throughout the development cycle. Frontend (React) and backend (Django) development with Claude Code.',
+  'Анализ и проработка требований. Курирование реализации на всём цикле разработки. Код — Frontend (React) + Backend (Django) с Claude Code.': 'Requirements analysis and refinement. Leading implementation throughout the development cycle. Full stack development with AI.',
   'Продуктовые релизы и проекты ↗': 'Product releases and projects ↗',
   'Описание требований, макеты в Figma, прототипы с React + Cursor/Claude Code, v0.': 'Writing requirements, designing in Figma, and prototyping with React, Cursor / Claude Code, and v0.',
   'Анализ и описание требований для продуктовых фичей. Работа с дизайнером, командой разработчиков и менеджером по продукту.': 'Analyzing and documenting requirements for product features. Working with the designer, engineering team, and product manager.',
@@ -29,6 +29,17 @@ const translations = {
   'Отвечал за проект целиком: от требований и дизайна до разработки, запуска и поддержки.': 'Owned the project end to end: requirements, design, development, launch, and support.',
   'Прорабатывал требования, координировал дизайн и разработку, доводил проект до релиза.': 'Defined requirements, coordinated design and development, and guided the project through release.',
   'Расширение Chrome': 'Chrome extension',
+  'Расширение для синхронизации cookies с localhost и staging.': 'A Chrome extension that syncs cookies to localhost and staging.',
+  'Платформа для маркетинговой аналитики. Продуктовые апдейты, над которыми я работал.': 'A marketing analytics platform. Product releases I worked on.',
+  'CRM/ERP-приложение для производственного предприятия.': 'A CRM/ERP frontend for a manufacturing business.',
+  'релизов': 'releases', '← Портфолио': '← Portfolio',
+  'Релизы': 'Releases',
+  'Система управления малым предприятием': 'Small business management system',
+  'Дипломный проект · СПбГУТ': 'Bachelor’s thesis · SPbSUT',
+  'Клиентское CRM/ERP-приложение для производственного предприятия. Проектирование интерфейсов, разработка на React, интеграция с серверным API и тестирование.': 'A CRM/ERP frontend for a manufacturing business. Interface design, React development, server API integration, and testing.',
+  'Клиенты, заявки на производство, продукция и обратная связь': 'Customers, production orders, products, and feedback',
+  'Авторизация и доступ к страницам по ролям пользователей': 'Authentication and role-based page access',
+  'Дипломная работа · PDF ↗': 'Bachelor’s thesis · PDF ↗',
   'Переносит cookies с выбранных хостов на localhost и staging, чтобы тестировать приложение с рабочей сессией. Автоматически, при загрузке страницы.': 'Automatically syncs cookies from selected hosts to localhost and staging on page load, so you can test your app with an authenticated session.',
   'Настраиваемые источники и назначения': 'Configurable sources and destinations',
   'Пауза синхронизации и поддержка инкогнито': 'Pause syncing and use incognito mode',
@@ -41,6 +52,7 @@ const translations = {
   'Сбросить фильтры': 'Reset filters', 'Показать ещё': 'Show more', 'Написать мне ↗': 'Email me ↗',
   'Навигация': 'Navigation', 'Роль в работе': 'Role', 'Места работы': 'Workplaces',
   'Разделы сайта': 'Site sections',
+  'Закрыть вкладку': 'Close tab',
   'Открыть в новой вкладке': 'Open in a new tab',
   'Выбранные работы': 'Selected work', 'Выбранное': 'Selected work',
   'Назад': 'Back', 'Вперёд': 'Forward', 'Всё': 'All', 'Все файлы': 'All files',
@@ -94,7 +106,7 @@ function applyLanguage() {
     if (node.textContent !== result) node.textContent = result;
   }
   document.querySelectorAll('[title], [aria-label], [placeholder], [data-window-title]').forEach(element => {
-    if (element.closest('[data-language-switch], [data-video-switch]')) return;
+    if (element.closest('[data-language-switch], [data-video-switch], [data-project-frame]')) return;
     let sources = attributeOriginals.get(element);
     if (!sources) { sources = new Map(); attributeOriginals.set(element, sources); }
     for (const attribute of ['title', 'aria-label', 'placeholder', 'data-window-title']) {

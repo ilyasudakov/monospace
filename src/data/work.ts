@@ -18,6 +18,7 @@ export interface Workplace {
   description: string;
   website: string;
   updates: WorkUpdate[];
+  logo?: string;
 }
 
 // Add a workplace here to create its section and navigation automatically.
@@ -26,6 +27,7 @@ export const workplaces: Workplace[] = [
   {
     id: 'improvado',
     name: 'Improvado',
+    logo: 'assets/improvado_icon.png',
     period: '2022 — сейчас',
     description: 'Платформа для маркетинговой аналитики. Продуктовые апдейты, над которыми я работал.',
     website: 'https://improvado.io/product-updates',
