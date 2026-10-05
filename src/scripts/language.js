@@ -57,9 +57,9 @@ function sourceText(value) {
 }
 const originals = new WeakMap();
 const attributeOriginals = new WeakMap();
-let language = 'ru';
+let language = 'en';
 const originalTitle = document.title;
-try { language = localStorage.getItem('site-language') === 'en' ? 'en' : 'ru'; } catch {}
+try { language = localStorage.getItem('site-language') === 'ru' ? 'ru' : 'en'; } catch {}
 export const getLanguage = () => language;
 export function translate(value) {
   const key = normalize(value);
@@ -132,7 +132,7 @@ export function setLanguage(next) {
 }
 window.addEventListener('site-language', event => setLanguage(event.detail));
 window.addEventListener('storage', event => {
-  if (event.key === 'site-language') setLanguage(event.newValue === 'en' ? 'en' : 'ru');
+  if (event.key === 'site-language') setLanguage(event.newValue === 'ru' ? 'ru' : 'en');
 });
 document.querySelectorAll('[data-language-switch]').forEach(button => {
   button.addEventListener('click', () => {
