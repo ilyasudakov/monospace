@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import '../styles/globals.css';
+const baseUrl = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 ---
 
 <BaseLayout title="Ilya Sudakov CV 2025" description="Portfolio and work experience" lang="ru">
@@ -23,6 +24,7 @@ import '../styles/globals.css';
               Анализ и проработка требований. Курирование реализации на всём цикле разработки. Код — Frontend
               (React) + Backend (Django) с Claude Code.
             </p>
+            <p><a class="work-link" href={`${baseUrl}work/#improvado`}>Продуктовые релизы и проекты ↗</a></p>
           </div>
         </li>
         <li>
@@ -73,7 +75,9 @@ import '../styles/globals.css';
 
 <style>
   .container {
-    padding: 3rem 0;
+    padding: 3rem clamp(24px, 6vw, 72px);
+    margin-inline: auto;
+    overflow: visible;
     gap: 3rem;
   }
 
@@ -106,5 +110,11 @@ import '../styles/globals.css';
 
   .list-item__description {
     padding-left: 1rem;
+  }
+
+  .work-link {
+    margin-top: .75rem;
+    font-size: 13px;
+    text-underline-offset: 3px;
   }
 </style>

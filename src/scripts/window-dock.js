@@ -1,15 +1,16 @@
-// Window dock — vertical micro UI on the left listing open windows.
-// Reads `openWindows` from window.js and animates the canvas view to focus a chosen window.
+// Shared window focus and canvas animations.
 
 import { view, MAX_SCALE, renderView } from './state.js';
-import { openWindows, closeWindow } from './window.js';
-
-const dockEl = document.createElement('div');
-dockEl.className = 'window-dock';
-document.body.appendChild(dockEl);
+import { openWindows, bringToFront, placeBesideCanvas } from './window.js';
+import { closeOverview, isOverviewOpen, layoutOverview } from './window-overview.js';
 
 let viewAnimRaf = null;
-function animateView(target, duration = 480) {
+export function stopViewAnimation() {
+  if (viewAnimRaf) cancelAnimationFrame(viewAnimRaf);
+  viewAnimRaf = null;
+}
+export function animateView(target, duration = 480) {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) duration = 1;
   if (viewAnimRaf) cancelAnimationFrame(viewAnimRaf);
   const start = performance.now();
   const from = { ...view };
@@ -28,10 +29,10 @@ function animateView(target, duration = 480) {
   viewAnimRaf = requestAnimationFrame(tick);
 }
 
-let windowZ = 1000;
-function focusWindow(win) {
-  windowZ += 1;
-  win.style.zIndex = String(windowZ);
+export function focusWindow(win) {
+  closeOverview();
+  bringToFront(win);
+  if (placeBesideCanvas(win)) return;
 
   win.animate(
     [{ filter: 'brightness(1.18)' }, { filter: 'brightness(1)' }],
@@ -54,42 +55,11 @@ function focusWindow(win) {
   });
 }
 
-function escapeHtml(s) {
-  return String(s).replace(/[&<>"']/g, (c) => ({
-    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
-  }[c]));
-}
-
 export function renderDock() {
-  dockEl.innerHTML = openWindows.map((win, i) => {
-    const title = win.querySelector('.os-window-title')?.textContent || '—';
-    return `<div class="dock-item" data-idx="${i}" title="${escapeHtml(title)}">
-      <span class="dock-title">${escapeHtml(title)}</span>
-      <button class="dock-close" data-idx="${i}" aria-label="close">×</button>
-    </div>`;
-  }).join('');
-
-  dockEl.querySelectorAll('.dock-item').forEach((item) => {
-    item.addEventListener('click', (e) => {
-      if (e.target.closest('.dock-close')) return;
-      const idx = parseInt(item.dataset.idx, 10);
-      const win = openWindows[idx];
-      if (win) focusWindow(win);
-    });
-  });
-  dockEl.querySelectorAll('.dock-close').forEach((btn) => {
-    btn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const idx = parseInt(btn.dataset.idx, 10);
-      const win = openWindows[idx];
-      if (win) closeWindow(win);
-    });
-  });
-
-  dockEl.classList.toggle('is-visible', openWindows.length > 0);
+  if (isOverviewOpen()) layoutOverview();
 }
 
-// Ctrl/Cmd + 1..9 → focus the Nth window in the dock
+// Ctrl/Cmd + 1..9 → focus the Nth open window
 window.addEventListener('keydown', (e) => {
   if (!(e.ctrlKey || e.metaKey) || e.altKey) return;
   if (e.key < '1' || e.key > '9') return;

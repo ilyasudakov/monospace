@@ -1,0 +1,125 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { workplaces, roleLabels } from '../data/work';
+import { personalProjects } from '../data/personal-projects';
+import '../styles/work.css';
+
+const baseUrl = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+const formatDate = (date: string) => new Intl.DateTimeFormat('ru', {
+  day: 'numeric', month: 'short', timeZone: 'UTC',
+}).format(new Date(`${date}T00:00:00Z`));
+---
+
+<BaseLayout title="Портфолио — Илья Судаков" description="Свои проекты и продуктовые релизы в компаниях, где я работал." bodyClass="work-archive">
+  <div class="work-shell">
+    <header class="site-header">
+      <a class="identity" href={baseUrl} target="_top">Илья Судаков</a>
+      <nav aria-label="Навигация">
+        <a href={baseUrl} target="_top">Главная</a>
+        <a href={`${baseUrl}cv/`}>Резюме</a>
+      </nav>
+    </header>
+    <main class="work-main">
+      <header class="portfolio-header">
+        <h1>Портфолио</h1>
+        <p>Свои проекты и продуктовые релизы<br class="desktop-break" /> как разработчика и менеджера.</p>
+      </header>
+      {personalProjects.length > 0 && <section class="personal-projects" aria-labelledby="personal-projects-title">
+        <h2 class="section-heading" id="personal-projects-title">Свои проекты</h2>
+        {personalProjects.map((project) => (
+          <article class="personal-project" id={project.id}>
+            <div class="project-heading">
+              <h3><a href={project.url} target="_blank" rel="noopener">{project.name} <span aria-hidden="true">↗</span></a></h3>
+              <span>{project.kind}</span>
+            </div>
+            <p>{project.description}</p>
+            <ul>{project.features.map((feature) => <li>{feature}</li>)}</ul>
+            <div class="project-links">
+              <a class="project-source" href={project.url} target="_blank" rel="noopener">Установить в Chrome ↗</a>
+              {project.sourceUrl && <a class="project-source" href={project.sourceUrl} target="_blank" rel="noopener">Код на GitHub ↗</a>}
+            </div>
+          </article>
+        ))}
+      </section>}
+      {workplaces.length > 1 && <nav class="company-nav" aria-label="Места работы">
+        {workplaces.map((company) => (
+          <a class="company-link" href={`#${company.id}`} data-company-link={company.id}>
+            {company.name}<span>{company.updates.length}</span>
+          </a>
+        ))}
+      </nav>}
+      {workplaces.map((company) => {
+        const sorted = [...company.updates].sort((a, b) => b.date.localeCompare(a.date));
+        const years = [...new Set(sorted.map((update) => update.date.slice(0, 4)))];
+        const featured = sorted.filter((update) => update.featured).slice(0, 3);
+        return (
+          <section class="company-section" id={company.id} data-company={company.id}>
+            <header class="company-header">
+              <div class="company-title"><h2>{company.name}</h2><span>{company.period}</span></div>
+              <a class="source-link" href={company.website} target="_blank" rel="noopener">Product updates <span aria-hidden="true">↗</span></a>
+            </header>
+
+            {featured.length > 0 && (
+              <section class="featured-section" aria-label="Выбранные работы">
+                <h2 class="section-heading">Выбранное</h2>
+                <div class="featured-grid">
+                  {featured.map((update) => (
+                    <a class="featured-card" href={update.url} target="_blank" rel="noopener">
+                      <span class={`role-label role-${update.role}`}>{roleLabels[update.role]}</span>
+                      <h3>{update.title} <span aria-hidden="true">↗</span></h3>
+                      {update.summary && <p>{update.summary}</p>}
+                      <time datetime={update.date}>{formatDate(update.date)} {update.date.slice(0, 4)}</time>
+                    </a>
+                  ))}
+                </div>
+              </section>
+            )}
+
+            <form class="archive-controls" data-controls hidden role="search" onsubmit="return false">
+              <div class="role-filters" role="group" aria-label="Роль в работе">
+                <button type="button" data-role="all" aria-pressed="true">Все <span>{sorted.length}</span></button>
+                <button type="button" data-role="owner" aria-pressed="false">Вёл целиком <span>{sorted.filter((update) => update.role === 'owner').length}</span></button>
+                <button type="button" data-role="manager" aria-pressed="false">Вёл как менеджер <span>{sorted.filter((update) => update.role === 'manager').length}</span></button>
+              </div>
+              <div class="search-row">
+                <label class="search-field"><span class="sr-only">Поиск апдейтов {company.name}</span><input type="search" placeholder="Поиск по названию" data-search autocomplete="off" /></label>
+                <label class="year-field"><span class="sr-only">Год апдейта</span><select data-year><option value="all">Все годы</option>{years.map((year) => <option value={year}>{year}</option>)}</select></label>
+              </div>
+            </form>
+            <p class="result-note" data-result-note hidden>Найдено: <span data-result-count aria-live="polite">{sorted.length}</span></p>
+
+            {years.map((year) => (
+              <section class="year-group" data-year-group={year} aria-label={`Апдейты за ${year}`}>
+                <h3>{year}</h3>
+                <ol class="update-list">
+                  {sorted.filter((update) => update.date.startsWith(year)).map((update) => (
+                    <li data-update data-role={update.role} data-year={year}>
+                      <a class="update-link" href={update.url} target="_blank" rel="noopener">
+                        <time datetime={update.date}>{formatDate(update.date)}</time>
+                        <div class="update-content"><h4>{update.title}</h4>{update.summary && <p>{update.summary}</p>}</div>
+                        <span class={`role-label role-${update.role}`}>{roleLabels[update.role]}</span>
+                        <span class="update-arrow" aria-hidden="true">↗</span>
+                      </a>
+                    </li>
+                  ))}
+                </ol>
+              </section>
+            ))}
+
+            {sorted.length === 0 && (
+              <div class="archive-empty">
+                <h3>Список ещё собирается</h3>
+                <p>Здесь появятся выбранные релизы<br />и проекты в {company.name}.</p>
+                <a href={company.website} target="_blank" rel="noopener">Пока — апдейты компании ↗</a>
+              </div>
+            )}
+            <div class="search-empty" data-no-results hidden><h3>Ничего не нашлось</h3><p>Попробуй другой запрос или сбрось фильтры.</p><button type="button" data-reset>Сбросить фильтры</button></div>
+            <button class="load-more" type="button" data-load-more hidden>Показать ещё <span data-remaining></span> ↓</button>
+          </section>
+        );
+      })}
+      <footer class="work-footer"><a href="mailto:ilyasudakov.dev@gmail.com">Написать мне ↗</a><span>Илья Судаков</span></footer>
+    </main>
+  </div>
+  <script src="../scripts/work.js"></script>
+</BaseLayout>

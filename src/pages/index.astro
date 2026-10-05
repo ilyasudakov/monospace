@@ -5,7 +5,6 @@ import '../styles/globals.css';
 import '../styles/window.css';
 
 const baseUrl = import.meta.env.BASE_URL.replace(/\/?$/, '/');
-const asset = (name: string) => `${baseUrl}assets/${name}`;
 const route = (name: string) => `${baseUrl}${name}/`;
 ---
 
@@ -15,9 +14,14 @@ const route = (name: string) => `${baseUrl}${name}/`;
   bodyClass="playground"
   disableViewportZoom
 >
+  <div class="language-switch" data-language-switch role="group" aria-label="Language / Язык">
+    <button type="button" data-language="ru" aria-pressed="true">RU</button>
+    <span aria-hidden="true">/</span>
+    <button type="button" data-language="en" aria-pressed="false">EN</button>
+  </div>
   <div class="viewport" id="viewport">
     <div class="canvas" id="canvas">
-      <div class="sticker sticker--paper" data-x="-260" data-y="-220" data-rot="-2.5">
+      <div class="sticker sticker--paper" data-x="-220" data-y="-200" data-rot="-2.5">
         <p>Привет, меня зовут <strong>Илья</strong>.</p>
         <p>
           Продакт-инженер в <a
@@ -29,99 +33,42 @@ const route = (name: string) => `${baseUrl}${name}/`;
           дизайн, код, поддержка.
         </p>
         <p class="muted">Пишу музыку, делаю фото.</p>
+        <p>
+          Можно связаться со мной <a class="paper-link" href="mailto:ilyasudakov.dev@gmail.com">по почте</a>
+          или в <a class="paper-link" href="https://t.me/ilyasudakov" target="_blank" rel="noopener">Telegram</a>.
+        </p>
       </div>
-
-      <div
-        class="sticker sticker--photo"
-        data-x="200"
-        data-y="-260"
-        data-rot="-3"
-        data-full={asset('img2.jpg')}
-      >
-        <img src={asset('img2_sm.jpg')} alt="" draggable="false" />
-        <div class="photo-label">авг 2024</div>
-      </div>
-
-      <div
-        class="sticker sticker--photo"
-        data-x="480"
-        data-y="60"
-        data-rot="4"
-        data-full={asset('img1.jpg')}
-      >
-        <img src={asset('img1_sm.jpg')} alt="" draggable="false" />
-        <div class="photo-label">фев 2025</div>
-      </div>
-
-      <a
-        class="sticker sticker--chip chip--email"
-        href="mailto:ilyasudakov.dev@gmail.com"
-        data-x="-280"
-        data-y="80"
-        data-rot="-4"
-      >
-        <span>email</span>
-      </a>
 
       <a
         class="sticker sticker--chip chip--cv"
         href={route('cv')}
         data-window={route('cv')}
         data-window-title="Резюме"
-        data-x="-140"
-        data-y="140"
+        data-x="122"
+        data-y="-144"
         data-rot="2"
       >
         <span>резюме</span>
       </a>
 
       <a
-        class="sticker sticker--chip chip--linkedin"
-        href="https://www.linkedin.com/in/ilyasudakov/"
-        target="_blank"
-        rel="noopener"
-        data-x="0"
-        data-y="180"
-        data-rot="-3"
+        class="sticker sticker--chip chip--work"
+        href={route('work')}
+        data-window={route('work')}
+        data-window-title="Портфолио"
+        data-x="116"
+        data-y="-200"
+        data-rot="-2"
       >
-        <span>linkedin</span>
+        <span>портфолио</span>
       </a>
 
-      <a
-        class="sticker sticker--chip chip--telegram"
-        href="https://t.me/ilyasudakov"
-        target="_blank"
-        rel="noopener"
-        data-x="160"
-        data-y="220"
-        data-rot="5"
-      >
-        <span>telegram</span>
-      </a>
-
-      <a
-        class="sticker sticker--chip chip--photos"
-        href={route('photos')}
-        data-window={route('photos')}
-        data-window-title="Фото"
-        data-x="500"
-        data-y="-140"
-        data-rot="-4"
-      >
-        <span>фото архив</span>
-      </a>
-
-      <div class="sticker sticker--note note--pink" data-x="-420" data-y="260" data-rot="-5">
+      <div class="sticker sticker--note note--pink" data-x="-220" data-y="140" data-rot="-5">
         <span class="note-label">интерес</span>
         <strong>Дизайн</strong>
       </div>
 
-      <div class="sticker sticker--note note--blue" data-x="-240" data-y="340" data-rot="3">
-        <span class="note-label">интерес</span>
-        <strong>Картография</strong>
-      </div>
-
-      <div class="sticker sticker--note note--yellow" data-x="-60" data-y="380" data-rot="-2">
+      <div class="sticker sticker--note note--yellow" data-x="-32" data-y="140" data-rot="-2">
         <span class="note-label">интерес</span>
         <strong>Музыка</strong>
       </div>
@@ -132,6 +79,33 @@ const route = (name: string) => `${baseUrl}${name}/`;
 </BaseLayout>
 
 <style>
+  .language-switch {
+    position: fixed;
+    top: 20px;
+    right: 24px;
+    z-index: 2100;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    border: 1px solid rgba(255,255,255,.55);
+    border-radius: 20px;
+    background: rgba(255,255,255,.5);
+    backdrop-filter: blur(16px);
+    box-shadow: 0 2px 8px rgba(60,65,75,.1);
+    font-size: 12px;
+  }
+  .language-switch button {
+    padding: 4px;
+    border: 0;
+    background: transparent;
+    color: var(--muted);
+    font: inherit;
+    cursor: pointer;
+  }
+  .language-switch button[aria-pressed="true"] { color: var(--ink); font-weight: 600; }
+  .language-switch button:focus-visible { outline: 2px solid var(--ink); border-radius: 4px; }
+  .language-switch span { color: var(--muted); }
   :global(:root) {
     --paper: #fdfaf3;
     --ink: #1a1a1a;
@@ -365,6 +339,10 @@ const route = (name: string) => `${baseUrl}${name}/`;
 
   .chip--cv {
     background: #d7ffd7;
+  }
+
+  .chip--work {
+    background: #e4edce;
   }
 
   .chip--linkedin {

@@ -7,15 +7,54 @@
 //   variant: 'photo' | 'page' | undefined
 //   path:    optional string for the address bar
 
-import { view } from './state.js';
-import { renderDock } from './window-dock.js';
+import { view, homes } from './state.js';
+import { renderDock, animateView } from './window-dock.js';
+import { toggleOverview } from './window-overview.js';
 
 const MAX_SIZE = 1000;
 
 export const openWindows = [];
 let windowZ = 1000;
+let homeView = null;
+
+export function placeBesideCanvas(win) {
+  if (window.innerWidth < 900 || !homes.size) return false;
+  document.body.classList.add('has-side-window');
+  const bounds = { left: Infinity, top: Infinity, right: -Infinity, bottom: -Infinity };
+  homes.forEach((position, element) => {
+    bounds.left = Math.min(bounds.left, position.x);
+    bounds.top = Math.min(bounds.top, position.y);
+    bounds.right = Math.max(bounds.right, position.x + element.offsetWidth);
+    bounds.bottom = Math.max(bounds.bottom, position.y + element.offsetHeight);
+  });
+  const gap = 32;
+  const margin = 28;
+  const leftWidth = Math.min(500, window.innerWidth * .4);
+  const scale = Math.min(1, (leftWidth - margin * 2) / (bounds.right - bounds.left), (window.innerHeight - 140) / (bounds.bottom - bounds.top));
+  const target = {
+    x: leftWidth / 2 - window.innerWidth / 2 - (bounds.left + bounds.right) / 2 * scale,
+    y: -(bounds.top + bounds.bottom) / 2 * scale,
+    scale,
+  };
+  const width = Math.min(win._preferredSize.width, (window.innerWidth - leftWidth - gap - margin) / scale);
+  const height = Math.min(win._preferredSize.height, (window.innerHeight - 112) / scale);
+  win.style.width = `${width}px`;
+  win.style.height = `${height}px`;
+  setWindowPos(win,
+    (leftWidth + gap - window.innerWidth / 2 - target.x) / scale,
+    (-height * scale / 2 - target.y + 16) / scale,
+  );
+  animateView(target);
+  return true;
+}
+
+export function bringToFront(win) {
+  win.style.zIndex = String(++windowZ);
+}
 
 const canvasEl = document.getElementById('canvas');
+let pageWindow = null;
+let tabSequence = 0;
 
 // --- Core ---
 export function openWindow({ title = '', body = '', footer = null, variant, path = null, width = 520, height = 420 } = {}) {
@@ -23,6 +62,8 @@ export function openWindow({ title = '', body = '', footer = null, variant, path
   win.className = 'os-window' + (variant ? ` os-window--${variant}` : '');
   win.style.width = `${width}px`;
   win.style.height = `${height}px`;
+  win._preferredSize = { width, height };
+  if (!openWindows.length) homeView = { ...view };
 
   // Titlebar
   const titlebar = document.createElement('div');
@@ -30,6 +71,7 @@ export function openWindow({ title = '', body = '', footer = null, variant, path
   titlebar.innerHTML = `
     <div class="os-window-title"></div>
     <div class="os-window-controls">
+      <button class="os-win-btn os-win-btn--overview" aria-label="Обзор открытых окон" title="Обзор открытых окон">▦</button>
       <button class="os-win-btn os-win-btn--close" aria-label="close"></button>
     </div>
   `;
@@ -83,9 +125,19 @@ export function openWindow({ title = '', body = '', footer = null, variant, path
   const startY = viewportCenterInCanvas.y - height / 2 + idx * 24 - 40;
   setWindowPos(win, startX, startY);
 
-  win.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 80, easing: 'linear' });
+  const beside = placeBesideCanvas(win);
+
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  win.animate([
+    { opacity: 0, transform: `${win.style.transform} translateX(${beside ? 24 : 0}px)` },
+    { opacity: 1, transform: win.style.transform },
+  ], { duration: reducedMotion ? 0 : 460, easing: 'cubic-bezier(.22, 1, .36, 1)' });
 
   // Close button
+  titlebar.querySelector('.os-win-btn--overview').addEventListener('click', (e) => {
+    e.stopPropagation();
+    toggleOverview();
+  });
   titlebar.querySelector('.os-win-btn--close').addEventListener('click', (e) => {
     e.stopPropagation();
     closeWindow(win);
@@ -93,8 +145,7 @@ export function openWindow({ title = '', body = '', footer = null, variant, path
 
   // Bring to front on any interaction
   win.addEventListener('pointerdown', () => {
-    windowZ += 1;
-    win.style.zIndex = String(windowZ);
+    bringToFront(win);
   });
 
   attachWindowDrag(win, titlebar);
@@ -105,10 +156,16 @@ export function openWindow({ title = '', body = '', footer = null, variant, path
 }
 
 export function closeWindow(win) {
+  if (win === pageWindow) pageWindow = null;
   win.remove();
   const i = openWindows.indexOf(win);
   if (i !== -1) openWindows.splice(i, 1);
   renderDock();
+  if (!openWindows.length && homeView) {
+    document.body.classList.remove('has-side-window');
+    animateView(homeView);
+    homeView = null;
+  }
 }
 
 function setWindowPos(win, x, y) {
@@ -207,17 +264,99 @@ function attachResize(win) {
 // --- Specialised helpers ---
 
 export function openPageWindow({ src, title }) {
-  const iframe = document.createElement('iframe');
-  iframe.src = src;
-  iframe.loading = 'lazy';
-  openWindow({
-    title: title || src,
-    variant: 'page',
-    body: iframe,
-    path: src,
-    width: MAX_SIZE,
-    height: Math.round(MAX_SIZE * 0.75),
-  });
+  const key = new URL(src, location.href).pathname;
+  if (pageWindow?.isConnected) {
+    const tab = pageWindow._tabs.find(tab => tab.key === key);
+    if (tab) {
+      if (!tab.frame.hasAttribute('src')) tab.src = src;
+      pageWindow._selectTab(tab);
+      const hash = new URL(src, location.href).hash;
+      if (hash) {
+        const navigateToSection = () => {
+          try { tab.frame.contentWindow.location.hash = hash; } catch {}
+        };
+        try {
+          if (tab.frame.contentWindow.location.pathname === key) navigateToSection();
+          else tab.frame.addEventListener('load', navigateToSection, { once: true });
+        } catch {}
+      }
+      bringToFront(pageWindow);
+      placeBesideCanvas(pageWindow);
+      return pageWindow;
+    }
+  }
+  if (!pageWindow?.isConnected) {
+    const panels = document.createElement('div');
+    panels.className = 'os-tab-panels';
+    pageWindow = openWindow({ title: title || src, variant: 'page', body: panels, width: MAX_SIZE, height: Math.round(MAX_SIZE * .75) });
+    const win = pageWindow;
+    const tabbar = document.createElement('div');
+    tabbar.className = 'os-tabbar';
+    tabbar.setAttribute('role', 'tablist');
+    tabbar.setAttribute('aria-label', 'Разделы сайта');
+    win.querySelector('.os-window-body').before(tabbar);
+    win._tabs = [];
+    win._selectTab = active => {
+      win._tabs.forEach(tab => {
+        const selected = tab === active;
+        tab.button.setAttribute('aria-selected', String(selected));
+        tab.button.tabIndex = selected ? 0 : -1;
+        tab.panel.hidden = !selected;
+        if (selected && !tab.frame.hasAttribute('src')) tab.frame.src = tab.src;
+      });
+      win.querySelector('.os-window-title').textContent = active.button.textContent;
+      renderDock();
+    };
+    win._addTab = (tabSrc, tabTitle) => {
+      const tabKey = new URL(tabSrc, location.href).pathname;
+      const existing = win._tabs.find(tab => tab.key === tabKey);
+      if (existing) return existing;
+      const id = ++tabSequence;
+      const button = document.createElement('button');
+      button.className = 'os-tab';
+      button.type = 'button';
+      button.id = `window-tab-${id}`;
+      button.setAttribute('role', 'tab');
+      button.setAttribute('aria-controls', `window-panel-${id}`);
+      button.textContent = tabTitle;
+      const panel = document.createElement('div');
+      panel.className = 'os-tab-panel';
+      panel.id = `window-panel-${id}`;
+      panel.setAttribute('role', 'tabpanel');
+      panel.setAttribute('aria-labelledby', button.id);
+      panel.hidden = true;
+      const frame = document.createElement('iframe');
+      frame.title = tabTitle;
+      panel.appendChild(frame);
+      panels.appendChild(panel);
+      tabbar.appendChild(button);
+      const tab = { key: tabKey, src: tabSrc, button, panel, frame };
+      win._tabs.push(tab);
+      button.addEventListener('click', () => win._selectTab(tab));
+      button.addEventListener('keydown', event => {
+        const index = win._tabs.indexOf(tab);
+        let next;
+        if (event.key === 'ArrowRight') next = (index + 1) % win._tabs.length;
+        if (event.key === 'ArrowLeft') next = (index - 1 + win._tabs.length) % win._tabs.length;
+        if (event.key === 'Home') next = 0;
+        if (event.key === 'End') next = win._tabs.length - 1;
+        if (next === undefined) return;
+        event.preventDefault();
+        event.stopPropagation();
+        win._selectTab(win._tabs[next]);
+        win._tabs[next].button.focus();
+      });
+      return tab;
+    };
+    ['.chip--work', '.chip--cv'].map(selector => document.querySelector(selector)).filter(Boolean).forEach(link => {
+      win._addTab(link.dataset.window, link.dataset.windowTitle);
+    });
+  }
+  const tab = pageWindow._addTab(src, title || src);
+  pageWindow._selectTab(tab);
+  bringToFront(pageWindow);
+  placeBesideCanvas(pageWindow);
+  return pageWindow;
 }
 
 export function openPhotoWindow(photoEl) {
