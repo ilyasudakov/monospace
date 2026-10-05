@@ -137,15 +137,6 @@ window.addEventListener('storage', event => {
 document.querySelectorAll('[data-language-switch]').forEach(button => {
   button.addEventListener('click', () => {
     setLanguage(language === 'ru' ? 'en' : 'ru');
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    const water = button.querySelector('.language-water');
-    water.getAnimations().forEach(animation => animation.cancel());
-    water.animate([
-      { transform: 'translateY(0) rotate(0)' },
-      { transform: 'translateY(-5px) rotate(-9deg)', offset: .3 },
-      { transform: 'translateY(2px) rotate(5deg)', offset: .65 },
-      { transform: 'translateY(0) rotate(0)' },
-    ], { duration: 850, easing: 'cubic-bezier(.22,1,.36,1)' });
   });
 });
 applyLanguage();
