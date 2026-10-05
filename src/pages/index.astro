@@ -345,12 +345,21 @@ const route = (name: string) => `${baseUrl}${name}/`;
   }
 
   .chip--cv {
-    background: #d7ffd7;
+    background: rgba(255,255,255,.55);
+    color: #35516a;
+    backdrop-filter: blur(12px);
+    box-shadow: inset 0 0 0 1px rgba(53,81,106,.35), inset 0 1px 0 rgba(255,255,255,.8), 0 4px 10px -6px rgba(25,55,85,.2);
   }
 
   .chip--work {
-    background: #e4edce;
+    background: linear-gradient(to bottom, #699dcb 0%, #477fb2 48%, #326b9e 52%, #285f91 100%);
+    color: #fff;
+    font-weight: 600;
+    text-shadow: 0 1px 1px rgba(15,45,75,.3);
+    box-shadow: inset 0 0 0 1px #285c88, inset 0 2px 0 rgba(255,255,255,.4), 0 6px 14px -5px rgba(20,65,105,.4);
   }
+  .sticker--chip.chip--work:hover { background: linear-gradient(to bottom, #7aaedb, #3674a9); }
+  .sticker--chip.chip--cv:hover { background: rgba(255,255,255,.85); color: #243d54; }
 
   .chip--linkedin {
     background: #cfe3ff;
