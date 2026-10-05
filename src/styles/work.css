@@ -10,6 +10,7 @@ a:focus-visible { outline: 2px solid #0000ef; outline-offset: 3px; }
 .portfolio-header h1 { margin: 0 0 1rem; }
 .portfolio-header p { line-height: 1.5; }
 .role-explanation { margin-top: 1.5rem; font-size: 14px; }
+.role-explanation p { line-height: 1.5; }
 .role-explanation p + p { margin-top: .75rem; }
 h2 { margin-bottom: 1rem; }
 .personal-project + .personal-project { margin-top: 2rem; }
@@ -26,21 +27,18 @@ h2 { margin-bottom: 1rem; }
 .source-link span { padding: 0; }
 .update-list { list-style: none; margin-top: 2rem; }
 .update-list li + li { margin-top: 2rem; }
-.update-link { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 12px; width: 100%; text-decoration: none; }
-.update-link:hover { background: none; color: inherit; }
-.update-link time { grid-column: 1 / -1; font-weight: 600; }
+.update-item { display: grid; grid-template-columns: minmax(0, 1fr); gap: 4px; width: 100%; }
+.update-item time { font-weight: 600; }
 .update-content { grid-column: 1; grid-row: 2; padding-left: 1rem; min-width: 0; }
-.update-content h3 { font-size: 16px; font-weight: 400; text-decoration: underline; text-underline-offset: 3px; }
-.update-link:hover h3 { background: #000; color: #fff; width: fit-content; }
+.update-content h3 { font-size: 16px; font-weight: 400; }
 .update-content p { margin-top: 8px; line-height: 1.5; }
-.update-link .role-label { grid-column: 1; padding: 0; margin-left: 1rem; font-size: 13px; color: #666; }
-.update-arrow { grid-column: 2; grid-row: 2; padding: 0; }
+.update-item .role-label { grid-column: 1; padding: 0; margin-left: 1rem; font-size: 13px; color: #666; }
+.update-arrow { padding: 0; }
 .archive-empty { margin-top: 2rem; }
 .archive-empty p { margin: .75rem 0; line-height: 1.5; }
 .featured-section { margin-top: 2rem; }
 .featured-grid { display: flex; flex-direction: column; gap: 2rem; }
-.featured-card { text-decoration: none; }
-.featured-card h3 { text-decoration: underline; font-size: 18px; margin: .5rem 0; }
+.featured-card h3 { font-size: 18px; margin: .5rem 0; }
 .featured-card p { line-height: 1.5; margin-bottom: .5rem; }
 .featured-card time, .featured-card .role-label { font-size: 13px; }
 .work-contact { font-size: 13px; }
@@ -52,5 +50,5 @@ h2 { margin-bottom: 1rem; }
   .portfolio-header p, .personal-project > p, .personal-project ul, .update-content p { line-height: 1.6; }
   .project-links a, .source-link, .work-contact a { padding-block: 8px; }
   .update-content { padding-left: 0; }
-  .update-link .role-label { margin-left: 0; }
+  .update-item .role-label { margin-left: 0; }
 }

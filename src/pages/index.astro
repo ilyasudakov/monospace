@@ -116,13 +116,19 @@ const route = (name: string) => `${baseUrl}${name}/`;
   .language-switch:focus-visible { outline: 2px solid #355774; outline-offset: 3px; }
   .video-switch {
     width: 32px;
+    color: #fff;
     background: transparent;
     backdrop-filter: none;
     box-shadow: none;
     border-radius: 0;
   }
-  .video-switch:hover { background: transparent; }
-  .video-switch svg { width: 16px; height: 16px; }
+  .video-switch:hover { background: transparent; color: #fff; }
+  .video-switch:focus-visible { outline-color: #fff; }
+  .video-switch svg {
+    width: 16px;
+    height: 16px;
+    filter: drop-shadow(0 0 1px rgba(0,0,0,.9)) drop-shadow(0 1px 2px rgba(0,0,0,.65));
+  }
   .video-switch[data-paused="true"] .pause-icon,
   .video-switch[data-paused="false"] .play-icon { display: none; }
   @media (prefers-reduced-motion: reduce) {

@@ -16,10 +16,6 @@ const formatDate = (date: string) => new Intl.DateTimeFormat('ru', {
       <header class="portfolio-header">
         <h1>Портфолио</h1>
         <p>Свои проекты и продуктовые релизы<br class="desktop-break" /> как разработчика и менеджера.</p>
-        <div class="role-explanation">
-          <p><strong>{roleLabels.owner}</strong> — <span>Отвечал за проект целиком: от требований и дизайна до разработки, запуска и поддержки.</span></p>
-          <p><strong>{roleLabels.manager}</strong> — <span>Прорабатывал требования, координировал дизайн и разработку, доводил проект до релиза.</span></p>
-        </div>
       </header>
       {personalProjects.length > 0 && <section class="personal-projects" aria-labelledby="personal-projects-title">
         <h2 class="section-heading" id="personal-projects-title">Свои проекты</h2>
@@ -55,17 +51,22 @@ const formatDate = (date: string) => new Intl.DateTimeFormat('ru', {
               <a class="source-link" href={company.website} target="_blank" rel="noopener">Product updates <span aria-hidden="true">↗</span></a>
             </header>
 
+            {company.id === 'improvado' && <div class="role-explanation">
+              <p><strong>{roleLabels.owner}</strong> — <span>Отвечал за проект целиком: от требований и дизайна до разработки, запуска и поддержки.</span></p>
+              <p><strong>{roleLabels.manager}</strong> — <span>Прорабатывал требования, координировал дизайн и разработку, доводил проект до релиза.</span></p>
+            </div>}
+
             {featured.length > 0 && (
               <section class="featured-section" aria-label="Выбранные работы">
                 <h2 class="section-heading">Выбранное</h2>
                 <div class="featured-grid">
                   {featured.map((update) => (
-                    <a class="featured-card" href={update.url} target="_blank" rel="noopener">
+                    <article class="featured-card">
                       <span class={`role-label role-${update.role}`}>{roleLabels[update.role]}</span>
-                      <h3>{update.title} <span aria-hidden="true">↗</span></h3>
+                      <h3><a href={update.url} target="_blank" rel="noopener">{update.title} <span aria-hidden="true">↗</span></a></h3>
                       {update.summary && <p>{update.summary}</p>}
                       <time datetime={update.date} data-date-year>{formatDate(update.date)}</time>
-                    </a>
+                    </article>
                   ))}
                 </div>
               </section>
@@ -74,12 +75,11 @@ const formatDate = (date: string) => new Intl.DateTimeFormat('ru', {
                 <ol class="update-list">
                   {sorted.map((update) => (
                     <li data-update data-role={update.role}>
-                      <a class="update-link" href={update.url} target="_blank" rel="noopener">
+                      <div class="update-item">
                         <time datetime={update.date} data-date-year>{formatDate(update.date)}</time>
-                        <div class="update-content"><h3>{update.title}</h3>{update.summary && <p>{update.summary}</p>}</div>
+                        <div class="update-content"><h3><a href={update.url} target="_blank" rel="noopener">{update.title} <span class="update-arrow" aria-hidden="true">↗</span></a></h3>{update.summary && <p>{update.summary}</p>}</div>
                         <span class={`role-label role-${update.role}`}>{roleLabels[update.role]}</span>
-                        <span class="update-arrow" aria-hidden="true">↗</span>
-                      </a>
+                      </div>
                     </li>
                   ))}
                 </ol>
