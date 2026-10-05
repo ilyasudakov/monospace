@@ -24,7 +24,7 @@ const formatDate = (date: string) => new Intl.DateTimeFormat('ru', {
         <h1>Портфолио</h1>
         <p><span>Свои проекты и продуктовые релизы</span> <span>как разработчика и менеджера.</span></p>
       </header>
-      <div class="portfolio-grid" data-portfolio-overview>
+      <div class="portfolio-list" data-portfolio-overview>
         {portfolioCards.map(card => (
           <a class="portfolio-card" href={`#${card.id}`} data-portfolio-card={card.id}>
             <div class="portfolio-card-heading">
