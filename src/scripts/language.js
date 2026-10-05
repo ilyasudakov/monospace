@@ -104,7 +104,11 @@ function applyLanguage() {
   document.querySelectorAll('time[datetime]').forEach(element => {
     const date = new Date(`${element.getAttribute('datetime')}T00:00:00Z`);
     if (Number.isNaN(date.getTime())) return;
-    element.textContent = new Intl.DateTimeFormat(language, { day: 'numeric', month: 'short', timeZone: 'UTC' }).format(date);
+    element.textContent = new Intl.DateTimeFormat(language, {
+      day: 'numeric', month: 'short',
+      ...(element.hasAttribute('data-date-year') ? { year: 'numeric' } : {}),
+      timeZone: 'UTC',
+    }).format(date);
   });
   document.querySelectorAll('[data-language-switch]').forEach(button => {
     button.dataset.language = language;

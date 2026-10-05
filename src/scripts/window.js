@@ -152,7 +152,10 @@ export function openWindow({ title = '', body = '', footer = null, variant, path
 }
 
 export function closeWindow(win) {
-  if (win === pageWindow) pageWindow = null;
+  if (win === pageWindow) {
+    pageWindow = null;
+    window.dispatchEvent(new CustomEvent('page-tab-change', { detail: { src: null } }));
+  }
   win.remove();
   const i = openWindows.indexOf(win);
   if (i !== -1) openWindows.splice(i, 1);
@@ -266,7 +269,7 @@ export function openPageWindow({ src, title }) {
   if (pageWindow?.isConnected) {
     const tab = pageWindow._tabs.find(tab => tab.key === key);
     if (tab) {
-      if (!tab.frame.hasAttribute('src')) tab.src = src;
+      tab.src = src;
       pageWindow._selectTab(tab);
       const hash = new URL(src, location.href).hash;
       if (hash) {
@@ -322,6 +325,7 @@ export function openPageWindow({ src, title }) {
       });
       win.querySelector('.os-window-title').textContent = active.button.textContent;
       renderDock();
+      window.dispatchEvent(new CustomEvent('page-tab-change', { detail: { src: active.src } }));
     };
     win._addTab = (tabSrc, tabTitle) => {
       const tabKey = new URL(tabSrc, location.href).pathname;

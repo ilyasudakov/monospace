@@ -38,7 +38,7 @@ const route = (name: string) => `${baseUrl}${name}/`;
 
       <a
         class="sticker sticker--chip chip--cv"
-        href={route('cv')}
+        href={`${baseUrl}#resume`}
         data-window={route('cv')}
         data-window-title="Резюме"
         data-x="122"
@@ -50,7 +50,7 @@ const route = (name: string) => `${baseUrl}${name}/`;
 
       <a
         class="sticker sticker--chip chip--work"
-        href={route('work')}
+        href={`${baseUrl}#portfolio`}
         data-window={route('work')}
         data-window-title="Портфолио"
         data-x="116"
