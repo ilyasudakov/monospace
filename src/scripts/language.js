@@ -126,6 +126,7 @@ function applyLanguage() {
   });
   document.querySelectorAll('[data-language-switch]').forEach(button => {
     button.dataset.language = language;
+    button.setAttribute('aria-checked', String(language === 'en'));
     button.querySelector('[data-language-label]').textContent = language.toUpperCase();
     const label = language === 'ru' ? 'Переключить на английский' : 'Switch to Russian';
     button.setAttribute('aria-label', label);
