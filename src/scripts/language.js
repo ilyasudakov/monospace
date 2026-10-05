@@ -88,6 +88,7 @@ function applyLanguage() {
     if (node.textContent !== result) node.textContent = result;
   }
   document.querySelectorAll('[title], [aria-label], [placeholder], [data-window-title]').forEach(element => {
+    if (element.closest('[data-language-switch]')) return;
     let sources = attributeOriginals.get(element);
     if (!sources) { sources = new Map(); attributeOriginals.set(element, sources); }
     for (const attribute of ['title', 'aria-label', 'placeholder', 'data-window-title']) {
@@ -101,8 +102,12 @@ function applyLanguage() {
     if (Number.isNaN(date.getTime())) return;
     element.textContent = new Intl.DateTimeFormat(language, { day: 'numeric', month: 'short', timeZone: 'UTC' }).format(date);
   });
-  document.querySelectorAll('[data-language-switch] button').forEach(button => {
-    button.setAttribute('aria-pressed', String(button.dataset.language === language));
+  document.querySelectorAll('[data-language-switch]').forEach(button => {
+    button.dataset.language = language;
+    button.querySelector('[data-language-label]').textContent = language.toUpperCase();
+    const label = language === 'ru' ? 'Переключить на английский' : 'Switch to Russian';
+    button.setAttribute('aria-label', label);
+    button.title = label;
   });
   observer.observe(document.body, { childList: true, subtree: true, characterData: true });
 }
@@ -129,7 +134,18 @@ window.addEventListener('site-language', event => setLanguage(event.detail));
 window.addEventListener('storage', event => {
   if (event.key === 'site-language') setLanguage(event.newValue === 'en' ? 'en' : 'ru');
 });
-document.querySelectorAll('[data-language-switch] button').forEach(button => {
-  button.addEventListener('click', () => setLanguage(button.dataset.language));
+document.querySelectorAll('[data-language-switch]').forEach(button => {
+  button.addEventListener('click', () => {
+    setLanguage(language === 'ru' ? 'en' : 'ru');
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const water = button.querySelector('.language-water');
+    water.getAnimations().forEach(animation => animation.cancel());
+    water.animate([
+      { transform: 'translateY(0) rotate(0)' },
+      { transform: 'translateY(-5px) rotate(-9deg)', offset: .3 },
+      { transform: 'translateY(2px) rotate(5deg)', offset: .65 },
+      { transform: 'translateY(0) rotate(0)' },
+    ], { duration: 850, easing: 'cubic-bezier(.22,1,.36,1)' });
+  });
 });
 applyLanguage();

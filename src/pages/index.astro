@@ -14,11 +14,10 @@ const route = (name: string) => `${baseUrl}${name}/`;
   bodyClass="playground"
   disableViewportZoom
 >
-  <div class="language-switch" data-language-switch role="group" aria-label="Language / Язык">
-    <button type="button" data-language="ru" aria-pressed="true">RU</button>
-    <span aria-hidden="true">/</span>
-    <button type="button" data-language="en" aria-pressed="false">EN</button>
-  </div>
+  <button class="language-switch" data-language-switch data-language="ru" type="button" aria-label="Переключить на английский" title="Переключить на английский">
+    <span class="language-water" aria-hidden="true"></span>
+    <span class="language-label" data-language-label>RU</span>
+  </button>
   <div class="viewport" id="viewport" style={`--wallpaper: url('${baseUrl}assets/aqua-wallpaper.webp')`}>
     <div class="canvas" id="canvas">
       <div class="sticker sticker--paper" data-x="-220" data-y="-200" data-rot="-2.5">
@@ -83,47 +82,52 @@ const route = (name: string) => `${baseUrl}${name}/`;
     top: 20px;
     right: 24px;
     z-index: 2100;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 6px 10px;
+    display: grid;
+    place-items: center;
+    width: 64px;
+    height: 38px;
+    padding: 0;
+    overflow: hidden;
+    isolation: isolate;
     border: 1px solid rgba(255,255,255,.55);
     border-radius: 20px;
     background: rgba(255,255,255,.5);
     backdrop-filter: blur(16px);
-    box-shadow: 0 2px 8px rgba(60,65,75,.1);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.85), inset 0 -2px 5px rgba(69,104,138,.12), 0 2px 8px rgba(60,65,75,.12);
     font-size: 12px;
-  }
-  .language-switch button {
-    padding: 5px 8px;
-    border: 1px solid rgba(255,255,255,.35);
-    border-radius: 11px;
-    background: linear-gradient(155deg, var(--language-light) 0%, var(--language-middle) 52%, var(--language-accent) 100%);
-    color: var(--muted);
-    font: inherit;
-    cursor: pointer;
-    box-shadow: inset 0 1px 0 rgba(255,255,255,.65);
-    transition: box-shadow 160ms ease, border-color 160ms ease;
-  }
-  .language-switch button[data-language="ru"] {
-    --language-light: rgba(255,255,255,.85);
-    --language-middle: rgba(75,123,212,.18);
-    --language-accent: rgba(211,73,84,.19);
-  }
-  .language-switch button[data-language="en"] {
-    --language-light: rgba(255,255,255,.85);
-    --language-middle: rgba(255,245,245,.5);
-    --language-accent: rgba(205,58,74,.23);
-  }
-  .language-switch button:hover { border-color: rgba(255,255,255,.85); }
-  .language-switch button[aria-pressed="true"] {
-    color: var(--ink);
     font-weight: 600;
-    border-color: rgba(70,96,125,.25);
-    box-shadow: inset 0 1px 0 rgba(255,255,255,.85), 0 2px 5px rgba(53,78,108,.12);
+    letter-spacing: .06em;
+    color: #253d52;
+    cursor: pointer;
   }
-  .language-switch button:focus-visible { outline: 2px solid var(--ink); border-radius: 4px; }
-  .language-switch span { color: var(--muted); }
+  .language-label { position: relative; z-index: 1; text-shadow: 0 1px 0 rgba(255,255,255,.7); }
+  .language-water { position: absolute; inset: 0; pointer-events: none; }
+  .language-water::before, .language-water::after {
+    content: '';
+    position: absolute;
+    width: 100px;
+    height: 85px;
+    left: -20px;
+    top: 15px;
+    border-radius: 43% 57% 48% 52%;
+    transition: transform 850ms cubic-bezier(.22,1,.36,1), opacity 700ms ease;
+  }
+  .language-water::before {
+    background: linear-gradient(170deg, rgba(111,166,229,.34), rgba(63,109,187,.15) 50%, rgba(215,96,111,.22));
+    transform: translateY(-8px) rotate(-12deg);
+  }
+  .language-water::after {
+    background: linear-gradient(165deg, rgba(255,255,255,.5), rgba(212,86,108,.32));
+    transform: translate(36px, 28px) rotate(24deg);
+    opacity: .3;
+  }
+  .language-switch[data-language="en"] .language-water::before { transform: translate(-35px, 25px) rotate(32deg); opacity: .25; }
+  .language-switch[data-language="en"] .language-water::after { transform: translate(0, -9px) rotate(-18deg); opacity: 1; }
+  .language-switch:hover { border-color: rgba(255,255,255,.95); }
+  .language-switch:focus-visible { outline: 2px solid #355774; outline-offset: 3px; }
+  @media (prefers-reduced-motion: reduce) {
+    .language-water::before, .language-water::after { transition: none; }
+  }
   :global(:root) {
     --paper: #fdfaf3;
     --ink: #1a1a1a;
