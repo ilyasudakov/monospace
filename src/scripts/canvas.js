@@ -12,6 +12,7 @@ import {
 } from './window.js';
 import { isOverviewOpen, closeOverview } from './window-overview.js';
 import './language.js';
+import { setupPageRoutes } from './page-route.js';
 
 const viewport = document.getElementById('viewport');
 const canvas = document.getElementById('canvas');
@@ -144,6 +145,9 @@ view.scale = Math.min(1, (window.innerWidth - 48) / initialWidth, (window.innerH
 view.x = -initialCenter.x * view.scale;
 view.y = -initialCenter.y * view.scale;
 renderView();
+
+// Open shared links only after the stickers and initial view are positioned.
+setupPageRoutes();
 
 // Pan + pinch-zoom (multi-touch aware)
 const pointers = new Map();   // pointerId -> { x, y }
