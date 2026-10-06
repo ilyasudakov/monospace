@@ -63,7 +63,7 @@ or zooming the canvas and restores its initial layout.
 ## Background media
 
 The wallpaper uses responsive desktop/mobile video files and image posters in
-`public/assets/`: autumn for the light theme and a sunset cityscape for the dark
+`public/assets/`: autumn for the light theme and snowy branches for the dark
 theme. Switching themes changes the video and poster while preserving the video
 pause preference. `src/scripts/background-video.js` handles the loop, playback
 speed, pause control and resuming after returning to the page. The initial state
