@@ -7,12 +7,13 @@
 //   variant: 'photo' | 'page' | undefined
 //   path:    optional string for the address bar
 
-import { view, homes } from './state.js';
+import { view, homeStage, homes } from './state.js';
 import { renderDock, animateView } from './window-dock.js';
 import { attachTabDrag } from './tab-drag.js';
 
 const MAX_SIZE = 1000;
 const MAX_PAGE_WIDTH = 960;
+const SIDE_WINDOW_SCALE = .9;
 
 export const openWindows = [];
 let windowZ = 1000;
@@ -33,8 +34,18 @@ export function resetWindowLayout(target) {
   animateView(target);
 }
 
+function resetHomeStage() {
+  homeStage.scale = 1;
+  const stage = document.querySelector('[data-home-stage]');
+  if (stage) stage.style.transform = '';
+  document.body.classList.remove('has-side-window');
+}
+
 export function placeBesideCanvas(win) {
-  if (window.innerWidth < 900 || !homes.size) return false;
+  if (window.innerWidth < 900 || !homes.size) {
+    resetHomeStage();
+    return false;
+  }
   document.body.classList.add('has-side-window');
   const bounds = { left: Infinity, top: Infinity, right: -Infinity, bottom: -Infinity };
   homes.forEach((position, element) => {
@@ -46,27 +57,26 @@ export function placeBesideCanvas(win) {
   });
   const gap = 16;
   const margin = 20;
-  const leftWidth = Math.min(380, window.innerWidth * .32);
-  const scale = Math.min(.78, (leftWidth - margin * 2) / (bounds.right - bounds.left), (window.innerHeight - 140) / (bounds.bottom - bounds.top));
-  const target = {
-    x: leftWidth / 2 - window.innerWidth / 2 - (bounds.left + bounds.right) / 2 * scale,
-    y: -(bounds.top + bounds.bottom) / 2 * scale,
-    scale,
-  };
-  const availableWidth = (window.innerWidth - leftWidth - gap - margin) / scale;
-  const availableHeight = (window.innerHeight - 112) / scale;
+  const leftWidth = Math.min(320, window.innerWidth * .28);
+  const scale = Math.min(.65, (leftWidth - margin * 2) / (bounds.right - bounds.left), (window.innerHeight - 140) / (bounds.bottom - bounds.top));
+  const availableWidth = (window.innerWidth - leftWidth - gap - margin) / SIDE_WINDOW_SCALE;
+  const availableHeight = (window.innerHeight - 112) / SIDE_WINDOW_SCALE;
   const isPage = win.classList.contains('os-window--page');
-  const width = isPage ? Math.min(availableWidth, MAX_PAGE_WIDTH / scale) : Math.min(win._preferredSize.width, availableWidth);
+  const width = isPage ? Math.min(availableWidth, MAX_PAGE_WIDTH) : Math.min(win._preferredSize.width, availableWidth);
   const height = Math.min(win._preferredSize.height, availableHeight);
-  const layoutOffset = Math.max(0, (window.innerWidth - leftWidth - gap - width * scale - margin) / 2);
-  target.x += layoutOffset;
+  const layoutOffset = Math.max(0, (window.innerWidth - leftWidth - gap - width * SIDE_WINDOW_SCALE - margin) / 2);
+  const stageX = layoutOffset + leftWidth / 2 - window.innerWidth / 2 - (bounds.left + bounds.right) / 2 * scale;
+  const stageY = -(bounds.top + bounds.bottom) / 2 * scale;
+  homeStage.scale = scale / SIDE_WINDOW_SCALE;
+  document.querySelector('[data-home-stage]').style.transform = `translate(${stageX / SIDE_WINDOW_SCALE}px, ${stageY / SIDE_WINDOW_SCALE}px) scale(${homeStage.scale})`;
   win.style.width = `${width}px`;
   win.style.height = `${height}px`;
   setWindowPos(win,
-    (layoutOffset + leftWidth + gap - window.innerWidth / 2 - target.x) / scale,
-    (-height * scale / 2 - target.y + 16) / scale,
+    (layoutOffset + leftWidth + gap - window.innerWidth / 2) / SIDE_WINDOW_SCALE,
+    -height / 2 + 16 / SIDE_WINDOW_SCALE,
   );
-  animateView(target);
+  // Give the page a mild zoom-out while sizing the home preview independently.
+  animateView({ x: 0, y: 0, scale: SIDE_WINDOW_SCALE });
   return true;
 }
 
@@ -188,7 +198,7 @@ export function closeWindow(win) {
   if (!openWindows.length) document.body.classList.remove('mobile-window-open');
   renderDock();
   if (!openWindows.length && homeView) {
-    document.body.classList.remove('has-side-window');
+    resetHomeStage();
     animateView(homeView);
     homeView = null;
   }
@@ -507,3 +517,8 @@ export function openPhotoWindow(photoEl) {
   img.onerror = () => mount();
   img.src = src;
 }
+
+window.addEventListener('resize', () => {
+  const win = openWindows.at(-1);
+  if (win) resetWindowLayout(homeView || { ...view });
+});

@@ -32,8 +32,9 @@ and deploys pushes to `main` to GitHub Pages. The workflow is
 
 Portfolio and CV share a canvas window with Aqua-style tabs. Reopening a link
 focuses the existing tab and preserves its page state. On wide screens, the
-homepage content becomes smaller beside a wider window. The whole group is
-centered, with the page window capped at 960 screen pixels. Tabs can be reordered
+homepage becomes a small preview on the left, while the active window stays
+at 90% scale for readable text. The preview has its own independent scale. The whole group is
+centered, with the page window capped at 960 CSS pixels before scaling. Tabs can be reordered
 by dragging, closed individually, or opened as standalone browser pages.
 
 Share `https://ilyasudakov.github.io/#portfolio` or

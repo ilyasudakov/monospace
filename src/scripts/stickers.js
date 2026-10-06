@@ -1,4 +1,4 @@
-import { view, homes, live, zRef } from './state.js';
+import { view, homeStage, homes, live, zRef } from './state.js';
 
 export function renderSticker(el) {
   const p = live.get(el);
@@ -36,8 +36,8 @@ export function attachDrag(el, { onTap, onDragEnd, dragHandle } = {}) {
 
   el.addEventListener('pointermove', (e) => {
     if (!dragging) return;
-    const dx = (e.clientX - startPtr.x) / view.scale;
-    const dy = (e.clientY - startPtr.y) / view.scale;
+    const dx = (e.clientX - startPtr.x) / (view.scale * homeStage.scale);
+    const dy = (e.clientY - startPtr.y) / (view.scale * homeStage.scale);
     if (!moved && Math.hypot(e.clientX - startPtr.x, e.clientY - startPtr.y) > 4) moved = true;
     const p = live.get(el);
     p.x = startPos.x + dx;
