@@ -1,4 +1,5 @@
 ---
+import '../styles/theme.css';
 interface Props {
   title: string;
   description?: string;
@@ -22,6 +23,17 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 <html lang={lang}>
   <head>
     <meta charset="UTF-8" />
+    <script is:inline>
+      (() => {
+        let theme = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        try {
+          const saved = localStorage.getItem('site-theme');
+          if (saved === 'light' || saved === 'dark') theme = saved;
+          if (window.parent !== window && window.parent.document.documentElement.dataset.theme) theme = window.parent.document.documentElement.dataset.theme;
+        } catch {}
+        document.documentElement.dataset.theme = theme;
+      })();
+    </script>
     <meta
       name="viewport"
       content={`width=device-width, initial-scale=1.0${disableViewportZoom ? ', user-scalable=no' : ''}`}
@@ -37,6 +49,7 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/?$/, '/');
   <body class={bodyClass}>
     <slot />
     <script src="../scripts/language.js"></script>
+    <script src="../scripts/theme.js"></script>
     <script src="../scripts/page-navigation.js"></script>
   </body>
 </html>

@@ -80,7 +80,8 @@ export function registerSticker(el, pos, opts = {}) {
 export function computeHomeCenter() {
   let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
   homes.forEach((h, el) => {
-    const w = el.offsetWidth || 0;
+    const visibleElement = el.matches('[data-links-menu]') ? el.querySelector('summary') : el;
+    const w = visibleElement.offsetWidth || 0;
     const hg = el.offsetHeight || 0;
     if (h.x < minX) minX = h.x;
     if (h.y < minY) minY = h.y;

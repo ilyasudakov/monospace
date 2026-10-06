@@ -48,6 +48,10 @@ The homepage's RU and EN links translate the canvas and embedded pages and save
 the preference locally. On the first visit, the browser's preferred language is
 used: Russian for `ru`, English for other languages. A saved choice takes priority.
 UI translations live in `src/scripts/language.js`.
+The sun/moon icon at the top left switches between light and dark themes,
+including embedded portfolio and resume pages. The first visit follows the system
+color scheme; an explicit choice is saved locally. Theme logic and colors live in
+`src/scripts/theme.js` and `src/styles/theme.css`.
 Personal projects such as Yoink are configured in `src/data/personal-projects.ts`.
 University projects such as Osfix are configured in `src/data/university-projects.ts`.
 
@@ -59,7 +63,9 @@ or zooming the canvas and restores its initial layout.
 ## Background media
 
 The wallpaper uses responsive desktop/mobile video files and image posters in
-`public/assets/`. `src/scripts/background-video.js` handles the loop, playback
+`public/assets/`: autumn for the light theme and snowy branches for the dark
+theme. Switching themes changes the video and poster while preserving the video
+pause preference. `src/scripts/background-video.js` handles the loop, playback
 speed, pause control and resuming after returning to the page. The initial state
 respects `prefers-reduced-motion`; an explicit video preference is saved locally.
 
