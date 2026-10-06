@@ -57,8 +57,8 @@ export function placeBesideCanvas(win) {
   });
   const gap = 16;
   const margin = 20;
-  const leftWidth = Math.min(320, window.innerWidth * .28);
-  const scale = Math.min(.65, (leftWidth - margin * 2) / (bounds.right - bounds.left), (window.innerHeight - 140) / (bounds.bottom - bounds.top));
+  const leftWidth = Math.min(380, window.innerWidth * .33);
+  const scale = Math.min(.78, (leftWidth - margin * 2) / (bounds.right - bounds.left), (window.innerHeight - 140) / (bounds.bottom - bounds.top));
   const availableWidth = (window.innerWidth - leftWidth - gap - margin) / SIDE_WINDOW_SCALE;
   const availableHeight = (window.innerHeight - 112) / SIDE_WINDOW_SCALE;
   const isPage = win.classList.contains('os-window--page');
