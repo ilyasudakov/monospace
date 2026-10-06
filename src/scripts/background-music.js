@@ -4,7 +4,8 @@ const audio = document.querySelector('[data-background-music]');
 const button = document.querySelector('[data-music-switch]');
 
 if (audio && button) {
-  let wantsPlaying = false;
+  const musicVolume = .25;
+  let wantsPlaying = true;
   let failed = false;
   let context = null;
   let master = null;
@@ -12,7 +13,7 @@ if (audio && button) {
   let previousTime = 0;
   let autoplayPending = true;
   let playAttempt = 0;
-  audio.volume = .2;
+  audio.volume = musicVolume;
 
   function prepareAmbience() {
     if (context) return;
@@ -25,23 +26,34 @@ if (audio && button) {
     const output = engine.createGain();
     const reverb = engine.createConvolver();
     const soften = engine.createBiquadFilter();
-    const length = Math.floor(engine.sampleRate * 2.2);
+    const echo = engine.createDelay(1);
+    const echoFeedback = engine.createGain();
+    const echoLevel = engine.createGain();
+    const echoFilter = engine.createBiquadFilter();
+    const length = Math.floor(engine.sampleRate * 3.8);
     const impulse = engine.createBuffer(2, length, engine.sampleRate);
     for (let channel = 0; channel < 2; channel++) {
       const samples = impulse.getChannelData(channel);
-      const delay = Math.floor(engine.sampleRate * .025);
+      const delay = Math.floor(engine.sampleRate * .045);
       for (let i = delay; i < length; i++) {
-        samples[i] = (Math.random() * 2 - 1) * Math.pow(1 - (i - delay) / (length - delay), 2.5);
+        samples[i] = (Math.random() * 2 - 1) * Math.pow(1 - (i - delay) / (length - delay), 2);
       }
     }
     reverb.buffer = impulse;
     soften.type = 'lowpass';
     soften.frequency.value = 3200;
-    dry.gain.value = .65;
-    wet.gain.value = .35;
+    dry.gain.value = .25;
+    wet.gain.value = .75;
+    echo.delayTime.value = .38;
+    echoFeedback.gain.value = .3;
+    echoLevel.gain.value = .2;
+    echoFilter.type = 'lowpass';
+    echoFilter.frequency.value = 2400;
     output.gain.value = 0;
     source.connect(dry).connect(output);
     source.connect(reverb).connect(soften).connect(wet).connect(output);
+    source.connect(echo).connect(echoFilter).connect(echoLevel).connect(output);
+    echoFilter.connect(echoFeedback).connect(echo);
     output.connect(engine.destination);
     context = engine;
     master = output;
@@ -65,17 +77,18 @@ if (audio && button) {
     if (context && master) {
       master.gain.cancelScheduledValues(context.currentTime);
       master.gain.setValueAtTime(0, context.currentTime);
-      fadeTo(.2, 1.5);
+      fadeTo(musicVolume, 1.5);
     }
   }
 
   function updateControl() {
     const playing = !audio.paused && (!context || context.state === 'running');
-    button.dataset.paused = String(!playing);
-    button.setAttribute('aria-pressed', String(playing));
+    button.dataset.paused = String(!wantsPlaying);
+    button.setAttribute('aria-pressed', String(wantsPlaying));
+    const waiting = wantsPlaying && !playing;
     const label = getLanguage() === 'ru'
-      ? (failed ? 'Не удалось включить музыку. Попробовать ещё раз' : playing ? 'Выключить музыку · Outside' : 'Включить музыку · Outside')
-      : (failed ? 'Music could not play. Try again' : playing ? 'Turn music off · Outside' : 'Turn music on · Outside');
+      ? (failed ? 'Не удалось включить музыку. Попробовать ещё раз' : waiting ? 'Музыка включена · запустится после взаимодействия. Выключить' : wantsPlaying ? 'Выключить музыку · Outside' : 'Включить музыку · Outside')
+      : (failed ? 'Music could not play. Try again' : waiting ? 'Music enabled · starts after interaction. Turn off' : wantsPlaying ? 'Turn music off · Outside' : 'Turn music on · Outside');
     button.setAttribute('aria-label', label);
     button.title = label;
   }
@@ -101,7 +114,7 @@ if (audio && button) {
       updateControl();
     }).catch(error => {
       if (attempt !== playAttempt || error.name === 'AbortError' || !wantsPlaying) return;
-      wantsPlaying = false;
+      wantsPlaying = automatic && error.name === 'NotAllowedError';
       // Audible autoplay may be blocked; retry only on a real interaction.
       failed = !automatic && error.name !== 'NotAllowedError';
       updateControl();
@@ -109,7 +122,7 @@ if (audio && button) {
   }
   button.addEventListener('click', () => {
     autoplayPending = false;
-    if (!audio.paused && (!context || context.state === 'running')) {
+    if (wantsPlaying) {
       ++playAttempt;
       wantsPlaying = false;
       audio.pause();
@@ -122,7 +135,24 @@ if (audio && button) {
     startMusic(true);
   }
   document.addEventListener('pointerdown', unlockMusic, { capture: true });
+  document.addEventListener('pointerup', unlockMusic, { capture: true });
   document.addEventListener('keydown', unlockMusic, { capture: true });
+  // Interactions inside same-origin page tabs do not bubble to the main document.
+  const boundDocuments = new WeakSet();
+  function bindPageInteraction(frame) {
+    try {
+      const page = frame.contentDocument;
+      if (!page || boundDocuments.has(page)) return;
+      boundDocuments.add(page);
+      page.addEventListener('pointerdown', unlockMusic, { capture: true });
+      page.addEventListener('pointerup', unlockMusic, { capture: true });
+      page.addEventListener('keydown', unlockMusic, { capture: true });
+    } catch { /* External frames cannot be accessed. */ }
+  }
+  document.addEventListener('load', event => {
+    if (event.target.tagName === 'IFRAME') bindPageInteraction(event.target);
+  }, { capture: true });
+  document.querySelectorAll('iframe').forEach(bindPageInteraction);
   audio.addEventListener('play', () => {
     previousTime = audio.currentTime;
     fadeIn();

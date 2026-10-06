@@ -12,6 +12,7 @@ import { renderDock, animateView } from './window-dock.js';
 import { attachTabDrag } from './tab-drag.js';
 
 const MAX_SIZE = 1000;
+const MAX_PAGE_WIDTH = 960;
 
 export const openWindows = [];
 let windowZ = 1000;
@@ -55,12 +56,14 @@ export function placeBesideCanvas(win) {
   const availableWidth = (window.innerWidth - leftWidth - gap - margin) / scale;
   const availableHeight = (window.innerHeight - 112) / scale;
   const isPage = win.classList.contains('os-window--page');
-  const width = isPage ? availableWidth : Math.min(win._preferredSize.width, availableWidth);
+  const width = isPage ? Math.min(availableWidth, MAX_PAGE_WIDTH / scale) : Math.min(win._preferredSize.width, availableWidth);
   const height = Math.min(win._preferredSize.height, availableHeight);
+  const layoutOffset = Math.max(0, (window.innerWidth - leftWidth - gap - width * scale - margin) / 2);
+  target.x += layoutOffset;
   win.style.width = `${width}px`;
   win.style.height = `${height}px`;
   setWindowPos(win,
-    (leftWidth + gap - window.innerWidth / 2 - target.x) / scale,
+    (layoutOffset + leftWidth + gap - window.innerWidth / 2 - target.x) / scale,
     (-height * scale / 2 - target.y + 16) / scale,
   );
   animateView(target);
