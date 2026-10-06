@@ -27,6 +27,7 @@ function applyTheme(theme) {
   root.dataset.theme = theme;
   document.querySelectorAll('iframe').forEach(syncFrame);
   updateControl();
+  window.dispatchEvent(new Event('themechange'));
 }
 
 document.querySelector('[data-theme-switch]')?.addEventListener('click', () => {

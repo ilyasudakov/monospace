@@ -15,6 +15,10 @@ html[data-theme="dark"] body.playground {
   --blue: #344e6c;
 }
 .theme-switch .theme-sun { display: none; }
+html[data-theme="dark"] .viewport { background-image: var(--wallpaper-dark); }
+@media (min-width: 900px) {
+  html[data-theme="dark"] .viewport { background-image: var(--wallpaper-dark-wide); }
+}
 html[data-theme="dark"] .theme-switch .theme-sun { display: block; }
 html[data-theme="dark"] .theme-switch .theme-moon { display: none; }
 html[data-theme="dark"] .viewport::after {

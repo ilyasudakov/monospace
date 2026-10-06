@@ -133,13 +133,25 @@ if (video) {
   let autoplayBlocked = false;
   let lastTime = null;
   let stalledChecks = 0;
-  const source = () => wideScreen.matches ? video.dataset.wideSrc : video.dataset.src;
+  const darkTheme = () => document.documentElement.dataset.theme === 'dark';
+  const source = () => darkTheme()
+    ? (wideScreen.matches ? video.dataset.darkWideSrc : video.dataset.darkSrc)
+    : (wideScreen.matches ? video.dataset.wideSrc : video.dataset.src);
   function updateSource() {
     cancelHandoff();
     layers.filter(layer => layer !== video).forEach(layer => layer.pause());
-    video.poster = wideScreen.matches ? video.dataset.widePoster : video.dataset.poster;
+    const poster = darkTheme()
+      ? (wideScreen.matches ? video.dataset.darkWidePoster : video.dataset.darkPoster)
+      : (wideScreen.matches ? video.dataset.widePoster : video.dataset.poster);
+    layers.forEach(layer => { layer.poster = poster; });
     if (video.hasAttribute('src') && video.getAttribute('src') !== source()) {
-      video.style.opacity = '0';
+      ++playAttempt;
+      layers.forEach(layer => {
+        layer.style.opacity = '0';
+        layer.pause();
+      });
+      lastTime = null;
+      stalledChecks = 0;
       video.src = source();
     }
     prepareStandby();
@@ -148,6 +160,11 @@ if (video) {
   wideScreen.addEventListener('change', () => {
     updateSource();
     resumePlayback();
+  });
+  window.addEventListener('themechange', () => {
+    updateSource();
+    resumePlayback();
+    updateControl();
   });
 
   function syncPlayback(restart = false) {
