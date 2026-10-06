@@ -5,13 +5,12 @@ const button = document.querySelector('[data-music-switch]');
 
 if (audio && button) {
   const musicVolume = .25;
-  let wantsPlaying = true;
+  let wantsPlaying = false;
   let failed = false;
   let context = null;
   let master = null;
   let fadingOut = false;
   let previousTime = 0;
-  let autoplayPending = true;
   let playAttempt = 0;
   audio.volume = musicVolume;
 
@@ -87,13 +86,13 @@ if (audio && button) {
     button.setAttribute('aria-pressed', String(wantsPlaying));
     const waiting = wantsPlaying && !playing;
     const label = getLanguage() === 'ru'
-      ? (failed ? 'Не удалось включить музыку. Попробовать ещё раз' : waiting ? 'Музыка включена · запустится после взаимодействия. Выключить' : wantsPlaying ? 'Выключить музыку · Outside' : 'Включить музыку · Outside')
-      : (failed ? 'Music could not play. Try again' : waiting ? 'Music enabled · starts after interaction. Turn off' : wantsPlaying ? 'Turn music off · Outside' : 'Turn music on · Outside');
+      ? (failed ? 'Не удалось включить музыку. Попробовать ещё раз' : waiting ? 'Музыка запускается · Выключить' : wantsPlaying ? 'Выключить музыку · Outside' : 'Включить музыку · Outside')
+      : (failed ? 'Music could not play. Try again' : waiting ? 'Music is starting · Turn off' : wantsPlaying ? 'Turn music off · Outside' : 'Turn music on · Outside');
     button.setAttribute('aria-label', label);
     button.title = label;
   }
 
-  function startMusic(automatic = false) {
+  function startMusic() {
     failed = false;
     wantsPlaying = true;
     const attempt = ++playAttempt;
@@ -102,7 +101,6 @@ if (audio && button) {
     context?.resume().then(() => {
       if (attempt !== playAttempt || !wantsPlaying) return;
       if (!audio.paused) {
-        autoplayPending = false;
         fadeIn();
         updateControl();
       }
@@ -110,18 +108,15 @@ if (audio && button) {
     audio.play().then(() => {
       if (attempt !== playAttempt) return;
       if (!wantsPlaying || (context && context.state !== 'running')) audio.pause();
-      else autoplayPending = false;
       updateControl();
     }).catch(error => {
       if (attempt !== playAttempt || error.name === 'AbortError' || !wantsPlaying) return;
-      wantsPlaying = automatic && error.name === 'NotAllowedError';
-      // Audible autoplay may be blocked; retry only on a real interaction.
-      failed = !automatic && error.name !== 'NotAllowedError';
+      wantsPlaying = false;
+      failed = true;
       updateControl();
     });
   }
   button.addEventListener('click', () => {
-    autoplayPending = false;
     if (wantsPlaying) {
       ++playAttempt;
       wantsPlaying = false;
@@ -129,30 +124,6 @@ if (audio && button) {
       updateControl();
     } else startMusic();
   });
-  function unlockMusic(event) {
-    if (!autoplayPending || event.target.closest?.('[data-music-switch]')) return;
-    if (event.type === 'keydown' && (event.ctrlKey || event.metaKey || event.altKey)) return;
-    startMusic(true);
-  }
-  document.addEventListener('pointerdown', unlockMusic, { capture: true });
-  document.addEventListener('pointerup', unlockMusic, { capture: true });
-  document.addEventListener('keydown', unlockMusic, { capture: true });
-  // Interactions inside same-origin page tabs do not bubble to the main document.
-  const boundDocuments = new WeakSet();
-  function bindPageInteraction(frame) {
-    try {
-      const page = frame.contentDocument;
-      if (!page || boundDocuments.has(page)) return;
-      boundDocuments.add(page);
-      page.addEventListener('pointerdown', unlockMusic, { capture: true });
-      page.addEventListener('pointerup', unlockMusic, { capture: true });
-      page.addEventListener('keydown', unlockMusic, { capture: true });
-    } catch { /* External frames cannot be accessed. */ }
-  }
-  document.addEventListener('load', event => {
-    if (event.target.tagName === 'IFRAME') bindPageInteraction(event.target);
-  }, { capture: true });
-  document.querySelectorAll('iframe').forEach(bindPageInteraction);
   audio.addEventListener('play', () => {
     previousTime = audio.currentTime;
     fadeIn();
@@ -178,5 +149,4 @@ if (audio && button) {
   });
   window.addEventListener('languagechange', updateControl);
   updateControl();
-  startMusic(true);
 }
