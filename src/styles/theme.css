@@ -1,0 +1,71 @@
+:root { color-scheme: light; }
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --text-color: #e6eaf0;
+  --secondary-text-color: #aab4c2;
+  --secondary-color: #566272;
+}
+html[data-theme="dark"] body { background-color: #171d26; color: #e6eaf0; }
+html[data-theme="dark"] body.playground {
+  --paper: #282d35;
+  --ink: #e6eaf0;
+  --muted: #abb4c0;
+  --pink: #63424e;
+  --yellow: #625b35;
+  --blue: #344e6c;
+}
+.theme-switch .theme-sun { display: none; }
+html[data-theme="dark"] .theme-switch .theme-sun { display: block; }
+html[data-theme="dark"] .theme-switch .theme-moon { display: none; }
+html[data-theme="dark"] .viewport::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(8,15,25,.2);
+  pointer-events: none;
+  z-index: 0;
+}
+html[data-theme="dark"] .sticker--paper {
+  background-image: repeating-linear-gradient(to bottom, transparent 0, transparent var(--paper-rule-position), rgba(255,255,255,.07) var(--paper-rule-position), rgba(255,255,255,.07) calc(var(--paper-rule-position) + 1px), transparent calc(var(--paper-rule-position) + 1px), transparent var(--paper-line-height));
+  background-position: 0 var(--paper-top-padding);
+  background-blend-mode: normal;
+  box-shadow: 0 12px 28px -10px rgba(0,0,0,.55);
+}
+html[data-theme="dark"] body.playground .sticker--paper strong { background: linear-gradient(transparent 60%, #655a2e 60%); }
+html[data-theme="dark"] body.playground .sticker--paper a.paper-link { background: linear-gradient(transparent 60%, #365675 60%); }
+html[data-theme="dark"] body.playground .sticker--paper a.paper-link:hover { background: #365675; }
+html[data-theme="dark"] body.playground .sticker--note { color: #f1eaf0; }
+html[data-theme="dark"] body.playground .sticker--note .note-label { color: #c9bcc6; }
+html[data-theme="dark"] body.playground .note--pink { background: #684553; }
+html[data-theme="dark"] body.playground .note--yellow { background: #625b39; }
+html[data-theme="dark"] .chip--cv {
+  background: linear-gradient(to bottom, rgba(86,108,130,.9), rgba(40,59,80,.88) 50%, rgba(29,47,66,.92) 52%, rgba(48,69,91,.9));
+  color: #e0eaf5;
+  text-shadow: 0 1px 1px #172638;
+  box-shadow: inset 0 0 0 1px rgba(167,194,218,.35), inset 0 1px 0 rgba(255,255,255,.18), 0 4px 10px -6px #000;
+}
+html[data-theme="dark"] .sticker--chip.chip--cv:hover { background: linear-gradient(#617f9c, #314b65); color: #fff; }
+html[data-theme="dark"] .profile-links { background: rgba(29,40,54,.95); border-color: #526376; }
+html[data-theme="dark"] .profile-links a { color: #e0eaf5; }
+html[data-theme="dark"] .profile-links a:hover { background: #34495f; }
+html[data-theme="dark"] .os-window { border-color: rgba(125,153,182,.5); }
+html[data-theme="dark"] .os-window-titlebar {
+  background: linear-gradient(to bottom, rgba(69,94,122,.65), rgba(33,57,82,.7) 48%, rgba(19,39,61,.8) 52%, rgba(28,51,75,.85));
+  color: #e0eaf5;
+  text-shadow: none;
+}
+html[data-theme="dark"] .os-window-titlebar::before { opacity: .35; }
+html[data-theme="dark"] .os-tab { color: #c6d4e3; text-shadow: none; background: linear-gradient(rgba(100,130,160,.25), rgba(31,52,73,.4)); }
+html[data-theme="dark"] .os-tab:hover { color: #fff; background: linear-gradient(#536d86, #2c455e); }
+html[data-theme="dark"] .os-tab[aria-selected="true"] { color: #fff; background: linear-gradient(#66829d, #3b566f 48%, #2a435c 52%, #25374b); border-bottom-color: #25374b; box-shadow: inset 0 1px 0 rgba(255,255,255,.35); }
+html[data-theme="dark"] .os-tab-close { color: #dbe6f2; }
+html[data-theme="dark"] .os-tab-close:hover { background: rgba(255,255,255,.15); color: #fff; }
+html[data-theme="dark"] .os-window--page .os-window-body { background: #171d26; }
+html[data-theme="dark"] a:hover { background-color: #dbe6f2; color: #171d26; }
+html[data-theme="dark"] .portfolio-card,
+html[data-theme="dark"] .portfolio-card:hover { color: #e6eaf0; background: transparent; }
+html[data-theme="dark"] .portfolio-card-meta,
+html[data-theme="dark"] .portfolio-card-footer,
+html[data-theme="dark"] .update-item .role-label { color: #abb8c7; }
+html[data-theme="dark"] .portfolio-monogram { background: #2c3746; }
+html[data-theme="dark"] footer { border-color: #344050; background: #1d2632; }
