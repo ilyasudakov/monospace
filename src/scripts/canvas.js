@@ -277,7 +277,7 @@ viewport.addEventListener('wheel', (e) => {
   const wx = (cx - view.x) / view.scale;
   const wy = (cy - view.y) / view.scale;
 
-  const delta = -e.deltaY * (e.ctrlKey ? 0.01 : 0.0015);
+  const delta = -e.deltaY * (e.ctrlKey ? 0.005 : 0.00075);
   const factor = Math.exp(delta);
   const next = Math.min(MAX_SCALE, Math.max(MIN_SCALE, view.scale * factor));
 
