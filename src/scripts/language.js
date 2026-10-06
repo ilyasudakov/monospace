@@ -109,7 +109,7 @@ function applyLanguage() {
     if (node.textContent !== result) node.textContent = result;
   }
   document.querySelectorAll('[title], [aria-label], [placeholder], [data-window-title]').forEach(element => {
-    if (element.closest('[data-language-switch], [data-video-switch], [data-project-frame]')) return;
+    if (element.closest('[data-language-switch], [data-video-switch], [data-music-switch], [data-project-frame]')) return;
     let sources = attributeOriginals.get(element);
     if (!sources) { sources = new Map(); attributeOriginals.set(element, sources); }
     for (const attribute of ['title', 'aria-label', 'placeholder', 'data-window-title']) {
