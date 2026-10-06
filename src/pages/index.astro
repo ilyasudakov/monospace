@@ -25,11 +25,15 @@ const route = (name: string) => `${baseUrl}${name}/`;
       <svg class="play-icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3.5 12 8l-7 4.5z" fill="currentColor" /></svg>
       <svg class="pause-icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M5 4v8M11 4v8" stroke="currentColor" stroke-width="2" stroke-linecap="round" /></svg>
     </button>
+    <button class="language-switch video-switch music-switch" data-music-switch data-paused="true" type="button" aria-pressed="false" aria-label="Включить музыку · Outside" title="Включить музыку · Outside">
+      <svg viewBox="0 0 16 16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3 3.5 6H1.5v4h2L7 13Z"/><path class="music-on" d="M10 5.5a4 4 0 0 1 0 5m2-7a7 7 0 0 1 0 9"/><path class="music-off" d="m10 6 4 4m0-4-4 4"/></svg>
+    </button>
     <div class="language-switch language-links" data-language-switch data-language="ru" role="group" aria-label="Language / Язык">
       <button class="language-option" data-language-option="ru" type="button" aria-pressed="true" aria-label="Русский">RU</button>
       <button class="language-option" data-language-option="en" type="button" aria-pressed="false" aria-label="English">EN</button>
     </div>
   </div>
+  <audio data-background-music data-src={`${baseUrl}assets/outside-01-25.m4a`} preload="none" loop></audio>
   <div class="viewport" id="viewport" style={`--wallpaper: url('${baseUrl}assets/autumn-background.webp'); --wallpaper-wide: url('${baseUrl}assets/autumn-wide-background.webp')`}>
     <video class="wallpaper-video" data-background-video data-src={`${baseUrl}assets/autumn-mobile-web.mp4`} data-wide-src={`${baseUrl}assets/autumn-wide-web.mp4`} data-poster={`${baseUrl}assets/autumn-background.webp`} data-wide-poster={`${baseUrl}assets/autumn-wide-background.webp`} muted loop playsinline preload="none" aria-hidden="true" tabindex="-1"></video>
     <div class="canvas" id="canvas">
@@ -45,8 +49,7 @@ const route = (name: string) => `${baseUrl}${name}/`;
           дизайн, код, поддержка.
         </p>
         <p>
-          Можно связаться со мной <a class="paper-link" href="mailto:ilyasudakov.dev@gmail.com">по почте</a><span>, в</span> <a class="paper-link" href="https://t.me/ilyasudakov" target="_blank" rel="noopener">Telegram</a>
-          <span>или в</span> <a class="paper-link" href="https://www.linkedin.com/in/ilyasudakov/" target="_blank" rel="noopener">LinkedIn</a>.
+          Можно связаться со мной <a class="paper-link" href="mailto:ilyasudakov.dev@gmail.com">по почте</a> <span>или в</span> <a class="paper-link" href="https://t.me/ilyasudakov" target="_blank" rel="noopener">Telegram</a>.
         </p>
       </div>
 
@@ -59,7 +62,7 @@ const route = (name: string) => `${baseUrl}${name}/`;
         data-y="-144"
         data-rot="2"
       >
-        <span>резюме</span>
+        <span>Резюме</span>
       </a>
 
       <a
@@ -71,8 +74,18 @@ const route = (name: string) => `${baseUrl}${name}/`;
         data-y="-200"
         data-rot="-2"
       >
-        <span>портфолио</span>
+        <span>Портфолио</span>
       </a>
+
+      <details class="sticker sticker--links" data-x="122" data-y="-86" data-rot="1" data-links-menu>
+        <summary class="sticker--chip chip--cv chip--links-toggle"><span>Ссылки</span><svg class="links-chevron" viewBox="0 0 16 16" aria-hidden="true"><path d="m4 6 4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
+        <nav class="profile-links" aria-label="Ссылки на профили">
+          <a href="https://github.com/ilyasudakov" target="_blank" rel="noopener">GitHub <span aria-hidden="true">↗</span></a>
+          <a href="https://www.linkedin.com/in/ilyasudakov/" target="_blank" rel="noopener">LinkedIn <span aria-hidden="true">↗</span></a>
+          <a href="https://t.me/ilyasudakov" target="_blank" rel="noopener">Telegram <span aria-hidden="true">↗</span></a>
+          <a href="mailto:ilyasudakov.dev@gmail.com"><span>Почта</span> <span aria-hidden="true">↗</span></a>
+        </nav>
+      </details>
 
       <div class="sticker sticker--note note--pink" data-x="-220" data-y="140" data-rot="-5">
         <span class="note-label">интерес</span>
@@ -88,6 +101,29 @@ const route = (name: string) => `${baseUrl}${name}/`;
 
   <script src="../scripts/canvas.js"></script>
   <script src="../scripts/background-video.js"></script>
+  <script src="../scripts/background-music.js"></script>
+  <script>
+    const linksMenu = document.querySelector<HTMLDetailsElement>('[data-links-menu]');
+    let outsidePress: { x: number; y: number; moved: boolean } | null = null;
+    document.addEventListener('pointerdown', event => {
+      outsidePress = linksMenu?.open && !linksMenu.contains(event.target as Node)
+        ? { x: event.clientX, y: event.clientY, moved: false } : null;
+    }, { capture: true });
+    document.addEventListener('pointermove', event => {
+      if (outsidePress && Math.hypot(event.clientX - outsidePress.x, event.clientY - outsidePress.y) > 4) outsidePress.moved = true;
+    }, { capture: true });
+    document.addEventListener('click', event => {
+      if (linksMenu?.open && !linksMenu.contains(event.target as Node)
+        && (event.detail === 0 || (outsidePress && !outsidePress.moved))) linksMenu.open = false;
+      outsidePress = null;
+    });
+    linksMenu?.addEventListener('keydown', event => {
+      if (event.key !== 'Escape' || !linksMenu.open) return;
+      event.stopPropagation();
+      linksMenu.open = false;
+      linksMenu.querySelector('summary')?.focus();
+    });
+  </script>
 </BaseLayout>
 
 <style>
@@ -179,6 +215,8 @@ const route = (name: string) => `${baseUrl}${name}/`;
   }
   .video-switch[data-paused="true"] .pause-icon,
   .video-switch[data-paused="false"] .play-icon { display: none; }
+  .music-switch[data-paused="true"] .music-on,
+  .music-switch[data-paused="false"] .music-off { display: none; }
   @media (prefers-reduced-motion: reduce) {
     .language-switch { transition: none; }
 
@@ -447,6 +485,29 @@ const route = (name: string) => `${baseUrl}${name}/`;
   .sticker--chip.chip--work:hover { background: linear-gradient(to bottom, #7aaedb, #3674a9); }
   .sticker--chip.chip--cv:hover { background: linear-gradient(to bottom, rgba(255,255,255,.96) 0%, rgba(239,247,253,.9) 48%, rgba(218,236,249,.85) 52%, rgba(233,244,252,.92) 100%); color: #243d54; }
 
+  .sticker--links { width: 180px; }
+  .chip--links-toggle { list-style: none; cursor: pointer; }
+  .chip--links-toggle::-webkit-details-marker { display: none; }
+  .chip--links-toggle::after { display: none; }
+  .links-chevron { display: block; width: 16px; height: 16px; margin-left: 8px; flex-shrink: 0; }
+  .sticker--links[open] .links-chevron { transform: rotate(180deg); }
+  .profile-links {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    width: 180px;
+    padding: 8px;
+    border: 1px solid rgba(255,255,255,.65);
+    border-radius: 14px;
+    background: rgba(244,249,253,.92);
+    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
+    box-shadow: 0 8px 24px rgba(20,45,70,.2);
+  }
+  .profile-links a { display: flex; width: 100%; justify-content: space-between; gap: 16px; padding: 10px 12px; border-radius: 7px; color: #29475f; font-size: 14px; text-decoration: underline; text-underline-offset: 3px; }
+  .profile-links a:hover { background: rgba(205,225,241,.65); }
+  .profile-links a span { padding: 0; }
+
   .chip--linkedin {
     background: #cfe3ff;
   }
@@ -529,6 +590,8 @@ const route = (name: string) => `${baseUrl}${name}/`;
     .sticker--chip { justify-content: center; width: 100%; min-height: 48px; padding: 12px 10px; font-size: 14px; }
     .chip--work { grid-row: 2; grid-column: 1; }
     .chip--cv { grid-row: 2; grid-column: 2; }
+    .sticker--links { grid-column: 1 / -1; grid-row: 3; justify-self: start; width: 180px; }
+    .profile-links { position: static; margin-top: 8px; }
     .sticker--note { width: 100%; padding: 14px 12px; }
     :global(body.mobile-window-open .viewport) { overflow: hidden; }
     :global(body.mobile-window-open .sticker) { pointer-events: none; }

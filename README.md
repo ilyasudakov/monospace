@@ -1,6 +1,8 @@
-# Monospace
+# Ilya Sudakov — portfolio
 
 Personal playground and portfolio built with [Astro](https://astro.build/).
+
+Website: [ilyasudakov.github.io](https://ilyasudakov.github.io/).
 
 ## Development
 
@@ -9,37 +11,72 @@ npm install
 npm run dev
 ```
 
-The production build is generated with `npm run build` and deployed to GitHub Pages from the `main` branch.
+Open `http://localhost:4321/`. The site uses the root base path (`/`), with no
+`/monospace/` prefix.
+
+`npm run check` checks Astro files. `npm run build` runs the checks and generates
+the production site in `dist/`; `npm run preview` serves that build locally.
+
+The repository is named `ilyasudakov.github.io`. GitHub Actions builds pull requests
+and deploys pushes to `main` to GitHub Pages. The workflow is
+`.github/workflows/deploy.yml`; the site URL and base path are in `astro.config.mjs`.
 
 ## Pages
 
 - `/` — interactive personal playground
 - `/cv/` — CV
-- `/work/` — product releases and projects, organized by workplace and role
-- `/photos/` — photo archive
-- `/metro/` — live Saint Petersburg metro map powered by OpenStreetMap and Overpass
+- `/work/` — projects and companies, with details and releases inside
+- `/photos/`, `/metro/` — older standalone pages, not linked from the homepage
 
 ## Work archive
 
 Portfolio and CV share a canvas window with Aqua-style tabs. Reopening a link
 focuses the existing tab and preserves its page state. On wide screens, the
-canvas shifts left to make room for the window.
+homepage content becomes smaller beside a wider window. The whole group is
+centered, with the page window capped at 960 screen pixels. Tabs can be reordered
+by dragging, closed individually, or opened as standalone browser pages.
 
-Share `/#portfolio` or `/#resume` (under the deployment base path)
+Share `https://ilyasudakov.github.io/#portfolio` or
+`https://ilyasudakov.github.io/#resume`
 to open the corresponding tab on the homepage automatically. The address updates
 when switching tabs, and closing the window restores the homepage URL.
 Add a section after the page name, such as `/#portfolio/improvado`, for a direct
 link to a workplace inside the portfolio. Earlier `?page=` links still open and
 are converted to the hash format.
 
-The homepage's RU / EN switch translates the canvas and embedded pages and saves
+The homepage's RU and EN links translate the canvas and embedded pages and save
 the preference locally. On the first visit, the browser's preferred language is
 used: Russian for `ru`, English for other languages. A saved choice takes priority.
 UI translations live in `src/scripts/language.js`.
 Personal projects such as Yoink are configured in `src/data/personal-projects.ts`.
+University projects such as Osfix are configured in `src/data/university-projects.ts`.
+
+The Links menu below Resume contains GitHub, LinkedIn, Telegram and email. Its
+button can be dragged on desktop; dragging or panning keeps the menu open.
+An outside click or Escape closes it. The reset-view icon appears after moving
+or zooming the canvas and restores its initial layout.
+
+## Background media
+
+The wallpaper uses responsive desktop/mobile video files and image posters in
+`public/assets/`. `src/scripts/background-video.js` handles the loop, playback
+speed, pause control and resuming after returning to the page. The initial state
+respects `prefers-reduced-motion`; an explicit video preference is saved locally.
+
+The Outside track is served from `public/assets/outside-01-25.m4a` and controlled
+by the speaker icon next to the video control. Music is enabled by default.
+If the browser blocks audible autoplay, playback retries on the first interaction,
+including inside embedded page tabs. Switching music off prevents these retries.
+
+`src/scripts/background-music.js` sets the output volume (currently 25%),
+reverb and echo through Web Audio. Playback fades in over 1.5 seconds, fades out
+at the end and fades in again when the track loops. Reload the page after editing
+the effects to recreate the audio graph.
+
+## Adding portfolio entries
 
 Edit `src/data/work.ts` to add workplaces and selected releases. Each workplace
-automatically gets a navigation entry and its own section; use `/work/#company-id`
+automatically gets a list entry and its own section; use `/work/#company-id`
 for a direct link. No page code needs changing to add another company.
 
 Each update has `title`, an ISO `date` (`YYYY-MM-DD`), `url`, and `role`

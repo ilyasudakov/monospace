@@ -30,6 +30,16 @@ document.querySelectorAll('.sticker').forEach((el) => {
   if (el.classList.contains('sticker--photo')) {
     opts.onTap = () => openPhotoWindow(el);
   }
+  if (el.matches('[data-links-menu]')) {
+    const summary = el.querySelector('summary');
+    opts.dragHandle = summary;
+    opts.onTap = () => { el.open = !el.open; };
+    summary.addEventListener('click', event => {
+      if (window.matchMedia('(max-width: 640px)').matches) return;
+      event.preventDefault();
+      if (event.detail === 0) el.open = !el.open;
+    });
+  }
   registerSticker(el, pos, opts);
 });
 

@@ -8,7 +8,7 @@ export function renderSticker(el) {
   window.dispatchEvent(new Event('canvaschange'));
 }
 
-export function attachDrag(el, { onTap, onDragEnd } = {}) {
+export function attachDrag(el, { onTap, onDragEnd, dragHandle } = {}) {
   let dragging = false;
   let moved = false;
   let startPtr = { x: 0, y: 0 };
@@ -16,9 +16,10 @@ export function attachDrag(el, { onTap, onDragEnd } = {}) {
 
   el.addEventListener('pointerdown', (e) => {
     if (window.matchMedia('(max-width: 640px)').matches) return;
+    if (dragHandle && !dragHandle.contains(e.target)) return;
     // Let nested interactive elements (links, buttons) handle their own clicks
-    const interactive = e.target.closest('a[href], button, iframe, input, textarea, select');
-    if (interactive && interactive !== el) return;
+    const interactive = e.target.closest('a[href], button, summary, iframe, input, textarea, select');
+    if (interactive && interactive !== el && interactive !== dragHandle) return;
 
     zRef.value += 1;
     el.style.zIndex = String(zRef.value);
@@ -51,7 +52,7 @@ export function attachDrag(el, { onTap, onDragEnd } = {}) {
     try { el.releasePointerCapture(e.pointerId); } catch {}
     if (moved) {
       onDragEnd?.();
-      if (el.tagName === 'A') {
+      if (el.tagName === 'A' || dragHandle) {
         const blockClick = (ev) => {
           ev.preventDefault();
           ev.stopPropagation();

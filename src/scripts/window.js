@@ -12,6 +12,7 @@ import { renderDock, animateView } from './window-dock.js';
 import { attachTabDrag } from './tab-drag.js';
 
 const MAX_SIZE = 1000;
+const MAX_PAGE_WIDTH = 960;
 
 export const openWindows = [];
 let windowZ = 1000;
@@ -37,26 +38,32 @@ export function placeBesideCanvas(win) {
   document.body.classList.add('has-side-window');
   const bounds = { left: Infinity, top: Infinity, right: -Infinity, bottom: -Infinity };
   homes.forEach((position, element) => {
+    const visibleElement = element.matches('[data-links-menu]') ? element.querySelector('summary') : element;
     bounds.left = Math.min(bounds.left, position.x);
     bounds.top = Math.min(bounds.top, position.y);
-    bounds.right = Math.max(bounds.right, position.x + element.offsetWidth);
+    bounds.right = Math.max(bounds.right, position.x + visibleElement.offsetWidth);
     bounds.bottom = Math.max(bounds.bottom, position.y + element.offsetHeight);
   });
-  const gap = 32;
-  const margin = 28;
-  const leftWidth = Math.min(500, window.innerWidth * .4);
-  const scale = Math.min(1, (leftWidth - margin * 2) / (bounds.right - bounds.left), (window.innerHeight - 140) / (bounds.bottom - bounds.top));
+  const gap = 16;
+  const margin = 20;
+  const leftWidth = Math.min(380, window.innerWidth * .32);
+  const scale = Math.min(.78, (leftWidth - margin * 2) / (bounds.right - bounds.left), (window.innerHeight - 140) / (bounds.bottom - bounds.top));
   const target = {
     x: leftWidth / 2 - window.innerWidth / 2 - (bounds.left + bounds.right) / 2 * scale,
     y: -(bounds.top + bounds.bottom) / 2 * scale,
     scale,
   };
-  const width = Math.min(win._preferredSize.width, (window.innerWidth - leftWidth - gap - margin) / scale);
-  const height = Math.min(win._preferredSize.height, (window.innerHeight - 112) / scale);
+  const availableWidth = (window.innerWidth - leftWidth - gap - margin) / scale;
+  const availableHeight = (window.innerHeight - 112) / scale;
+  const isPage = win.classList.contains('os-window--page');
+  const width = isPage ? Math.min(availableWidth, MAX_PAGE_WIDTH / scale) : Math.min(win._preferredSize.width, availableWidth);
+  const height = Math.min(win._preferredSize.height, availableHeight);
+  const layoutOffset = Math.max(0, (window.innerWidth - leftWidth - gap - width * scale - margin) / 2);
+  target.x += layoutOffset;
   win.style.width = `${width}px`;
   win.style.height = `${height}px`;
   setWindowPos(win,
-    (leftWidth + gap - window.innerWidth / 2 - target.x) / scale,
+    (layoutOffset + leftWidth + gap - window.innerWidth / 2 - target.x) / scale,
     (-height * scale / 2 - target.y + 16) / scale,
   );
   animateView(target);
