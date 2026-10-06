@@ -2,6 +2,7 @@
 export const view = { x: 0, y: 0, scale: 1 };
 export const homeView = { x: 0, y: 0, scale: 1 };
 export const viewMotion = { active: false };
+export const homeStage = { scale: 1 };
 export const MIN_SCALE = 0.4;
 export const MAX_SCALE = 2.2;
 

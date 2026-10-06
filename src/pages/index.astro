@@ -41,64 +41,66 @@ const route = (name: string) => `${baseUrl}${name}/`;
   <div class="viewport" id="viewport" style={`--wallpaper: url('${baseUrl}assets/autumn-background.webp'); --wallpaper-wide: url('${baseUrl}assets/autumn-wide-background.webp'); --wallpaper-dark: url('${baseUrl}assets/winter-background.webp'); --wallpaper-dark-wide: url('${baseUrl}assets/winter-wide-background.webp')`}>
     <video class="wallpaper-video" data-background-video data-src={`${baseUrl}assets/autumn-mobile-web.mp4`} data-wide-src={`${baseUrl}assets/autumn-wide-web.mp4`} data-poster={`${baseUrl}assets/autumn-background.webp`} data-wide-poster={`${baseUrl}assets/autumn-wide-background.webp`} data-dark-src={`${baseUrl}assets/winter-mobile-web.mp4`} data-dark-wide-src={`${baseUrl}assets/winter-wide-web.mp4`} data-dark-poster={`${baseUrl}assets/winter-background.webp`} data-dark-wide-poster={`${baseUrl}assets/winter-wide-background.webp`} muted loop playsinline preload="none" aria-hidden="true" tabindex="-1"></video>
     <div class="canvas" id="canvas">
-      <div class="sticker sticker--paper" data-x="-220" data-y="-200" data-rot="-2.5">
-        <p>Привет, меня зовут <strong>Илья</strong>.</p>
-        <p>
-          Продакт-инженер в <a
-            href="https://improvado.io"
-            target="_blank"
-            rel="noopener"
-            class="paper-link">Improvado</a
-          >, из Санкт-Петербурга. Люблю решать сложные задачи и делать полезные продукты end-to-end:
-          дизайн, код, поддержка.
-        </p>
-        <p>
-          Можно связаться со мной <a class="paper-link" href="mailto:ilyasudakov.dev@gmail.com">по почте</a> <span>или в</span> <a class="paper-link" href="https://t.me/ilyasudakov" target="_blank" rel="noopener">Telegram</a>.
-        </p>
-      </div>
+      <div class="home-stage" data-home-stage>
+        <div class="sticker sticker--paper" data-x="-220" data-y="-200" data-rot="-2.5">
+          <p>Привет, меня зовут <strong>Илья</strong>.</p>
+          <p>
+            Продакт-инженер в <a
+              href="https://improvado.io"
+              target="_blank"
+              rel="noopener"
+              class="paper-link">Improvado</a
+            >, из Санкт-Петербурга. Люблю решать сложные задачи и делать полезные продукты end-to-end:
+            дизайн, код, поддержка.
+          </p>
+          <p>
+            Можно связаться со мной <a class="paper-link" href="mailto:ilyasudakov.dev@gmail.com">по почте</a> <span>или в</span> <a class="paper-link" href="https://t.me/ilyasudakov" target="_blank" rel="noopener">Telegram</a>.
+          </p>
+        </div>
 
-      <a
-        class="sticker sticker--chip chip--cv"
-        href={`${baseUrl}#resume`}
-        data-window={route('cv')}
-        data-window-title="Резюме"
-        data-x="122"
-        data-y="-144"
-        data-rot="2"
-      >
-        <span>Резюме</span>
-      </a>
+        <a
+          class="sticker sticker--chip chip--cv"
+          href={`${baseUrl}#resume`}
+          data-window={route('cv')}
+          data-window-title="Резюме"
+          data-x="122"
+          data-y="-144"
+          data-rot="2"
+        >
+          <span>Резюме</span>
+        </a>
 
-      <a
-        class="sticker sticker--chip chip--work"
-        href={`${baseUrl}#portfolio`}
-        data-window={route('work')}
-        data-window-title="Портфолио"
-        data-x="116"
-        data-y="-200"
-        data-rot="-2"
-      >
-        <span>Портфолио</span>
-      </a>
+        <a
+          class="sticker sticker--chip chip--work"
+          href={`${baseUrl}#portfolio`}
+          data-window={route('work')}
+          data-window-title="Портфолио"
+          data-x="116"
+          data-y="-200"
+          data-rot="-2"
+        >
+          <span>Портфолио</span>
+        </a>
 
-      <details class="sticker sticker--links" data-x="122" data-y="-86" data-rot="1" data-links-menu>
-        <summary class="sticker--chip chip--cv chip--links-toggle"><span>Ссылки</span><svg class="links-chevron" viewBox="0 0 16 16" aria-hidden="true"><path d="m4 6 4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
-        <nav class="profile-links" aria-label="Ссылки на профили">
-          <a href="https://github.com/ilyasudakov" target="_blank" rel="noopener">GitHub <span aria-hidden="true">↗</span></a>
-          <a href="https://www.linkedin.com/in/ilyasudakov/" target="_blank" rel="noopener">LinkedIn <span aria-hidden="true">↗</span></a>
-          <a href="https://t.me/ilyasudakov" target="_blank" rel="noopener">Telegram <span aria-hidden="true">↗</span></a>
-          <a href="mailto:ilyasudakov.dev@gmail.com"><span>Почта</span> <span aria-hidden="true">↗</span></a>
-        </nav>
-      </details>
+        <details class="sticker sticker--links" data-x="122" data-y="-86" data-rot="1" data-links-menu>
+          <summary class="sticker--chip chip--cv chip--links-toggle"><span>Ссылки</span><svg class="links-chevron" viewBox="0 0 16 16" aria-hidden="true"><path d="m4 6 4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
+          <nav class="profile-links" aria-label="Ссылки на профили">
+            <a href="https://github.com/ilyasudakov" target="_blank" rel="noopener">GitHub <span aria-hidden="true">↗</span></a>
+            <a href="https://www.linkedin.com/in/ilyasudakov/" target="_blank" rel="noopener">LinkedIn <span aria-hidden="true">↗</span></a>
+            <a href="https://t.me/ilyasudakov" target="_blank" rel="noopener">Telegram <span aria-hidden="true">↗</span></a>
+            <a href="mailto:ilyasudakov.dev@gmail.com"><span>Почта</span> <span aria-hidden="true">↗</span></a>
+          </nav>
+        </details>
 
-      <div class="sticker sticker--note note--pink" data-x="-220" data-y="140" data-rot="-5">
-        <span class="note-label">интерес</span>
-        <strong>Дизайн</strong>
-      </div>
+        <div class="sticker sticker--note note--pink" data-x="-220" data-y="140" data-rot="-5">
+          <span class="note-label">интерес</span>
+          <strong>Дизайн</strong>
+        </div>
 
-      <div class="sticker sticker--note note--yellow" data-x="-60" data-y="140" data-rot="-2">
-        <span class="note-label">интерес</span>
-        <strong>Музыка</strong>
+        <div class="sticker sticker--note note--yellow" data-x="-60" data-y="140" data-rot="-2">
+          <span class="note-label">интерес</span>
+          <strong>Музыка</strong>
+        </div>
       </div>
     </div>
   </div>
@@ -273,6 +275,16 @@ const route = (name: string) => `${baseUrl}${name}/`;
     height: 0;
     transform-origin: 0 0;
     z-index: 1;
+  }
+  .home-stage {
+    transform-origin: 0 0;
+    transition: transform 480ms cubic-bezier(.22, 1, .36, 1);
+  }
+  @media (max-width: 640px) {
+    .home-stage { display: contents; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .home-stage { transition: none; }
   }
   .wallpaper-video {
     opacity: 0;
