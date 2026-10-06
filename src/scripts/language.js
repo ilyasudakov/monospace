@@ -1,4 +1,5 @@
 const translations = {
+  'Ссылки': 'Links', 'Ссылки на профили': 'Profile links', 'Почта': 'Email',
   'Сбросить вид': 'Reset view', 'Сбросить вид (R)': 'Reset view (R)',
   ', в': ', on',
   'Привет, меня зовут': 'Hi, I’m', 'Илья': 'Ilya', 'Илья Судаков': 'Ilya Sudakov',

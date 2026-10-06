@@ -17,7 +17,7 @@ export function attachDrag(el, { onTap, onDragEnd } = {}) {
   el.addEventListener('pointerdown', (e) => {
     if (window.matchMedia('(max-width: 640px)').matches) return;
     // Let nested interactive elements (links, buttons) handle their own clicks
-    const interactive = e.target.closest('a[href], button, iframe, input, textarea, select');
+    const interactive = e.target.closest('a[href], button, summary, iframe, input, textarea, select');
     if (interactive && interactive !== el) return;
 
     zRef.value += 1;
