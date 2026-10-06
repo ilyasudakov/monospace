@@ -1,4 +1,12 @@
 :root { color-scheme: light; }
+::view-transition-old(root), ::view-transition-new(root) {
+  animation-duration: 350ms;
+  animation-timing-function: ease-in-out;
+  mix-blend-mode: normal;
+}
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root), ::view-transition-new(root) { animation: none; }
+}
 :root[data-theme="dark"] {
   color-scheme: dark;
   --text-color: #e6eaf0;

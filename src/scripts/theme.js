@@ -2,6 +2,8 @@ import { getLanguage } from './language.js';
 
 const root = document.documentElement;
 const systemTheme = window.matchMedia('(prefers-color-scheme: dark)');
+const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+let activeTransition = null;
 let savedTheme = null;
 try { savedTheme = localStorage.getItem('site-theme'); } catch {}
 
@@ -30,10 +32,23 @@ function applyTheme(theme) {
   window.dispatchEvent(new Event('themechange'));
 }
 
+function switchTheme(theme) {
+  activeTransition?.skipTransition();
+  if (reducedMotion.matches || typeof document.startViewTransition !== 'function') {
+    applyTheme(theme);
+    return;
+  }
+  const transition = document.startViewTransition(() => applyTheme(theme));
+  activeTransition = transition;
+  transition.finished.catch(() => {}).finally(() => {
+    if (activeTransition === transition) activeTransition = null;
+  });
+}
+
 document.querySelector('[data-theme-switch]')?.addEventListener('click', () => {
-  savedTheme = root.dataset.theme === 'dark' ? 'light' : 'dark';
+  savedTheme = (savedTheme || root.dataset.theme) === 'dark' ? 'light' : 'dark';
   try { localStorage.setItem('site-theme', savedTheme); } catch {}
-  applyTheme(savedTheme);
+  switchTheme(savedTheme);
 });
 document.addEventListener('load', event => {
   if (event.target.tagName === 'IFRAME') syncFrame(event.target);
