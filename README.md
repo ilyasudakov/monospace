@@ -70,9 +70,8 @@ speed, pause control and resuming after returning to the page. The initial state
 respects `prefers-reduced-motion`; an explicit video preference is saved locally.
 
 The Outside track is served from `public/assets/outside-01-25.m4a` and controlled
-by the speaker icon next to the video control. Music is enabled by default.
-If the browser blocks audible autoplay, playback retries on the first interaction,
-including inside embedded page tabs. Switching music off prevents these retries.
+by the speaker icon next to the video control. Music is off by default and
+loads and plays only when the visitor turns it on with the speaker icon.
 
 `src/scripts/background-music.js` sets the output volume (currently 25%),
 reverb and echo through Web Audio. Playback fades in over 1.5 seconds, fades out
